@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where psql *)",
+      "Bash(node -e ' *)",
+      "PowerShell(npx eslint .)",
+      "Bash(echo \"--- tsc exit: $? ---\")",
+      "Bash(npm install *)",
+      "Bash(npx vitest *)",
+      "Bash(npm run test *)",
+      "Bash(npm run check *)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run test --silent >/dev/null 2>&1 || printf '{\"systemMessage\":\"Regressao FALHOU. Rode: npm run test\"}'",
+            "shell": "bash",
+            "timeout": 120,
+            "statusMessage": "Rodando regressao (105 testes)"
+          }
+        ]
+      }
+    ]
+  }
+}
