@@ -934,13 +934,15 @@ const pt = {
   'onboarding.resultFootnote': 'No app real, um toque cobra todo mundo no WhatsApp.',
   'onboarding.resultCta': 'Continuar',
 
-  'login.headline': 'RACHA A CONTA\nCOM A GALERA!',
-  // A legenda NÃO repete o título: "RACHA A CONTA COM A GALERA" já diz o quê e
-  // com quem. Aqui se ensina a palavra nova — que "resenha" é a coisa que a
-  // pessoa cria — e que dá pra ter várias. Os três exemplos fazem o trabalho
-  // que "deixe as contas organizadas" não fazia: mostram o alcance sem
-  // explicar. Quebra manual pra as duas linhas ficarem equilibradas no centro.
-  'login.cardCopy': 'Uma resenha pra cada ocasião:\nchurras, viagem, casa.',
+  // Texto ÚNICO da intro: o título que ficava sobre a foto foi absorvido aqui.
+  // Sem texto por cima, a imagem respira e o logo fica como âncora — e some o
+  // problema de contraste de escrever sobre foto.
+  //
+  // Sem enumerar caso de uso. A versão anterior dizia "churras, viagem, casa",
+  // e três exemplos com ponto final leem como limite: parecia que o app servia
+  // só pra aquilo. Quem abre o leque é a MECÂNICA (cria, chama, racha), não a
+  // lista. Quebra manual pra as duas linhas ficarem equilibradas no centro.
+  'login.cardCopy': 'Cria uma resenha, chama a galera\ne ninguém sai devendo sem saber.',
   'login.cta': 'Bora rachar',
   'login.haveAccount': 'Já tenho conta',
 
