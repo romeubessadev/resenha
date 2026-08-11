@@ -13,6 +13,7 @@ import {
   useDemoteAdmin,
   useLeaveGroup,
   useRegenerateInviteCode,
+  useUpdateGroupAvatar,
   ArchiveNotSettledError,
 } from '@/hooks/useGroup';
 import { RoleLimitError } from '@/hooks/useGroups';
@@ -279,6 +280,215 @@ describe('sair do rolê', () => {
   });
 });
 
+describe('foto do rolê', () => {
+  // `uploadGroupAvatar` lê o arquivo local com `fetch(uri)` — o jsdom não
+  // implementa. O stub só devolve bytes; o que se testa é a ORDEM e por onde
+  // a gravação passa.
+  const comArquivoLocal = () => {
+    const original = globalThis.fetch;
+    globalThis.fetch = (async () => new Response(new Uint8Array([1, 2, 3]))) as typeof fetch;
+    return () => { globalThis.fetch = original; };
+  };
+
+  it('sobe o arquivo ANTES de apontar a coluna pra ele', async () => {
+    // Na ordem inversa, a linha apontaria pra um objeto que ainda não existe.
+    const restaurar = comArquivoLocal();
+    h = createHarness({ session, tables: baseTables() });
+    const { result } = await h.runReady(() => useUpdateGroupAvatar());
+
+    await result.current.updateGroupAvatar(GROUP, 'file:///foto.jpg', 'image/jpeg');
+
+    const ordem = h.mock.calls.map(c => (c.kind === 'storage' ? `storage:${c.op}` : c.kind));
+    expect(ordem.indexOf('storage:upload')).toBeLessThan(ordem.indexOf('update'));
+    restaurar();
+  });
+
+  it('trocar a foto apaga a ANTIGA do bucket', async () => {
+    const restaurar = comArquivoLocal();
+    h = createHarness({ session, tables: baseTables() });
+    const { result } = await h.runReady(() => useUpdateGroupAvatar());
+
+    await result.current.updateGroupAvatar(GROUP, 'file:///nova.jpg', 'image/jpeg', 'g1/velha.jpg');
+
+    const remove = h.mock.of('storage').filter(c => c.op === 'remove');
+    expect(remove[0].args[0]).toEqual(['g1/velha.jpg']);
+    restaurar();
+  });
+
+  it('foto escolhida NA CRIAÇÃO grava por RPC, não por UPDATE', async () => {
+    // O gatilho de histórico não sabe que aquilo faz parte da criação — pelo
+    // UPDATE, o rolê nasceria com "fulano editou o rolê" logo depois de
+    // "fulano criou o rolê".
+    const restaurar = comArquivoLocal();
+    h = createHarness({ session, tables: baseTables(), rpc: { set_group_avatar_on_create: () => ({}) } });
+    const { result } = await h.runReady(() => useUpdateGroupAvatar());
+
+    await result.current.setGroupAvatarOnCreate(GROUP, 'file:///foto.jpg', 'image/jpeg');
+
+    expect(h.mock.rpcNames()).toContain('set_group_avatar_on_create');
+    expect(h.mock.of('update').filter(c => c.table === 'groups')).toHaveLength(0);
+    restaurar();
+  });
+
+  it('remover zera a coluna e SÓ DEPOIS apaga o arquivo', async () => {
+    // Na ordem inversa, uma falha no UPDATE deixaria a linha apontando pra um
+    // arquivo que já não existe.
+    h = createHarness({ session, tables: baseTables() });
+    const { result } = await h.runReady(() => useUpdateGroupAvatar());
+
+    await result.current.removeGroupAvatar(GROUP, 'g1/velha.jpg');
+
+    const ordem = h.mock.calls.map(c => (c.kind === 'storage' ? `storage:${c.op}` : c.kind));
+    expect(ordem.indexOf('update')).toBeLessThan(ordem.indexOf('storage:remove'));
+    expect(h.mock.of('update')[0].values).toEqual({ avatar_path: null });
+  });
+
+  it('a foto nova alcança a lista de rolês e o histórico', async () => {
+    const restaurar = comArquivoLocal();
+    h = createHarness({ session, tables: baseTables() });
+    const { result } = await h.runReady(() => useUpdateGroupAvatar());
+
+    await result.current.updateGroupAvatar(GROUP, 'file:///foto.jpg', 'image/jpeg');
+
+    expect(h.invalidatedNames()).toEqual(expect.arrayContaining(['group', 'my-groups', 'group-history']));
+    restaurar();
+  });
+
+  it('falha ao gravar a coluna propaga — não fica foto órfã dada como salva', async () => {
+    const restaurar = comArquivoLocal();
+    h = createHarness({ session, tables: baseTables(), fail: { 'groups:update': 'RLS negou' } });
+    const { result } = await h.runReady(() => useUpdateGroupAvatar());
+
+    await expect(result.current.updateGroupAvatar(GROUP, 'file:///foto.jpg', 'image/jpeg'))
+      .rejects.toMatchObject({ message: 'RLS negou' });
+    restaurar();
+  });
+
+  it('falha ao REMOVER propaga antes de apagar o arquivo', async () => {
+    // Se o UPDATE falhou, a linha ainda aponta pro arquivo — apagá-lo deixaria
+    // o rolê com foto quebrada.
+    h = createHarness({ session, tables: baseTables(), fail: { 'groups:update': 'boom' } });
+    const { result } = await h.runReady(() => useUpdateGroupAvatar());
+
+    await expect(result.current.removeGroupAvatar(GROUP, 'g1/velha.jpg'))
+      .rejects.toMatchObject({ message: 'boom' });
+    expect(h.mock.of('storage').filter(c => c.op === 'remove')).toHaveLength(0);
+  });
+
+  it('falha da RPC na criação propaga', async () => {
+    const restaurar = comArquivoLocal();
+    h = createHarness({
+      session, tables: baseTables(),
+      rpc: { set_group_avatar_on_create: () => ({ error: { message: 'boom' } }) },
+    });
+    const { result } = await h.runReady(() => useUpdateGroupAvatar());
+
+    await expect(result.current.setGroupAvatarOnCreate(GROUP, 'file:///foto.jpg', 'image/jpeg'))
+      .rejects.toMatchObject({ message: 'boom' });
+    restaurar();
+  });
+});
+
+describe('erro do banco não passa calado', () => {
+  // Foi um erro DESCARTADO que fez todo push sair sem o nome do rolê. Estes
+  // testes fixam que cada caminho de escrita propaga em vez de engolir.
+  const casos: [string, string, (h: Harness) => Promise<unknown>][] = [
+    ['contagem de despesas', 'expenses:select', async harness => {
+      const { result } = harness.run(() => useGroup(GROUP));
+      await waitFor(() => expect(result.current.error).toBeTruthy());
+      return result.current.error;
+    }],
+    ['leitura de membros', 'group_members:select', async harness => {
+      const { result } = harness.run(() => useGroup(GROUP));
+      await waitFor(() => expect(result.current.error).toBeTruthy());
+      return result.current.error;
+    }],
+    ['leitura de perfis', 'profiles:select', async harness => {
+      const { result } = harness.run(() => useGroup(GROUP));
+      await waitFor(() => expect(result.current.error).toBeTruthy());
+      return result.current.error;
+    }],
+  ];
+
+  it.each(casos)('falha na %s vira erro na tela', async (_nome, chave, rodar) => {
+    h = createHarness({ session, tables: baseTables(), fail: { [chave]: 'boom' } });
+    expect(await rodar(h)).toBe('Erro ao carregar rolê');
+  });
+
+  it('editar o rolê propaga a falha', async () => {
+    h = createHarness({ session, tables: baseTables(), fail: { 'groups:update': 'boom' } });
+    const { result } = await h.runReady(() => useUpdateGroup());
+    await expect(result.current.updateGroup(GROUP, { name: 'X' })).rejects.toMatchObject({ message: 'boom' });
+    expect(h.invalidatedNames()).toEqual([]);
+  });
+
+  it('promover propaga a falha', async () => {
+    h = createHarness({ session, tables: baseTables(), fail: { 'group_members:update': 'boom' } });
+    const { result } = await h.runReady(() => usePromoteToAdmin());
+    await expect(result.current.promoteToAdmin(GROUP, BRUNO)).rejects.toMatchObject({ message: 'boom' });
+  });
+
+  it('rebaixar propaga a falha da RPC', async () => {
+    h = createHarness({
+      session, tables: baseTables(),
+      rpc: { demote_admin: () => ({ error: { message: 'boom' } }) },
+    });
+    const { result } = await h.runReady(() => useDemoteAdmin());
+    await expect(result.current.demoteAdmin(GROUP, BRUNO)).rejects.toMatchObject({ message: 'boom' });
+  });
+
+  it('remover membro propaga a falha', async () => {
+    h = createHarness({ session, tables: baseTables(), fail: { 'group_members:delete': 'boom' } });
+    const { result } = await h.runReady(() => useRemoveMember());
+    await expect(result.current.removeMember(GROUP, BRUNO)).rejects.toMatchObject({ message: 'boom' });
+  });
+
+  it('sair sem sessão é barrado antes de tocar no banco', async () => {
+    h = createHarness({ session: null, tables: baseTables() });
+    const { result } = await h.runReady(() => useLeaveGroup());
+    await expect(result.current.leaveGroup(GROUP)).rejects.toThrow('Sessão inválida');
+  });
+
+  it('falha ao CONTAR membros aborta a saída', async () => {
+    // Sem a contagem não dá pra saber se sair apaga o rolê ou só a sua linha.
+    h = createHarness({ session, tables: baseTables(), fail: { 'group_members:select': 'boom' } });
+    const { result } = await h.runReady(() => useLeaveGroup());
+    await expect(result.current.leaveGroup(GROUP)).rejects.toMatchObject({ message: 'boom' });
+  });
+});
+
+describe('sair sendo o último membro', () => {
+  const soEu = () => {
+    const t = baseTables();
+    t.group_members = [t.group_members[0]];
+    return t;
+  };
+
+  it('RLS que barra em SILÊNCIO (zero linhas) vira falha explícita', async () => {
+    // O delete não dá erro — simplesmente não apaga nada. Sem este check,
+    // seguíamos pra apagar a foto de um rolê que continuava de pé.
+    const t = soEu();
+    t.groups = [];
+    h = createHarness({ session, tables: t });
+    const { result } = await h.runReady(() => useLeaveGroup());
+
+    await expect(result.current.leaveGroup(GROUP)).rejects.toThrow(/leave_group_delete_blocked/);
+  });
+
+  it('rolê com foto apaga o arquivo junto', async () => {
+    const t = soEu();
+    (t.groups[0] as Record<string, unknown>).avatar_path = 'g1/foto.jpg';
+    h = createHarness({ session, tables: t });
+    const { result } = await h.runReady(() => useLeaveGroup());
+
+    await result.current.leaveGroup(GROUP);
+    await new Promise(r => setTimeout(r, 20));
+
+    const remove = h.mock.of('storage').filter(c => c.op === 'remove');
+    expect(remove[0].args[0]).toEqual(['g1/foto.jpg']);
+  });
+});
+
 describe('regenerar o código de convite', () => {
   it('pede o código novo ao banco e grava no rolê', async () => {
     // O código não é sorteado no client: a RPC garante que é único.
@@ -292,5 +502,29 @@ describe('regenerar o código de convite', () => {
 
     expect(novo).toBe('XYZ789');
     expect(h.mock.of('update')[0].values).toEqual({ invite_code: 'XYZ789' });
+  });
+
+  it('falha ao SORTEAR o código não grava nada', async () => {
+    // Sem código novo em mãos, gravar deixaria o convite em branco.
+    h = createHarness({
+      session, tables: baseTables(),
+      rpc: { generate_invite_code: () => ({ error: { message: 'boom' } }) },
+    });
+    const { result } = await h.runReady(() => useRegenerateInviteCode());
+
+    await expect(result.current.regenerate(GROUP)).rejects.toMatchObject({ message: 'boom' });
+    expect(h.mock.of('update')).toHaveLength(0);
+  });
+
+  it('falha ao GRAVAR o código propaga', async () => {
+    h = createHarness({
+      session, tables: baseTables(),
+      rpc: { generate_invite_code: () => ({ data: 'XYZ789' }) },
+      fail: { 'groups:update': 'boom' },
+    });
+    const { result } = await h.runReady(() => useRegenerateInviteCode());
+
+    await expect(result.current.regenerate(GROUP)).rejects.toMatchObject({ message: 'boom' });
+    expect(h.invalidatedNames()).toEqual([]);
   });
 });

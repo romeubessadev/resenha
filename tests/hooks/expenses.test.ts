@@ -15,6 +15,7 @@ import {
   CREATE_EXPENSE_MUTATION_KEY,
   UPDATE_EXPENSE_MUTATION_KEY,
   DELETE_EXPENSE_MUTATION_KEY,
+  DESCRIBE_EXPENSE_MUTATION_KEY,
   EXPENSE_MUTATION_SCOPE,
   type LancamentoItem,
   type CreateExpenseInput,
@@ -82,6 +83,28 @@ const createInput = (over: Partial<CreateExpenseInput> = {}): CreateExpenseInput
   },
   participants: [{ userId: ANA }, { userId: BRUNO }],
   date: '2026-03-11',
+  ...over,
+});
+
+/** Edição mínima e válida — os blocos abaixo trocam só o que estão testando. */
+const updateBase = (over: Record<string, unknown> = {}) => ({
+  expenseId: 'e1',
+  groupId: GROUP,
+  categoryId: 'c1',
+  title: 'Bar do Zé',
+  amount: 120,
+  splitType: 'equal' as const,
+  paidById: BRUNO,
+  date: '2026-03-10',
+  receiptPath: null,
+  participants: [{ userId: ANA }, { userId: BRUNO }],
+  memberInfo: {
+    [ANA]: { name: 'Ana', photoUrl: null },
+    [BRUNO]: { name: 'Bruno', photoUrl: null },
+  },
+  recurrence: { action: 'none' as const, id: null },
+  titleChanged: false,
+  categoryTouched: false,
   ...over,
 });
 
@@ -687,6 +710,347 @@ describe('apagar despesa', () => {
 });
 
 // ───────────────────────────────────────────────────────────────────────────
+describe('nenhum erro do banco passa calado', () => {
+  // Foi um erro DESCARTADO que fez todo push sair sem o nome do rolê. Aqui se
+  // fixa que cada leitura e cada escrita propaga em vez de engolir.
+  it.each([
+    ['despesas', 'expenses:select'],
+    ['acertos', 'payments:select'],
+    ['participantes', 'expense_participants:select'],
+    ['perfis', 'profiles:select'],
+  ])('falha ao ler %s vira erro na tela', async (_nome, chave) => {
+    h = createHarness({ session, tables: baseTables(), fail: { [chave]: 'boom' } });
+    const { result } = h.run(() => useExpenses(GROUP));
+    await waitFor(() => expect(result.current.error).toBeTruthy());
+
+    expect(result.current.error).toBe('Erro ao carregar despesas');
+  });
+
+  it('sem sessão, criar e editar são barrados antes de tocar no banco', async () => {
+    h = withMutations({ session: null, tables: baseTables() });
+    const criar = await h.runReady(() => useCreateExpense());
+    const editar = await h.runReady(() => useUpdateExpense());
+
+    expect(() => criar.result.current.createExpense(createInput())).toThrow('Sessão inválida');
+    expect(() => editar.result.current.updateExpense(updateBase())).toThrow('Sessão inválida');
+    expect(h.mock.of('rpc')).toHaveLength(0);
+  });
+});
+
+describe('recorrência ao editar — os outros caminhos', () => {
+  it('CANCELAR apaga a receita e desliga a seção no detalhe na hora', async () => {
+    h = withMutations({
+      session,
+      tables: { ...baseTables(), expense_recurrences: [{ id: 'r1', paused: false }] },
+    });
+    h.queryClient.setQueryData(queryKeys.expenseRecurrenceInfo('r1'), { freq: 'monthly', paused: false });
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    await act(async () => {
+      result.current.updateExpense(updateBase({ recurrence: { action: 'cancel', id: 'r1' } }));
+    });
+    await waitFor(() => expect(h.mock.of('delete').some(c => c.table === 'expense_recurrences')).toBe(true));
+
+    // null é o que o servidor devolveria pra uma receita apagada.
+    expect(h.queryClient.getQueryData(queryKeys.expenseRecurrenceInfo('r1'))).toBeNull();
+  });
+
+  it('CRIAR grava a receita antes da despesa e semeia a seção', async () => {
+    h = withMutations({ session, tables: { ...baseTables(), expense_recurrences: [] } });
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    const row = {
+      id: 'r9', group_id: GROUP, created_by: ANA, title: 'Bar', category_id: null,
+      amount: 120, split_type: 'equal', paid_by: BRUNO, receipt_path: null,
+      participants: [], freq: 'monthly' as const, interval_days: null,
+      next_run_date: '2026-04-10', end_date: null, anchor_day: 10,
+    };
+    await act(async () => {
+      result.current.updateExpense(updateBase({ recurrence: { action: 'create', id: 'r9', row } }));
+    });
+    await waitFor(() => expect(h.mock.rpcNames()).toContain('materialize_recurring_expenses'));
+
+    const ordem = h.mock.calls.map(c => (c.kind === 'rpc' ? `rpc:${c.name}` : `${c.kind}:${'table' in c ? c.table : ''}`));
+    expect(ordem.indexOf('upsert:expense_recurrences'))
+      .toBeLessThan(ordem.indexOf('rpc:update_expense_with_participants'));
+    expect(h.queryClient.getQueryData(queryKeys.expenseRecurrenceInfo('r9'))).toMatchObject({ paused: false });
+  });
+
+  it('atualizar a série reflete no detalhe antes da resposta chegar', async () => {
+    h = withMutations({ session, tables: { ...baseTables(), expense_recurrences: [{ id: 'r1' }] } });
+    h.queryClient.setQueryData(queryKeys.expenseRecurrenceInfo('r1'), {
+      freq: 'monthly', intervalDays: null, endDate: null, paused: false, active: true,
+    });
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    await act(async () => {
+      result.current.updateExpense(updateBase({
+        recurrence: {
+          action: 'update', id: 'r1', freq: 'weekly', intervalDays: null,
+          endDate: '2026-12-31', amount: 120, applyToFuture: false, paused: true,
+        },
+      }));
+    });
+
+    expect(h.queryClient.getQueryData(queryKeys.expenseRecurrenceInfo('r1')))
+      .toMatchObject({ freq: 'weekly', paused: true, endDate: '2026-12-31' });
+  });
+
+  it('falha ao gravar a receita aborta antes de mexer na despesa', async () => {
+    h = withMutations({
+      session,
+      tables: { ...baseTables(), expense_recurrences: [] },
+      fail: { 'expense_recurrences:upsert': 'boom' },
+    });
+    noRetry(h, UPDATE_EXPENSE_MUTATION_KEY);
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    const row = { id: 'r9', group_id: GROUP } as never;
+    await act(async () => {
+      result.current.updateExpense(updateBase({ recurrence: { action: 'create', id: 'r9', row } }));
+    });
+    await new Promise(r => setTimeout(r, 40));
+
+    expect(h.mock.rpcNames()).not.toContain('update_expense_with_participants');
+  });
+});
+
+describe('comprovante trocado', () => {
+  it('o arquivo ANTIGO é apagado depois da despesa já apontar pro novo', async () => {
+    // Na ordem inversa, uma falha da RPC deixaria a linha apontando pra um
+    // arquivo que já não existe.
+    h = withMutations({ session, tables: baseTables() });
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    await act(async () => {
+      result.current.updateExpense(updateBase({
+        receiptPath: 'g1/novo.jpg', previousReceiptPath: 'g1/velho.jpg',
+      }));
+    });
+    await waitFor(() => expect(h.mock.of('storage').some(c => c.op === 'remove')).toBe(true));
+
+    const ordem = h.mock.calls.map(c => (c.kind === 'rpc' ? 'rpc' : c.kind === 'storage' ? `storage:${c.op}` : c.kind));
+    expect(ordem.indexOf('rpc')).toBeLessThan(ordem.indexOf('storage:remove'));
+  });
+
+  it('comprovante que NÃO mudou não é apagado', async () => {
+    h = withMutations({ session, tables: baseTables() });
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    await act(async () => {
+      result.current.updateExpense(updateBase({
+        receiptPath: 'g1/mesmo.jpg', previousReceiptPath: 'g1/mesmo.jpg',
+      }));
+    });
+    await new Promise(r => setTimeout(r, 30));
+
+    expect(h.mock.of('storage').filter(c => c.op === 'remove')).toHaveLength(0);
+  });
+});
+
+describe('apagar: falhas no meio do caminho', () => {
+  it('falha ao PAUSAR a série aborta antes de apagar a despesa', async () => {
+    h = withMutations({
+      session,
+      tables: { ...baseTables(), expense_recurrences: [{ id: 'r1', paused: false }] },
+      fail: { 'expense_recurrences:update': 'boom' },
+    });
+    noRetry(h, DELETE_EXPENSE_MUTATION_KEY);
+    const { result } = await h.runReady(() => useDeleteExpense());
+
+    await act(async () => { result.current.deleteExpense('e1', GROUP, 'r1', true); });
+    await new Promise(r => setTimeout(r, 40));
+
+    expect(h.mock.of('delete').filter(c => c.table === 'expenses')).toHaveLength(0);
+  });
+
+  it('erro ao criar propaga a mensagem e desfaz o detalhe semeado', async () => {
+    h = withMutations({
+      session,
+      tables: baseTables(),
+      rpc: { create_expense_with_participants: () => ({ error: { message: 'boom' } }) },
+    });
+    noRetry(h, CREATE_EXPENSE_MUTATION_KEY);
+    h.queryClient.setQueryData(queryKeys.expenses(GROUP), []);
+    const { result } = await h.runReady(() => useCreateExpense());
+
+    await act(async () => {
+      result.current.createExpense(createInput({
+        recurrence: { freq: 'monthly', nextRunDate: new Date(2026, 3, 11) },
+      }));
+    });
+    await waitFor(() => {
+      expect(h.queryClient.getQueryData<LancamentoItem[]>(queryKeys.expenses(GROUP))).toHaveLength(0);
+    });
+
+    // O detalhe e a recorrência semeados no onMutate saem junto.
+    expect(h.queryClient.getQueryData(queryKeys.expenseRecurrenceInfo('uuid-1'))).toBeUndefined();
+  });
+});
+
+describe('rollback do otimista quando a mutação falha de vez', () => {
+  const listaAntiga: LancamentoItem[] = [{
+    id: 'e1', type: 'expense', title: 'Bar', categoryId: 'c1', amount: 100,
+    paidById: BRUNO, paidByName: 'Bruno', paidByMe: false,
+    date: '2026-03-10', createdAt: '2026-03-10T20:00:00Z',
+    participantShares: { [ANA]: 50, [BRUNO]: 50 },
+  }];
+  const detalheAntigo = {
+    id: 'e1', groupId: GROUP, title: 'Bar', description: null, categoryId: 'c1',
+    amount: 100, splitType: 'equal', paidById: BRUNO, paidByName: 'Bruno',
+    paidByPhotoUrl: null, paidByMe: false, createdByMe: true,
+    date: '2026-03-10', receiptPath: null, recurrenceId: null, participants: [],
+  };
+  const saldoAntigo = { balances: { [ANA]: -50, [BRUNO]: 50 }, transfers: [], paymentsOnlyBalances: {} };
+
+  const semear = (harness: Harness) => {
+    harness.queryClient.setQueryData(queryKeys.expenses(GROUP), listaAntiga);
+    harness.queryClient.setQueryData(queryKeys.groupBalances(GROUP), saldoAntigo);
+    harness.queryClient.setQueryData(queryKeys.expense('e1'), detalheAntigo);
+  };
+
+  it('editar: o DETALHE mostra o valor novo na hora e volta ao antigo se falhar', async () => {
+    h = withMutations({
+      session, tables: baseTables(),
+      rpc: { update_expense_with_participants: () => ({ error: { message: 'boom' } }) },
+    });
+    noRetry(h, UPDATE_EXPENSE_MUTATION_KEY);
+    semear(h);
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    await act(async () => { result.current.updateExpense(updateBase()); });
+
+    await waitFor(() => {
+      expect(h.queryClient.getQueryData<{ amount: number }>(queryKeys.expense('e1'))!.amount).toBe(100);
+    });
+    const saldo = h.queryClient.getQueryData<{ balances: Record<string, number> }>(queryKeys.groupBalances(GROUP))!;
+    expect(saldo.balances).toEqual({ [ANA]: -50, [BRUNO]: 50 });
+  });
+
+  it('editar com sucesso reescreve o detalhe com os participantes novos', async () => {
+    h = withMutations({ session, tables: baseTables() });
+    semear(h);
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    await act(async () => { result.current.updateExpense(updateBase()); });
+
+    const det = h.queryClient.getQueryData<{ amount: number; participants: unknown[] }>(queryKeys.expense('e1'))!;
+    expect(det.amount).toBe(120);
+    expect(det.participants).toHaveLength(2);
+  });
+
+  it('apagar: o SALDO volta ao que era se a exclusão falhar', async () => {
+    h = withMutations({ session, tables: baseTables(), fail: { 'expenses:delete': 'boom' } });
+    noRetry(h, DELETE_EXPENSE_MUTATION_KEY);
+    semear(h);
+    const { result } = await h.runReady(() => useDeleteExpense());
+
+    await act(async () => { result.current.deleteExpense('e1', GROUP, null, false); });
+
+    await waitFor(() => {
+      const s = h.queryClient.getQueryData<{ balances: Record<string, number> }>(queryKeys.groupBalances(GROUP))!;
+      expect(s.balances).toEqual({ [ANA]: -50, [BRUNO]: 50 });
+    });
+  });
+
+  it('ligar "Repetir" e falhar devolve a seção de recorrência ao estado anterior', async () => {
+    h = withMutations({
+      session, tables: { ...baseTables(), expense_recurrences: [] },
+      rpc: { update_expense_with_participants: () => ({ error: { message: 'boom' } }) },
+    });
+    noRetry(h, UPDATE_EXPENSE_MUTATION_KEY);
+    semear(h);
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    const row = { id: 'r9', group_id: GROUP, created_by: ANA, freq: 'monthly',
+      interval_days: null, next_run_date: '2026-04-10', end_date: null, anchor_day: 10 } as never;
+    await act(async () => {
+      result.current.updateExpense(updateBase({ recurrence: { action: 'create', id: 'r9', row } }));
+    });
+
+    await waitFor(() => {
+      expect(h.queryClient.getQueryData(queryKeys.expenseRecurrenceInfo('r9'))).toBeNull();
+    });
+  });
+});
+
+describe('erros nas etapas de recorrência e comprovante', () => {
+  it.each([
+    ['cancelar a receita', 'expense_recurrences:delete', { action: 'cancel' as const, id: 'r1' }],
+    ['atualizar a série', 'expense_recurrences:update', {
+      action: 'update' as const, id: 'r1', freq: 'monthly' as const, intervalDays: null,
+      endDate: null, amount: 120, applyToFuture: false, paused: false,
+    }],
+    ['propagar a categoria pra série', 'expense_recurrences:update', { action: 'none' as const, id: 'r1' }],
+  ])('falha ao %s propaga', async (_nome, chave, recurrence) => {
+    h = withMutations({
+      session,
+      tables: { ...baseTables(), expense_recurrences: [{ id: 'r1', paused: false }] },
+      fail: { [chave]: 'boom' },
+    });
+    noRetry(h, UPDATE_EXPENSE_MUTATION_KEY);
+    let msg = '';
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    await act(async () => { result.current.updateExpense(updateBase({ recurrence }), m => { msg = m; }); });
+    await waitFor(() => expect(msg).toBe('boom'));
+  });
+
+  it('falha ao gravar a receita na CRIAÇÃO aborta antes da despesa', async () => {
+    h = withMutations({
+      session, tables: { ...baseTables(), expense_recurrences: [] },
+      fail: { 'expense_recurrences:upsert': 'boom' },
+    });
+    noRetry(h, CREATE_EXPENSE_MUTATION_KEY);
+    const { result } = await h.runReady(() => useCreateExpense());
+
+    await act(async () => {
+      result.current.createExpense(createInput({
+        recurrence: { freq: 'monthly', nextRunDate: new Date(2026, 3, 11) },
+      }));
+    });
+    await new Promise(r => setTimeout(r, 40));
+
+    expect(h.mock.rpcNames()).not.toContain('create_expense_with_participants');
+  });
+
+  it('falha ao CONTAR ocorrências não encerra a série por engano', async () => {
+    // A contagem decide se a série fica sem futuro. Errar pra baixo encerraria
+    // uma série que ainda tem ocorrência.
+    const t = baseTables();
+    t.expenses[0].recurrence_id = 'r1';
+    h = withMutations({
+      session,
+      tables: { ...t, expense_recurrences: [{ id: 'r1' }] },
+      fail: { 'expenses:select': 'boom' },
+    });
+    noRetry(h, DELETE_EXPENSE_MUTATION_KEY);
+    const { result } = await h.runReady(() => useDeleteExpense());
+
+    await act(async () => { result.current.deleteExpense('e1', GROUP, 'r1', false); });
+    await new Promise(r => setTimeout(r, 40));
+
+    expect(h.mock.of('update').filter(c => c.table === 'expense_recurrences')).toHaveLength(0);
+  });
+
+  it('falha ao ENCERRAR a série órfã propaga', async () => {
+    const t = baseTables();
+    t.expenses[0].recurrence_id = 'r1';
+    h = withMutations({
+      session,
+      tables: { ...t, expense_recurrences: [{ id: 'r1' }] },
+      fail: { 'expense_recurrences:update': 'boom' },
+    });
+    noRetry(h, DELETE_EXPENSE_MUTATION_KEY);
+    let msg = '';
+    const { result } = await h.runReady(() => useDeleteExpense());
+
+    await act(async () => { result.current.deleteExpense('e1', GROUP, 'r1', false, m => { msg = m; }); });
+    await waitFor(() => expect(msg).toBe('boom'));
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────────────
 describe('configuração das mutações', () => {
   it('TODA mutação de despesa roda no mesmo escopo, em série', async () => {
     // Sem escopo elas correm em paralelo, e com retry a exclusão pode chegar
@@ -697,6 +1061,63 @@ describe('configuração das mutações', () => {
       expect(h.queryClient.getMutationDefaults(key as unknown as string[]).scope)
         .toBe(EXPENSE_MUTATION_SCOPE);
     }
+  });
+
+  it('a descrição insiste MAIS que as outras — a despesa já está a salvo', async () => {
+    // 6 tentativas, não 3: quando esta roda o insert já terminou, então
+    // insistir não segura nada nem arrisca nada.
+    h = withMutations({ session, tables: baseTables() });
+    const d = h.queryClient.getMutationDefaults(DESCRIBE_EXPENSE_MUTATION_KEY as unknown as string[]);
+
+    expect(d.retry).toBe(6);
+    // A espera cresce, mas com teto — senão a última tentativa cairia em horas.
+    const espera = d.retryDelay as (n: number) => number;
+    expect(espera(0)).toBe(1000);
+    expect(espera(3)).toBe(8000);
+    expect(espera(20)).toBe(30000);
+  });
+
+  it('IA fora do ar não desfaz a despesa — ela já está gravada', async () => {
+    // A descrição é mutação separada justamente pra isso: quando a IA falha,
+    // o insert já terminou e nada é desfeito.
+    h = withMutations({
+      session, tables: baseTables(),
+      fail: { 'invoke:categorize-expense': 'modelo indisponível' },
+    });
+    const atual = h.queryClient.getMutationDefaults(DESCRIBE_EXPENSE_MUTATION_KEY as unknown as string[]);
+    h.queryClient.setMutationDefaults(DESCRIBE_EXPENSE_MUTATION_KEY as unknown as string[], { ...atual, retry: false });
+    h.queryClient.setQueryData<LancamentoItem[]>(queryKeys.expenses(GROUP), []);
+    const { result } = await h.runReady(() => useCreateExpense());
+
+    await act(async () => { result.current.createExpense(createInput()); });
+    await waitFor(() => expect(h.mock.of('invoke')).toHaveLength(1));
+    await new Promise(r => setTimeout(r, 30));
+
+    // A despesa continua na lista, só sem categoria.
+    const lista = h.queryClient.getQueryData<LancamentoItem[]>(queryKeys.expenses(GROUP))!;
+    expect(lista).toHaveLength(1);
+    expect(lista[0].categoryId).toBeNull();
+  });
+
+  it('desligar "Repetir" desvincula a despesa da série na lista', async () => {
+    h = withMutations({
+      session,
+      tables: { ...baseTables(), expense_recurrences: [{ id: 'r1', paused: false }] },
+    });
+    h.queryClient.setQueryData<LancamentoItem[]>(queryKeys.expenses(GROUP), [{
+      id: 'e1', type: 'expense', title: 'Bar', categoryId: 'c1', amount: 100,
+      paidById: BRUNO, paidByName: 'Bruno', paidByMe: false,
+      date: '2026-03-10', createdAt: '2026-03-10T20:00:00Z',
+      participantShares: { [ANA]: 50, [BRUNO]: 50 }, recurrenceId: 'r1',
+    }]);
+    const { result } = await h.runReady(() => useUpdateExpense());
+
+    await act(async () => {
+      result.current.updateExpense(updateBase({ recurrence: { action: 'cancel', id: 'r1' } }));
+    });
+
+    const lista = h.queryClient.getQueryData<LancamentoItem[]>(queryKeys.expenses(GROUP))!;
+    expect(lista[0].recurrenceId).toBeNull();
   });
 
   it('criar, editar e apagar repetem 3 vezes antes de desistir', async () => {

@@ -195,9 +195,12 @@ export function createSupabaseMock(config: MockConfig = {}) {
     },
 
     functions: {
+      // Falha por `fail: { 'invoke:categorize-expense': 'boom' }` — a Edge
+      // Function fora do ar é um caminho que o app trata de propósito.
       invoke: (name: string, opts?: { body?: unknown }) => {
         calls.push({ kind: 'invoke', name, body: opts?.body });
-        return Promise.resolve({ data: null, error: null });
+        const err = failFor(`invoke:${name}`);
+        return Promise.resolve({ data: null, error: err ? toError({ message: err }) : null });
       },
     },
 
