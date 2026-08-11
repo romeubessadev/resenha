@@ -7,7 +7,7 @@ import { Button } from '@/components';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTheme } from '@/hooks/useTheme';
 import { isOnboardingDone, resetOnboarding } from '@/lib/onboarding';
-import { fontFamilies, fontSizes, radius, shadows, spacing, type ColorPalette } from '@/theme';
+import { darkColors, fontFamilies, fontSizes, radius, shadows, spacing, type ColorPalette } from '@/theme';
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
@@ -50,6 +50,8 @@ export default function LoginScreen() {
         <Image source={require('@/assets/logo-resenha.png')} style={styles.wordmark} resizeMode="contain" />
 
         <View style={styles.bottomBlock}>
+          <Text style={styles.headline}>{t('login.headline')}</Text>
+
           <View style={styles.card}>
             <Text style={styles.cardCopy}>{t('login.cardCopy')}</Text>
 
@@ -102,6 +104,25 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
   },
   bottomBlock: {
     paddingHorizontal: spacing.pagePadding,
+  },
+  headline: {
+    textAlign: 'center',
+    fontSize: fontSizes.hero,
+    lineHeight: fontSizes.hero,
+    fontFamily: fontFamilies.bold,
+    // `darkColors.coral`, e não `colors.coral`: o fundo aqui é FOTO escurecida
+    // nos dois temas, então a cor não pode seguir o tema do app — e a variante
+    // clara do coral (#FF7643) rende só 2,79:1 sobre esse fundo, abaixo do
+    // mínimo de 3:1 pra texto grande. A variante escura (#FF9166) é a mesma
+    // cor de marca calibrada pra fundo escuro, e dá 3,36:1.
+    color: darkColors.coral,
+    letterSpacing: -0.5,
+    marginBottom: spacing.md,
+    // A foto tem pontos claros; a sombra segura o texto onde o gradiente não
+    // alcança.
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 10,
   },
   card: {
     backgroundColor: colors.surface,

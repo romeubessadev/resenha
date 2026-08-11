@@ -938,16 +938,19 @@ const pt = {
   // Sem texto por cima, a imagem respira e o logo fica como âncora — e some o
   // problema de contraste de escrever sobre foto.
   //
-  // Sem enumerar caso de uso. A versão anterior dizia "churras, viagem, casa",
-  // e três exemplos com ponto final leem como limite: parecia que o app servia
-  // só pra aquilo. Quem abre o leque é a MECÂNICA (cria, chama, sabe), não a
-  // lista. Quebra manual pra as duas linhas ficarem equilibradas no centro.
+  // As duas linhas da intro se COMPLEMENTAM, não se repetem: o título diz a
+  // promessa (o quê, com quem) e o card diz a mecânica (como). Por isso "a
+  // galera" aparece só no título — quando estava nos dois, a legenda era
+  // paráfrase do título e a linha se perdia.
+  'login.headline': 'RACHA A CONTA\nCOM A GALERA!',
+  // Sem enumerar caso de uso. Uma versão dizia "churras, viagem, casa", e três
+  // exemplos com ponto final leem como limite — parecia que o app servia só
+  // pra aquilo. Quem abre o leque é a mecânica, não a lista.
   //
-  // As três partes são AFIRMATIVAS e na mesma pessoa. Uma tentativa anterior
-  // fechava com "e ninguém sai devendo sem saber": além de negativa no meio de
-  // duas afirmações, o "sem saber" ficava sem complemento — saber o quê? Aqui
-  // a terceira parte diz o que a pessoa GANHA, no mesmo formato das outras.
-  'login.cardCopy': 'Cria uma resenha, chama a galera\ne cada um sabe quanto deve.',
+  // Afirmativa até o fim. Outra tentativa fechava com "e ninguém sai devendo
+  // sem saber": negativa no meio de afirmações, e o "sem saber" ficava sem
+  // complemento — saber o quê? Aqui a segunda parte diz o que se GANHA.
+  'login.cardCopy': 'Cria uma resenha e cada um\nsabe quanto deve.',
   'login.cta': 'Bora rachar',
   'login.haveAccount': 'Já tenho conta',
 
