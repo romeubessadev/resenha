@@ -935,7 +935,12 @@ const pt = {
   'onboarding.resultCta': 'Continuar',
 
   'login.headline': 'RACHA A CONTA\nCOM A GALERA!',
-  'login.cardCopy': 'Divida contas com a\ngalera sem drama',
+  // A legenda NÃO repete o título: "RACHA A CONTA COM A GALERA" já diz o quê e
+  // com quem. Aqui se ensina a palavra nova — que "resenha" é a coisa que a
+  // pessoa cria — e que dá pra ter várias. Os três exemplos fazem o trabalho
+  // que "deixe as contas organizadas" não fazia: mostram o alcance sem
+  // explicar. Quebra manual pra as duas linhas ficarem equilibradas no centro.
+  'login.cardCopy': 'Uma resenha pra cada ocasião:\nchurras, viagem, casa.',
   'login.cta': 'Bora rachar',
   'login.haveAccount': 'Já tenho conta',
 
