@@ -7,7 +7,7 @@ import { Button } from '@/components';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTheme } from '@/hooks/useTheme';
 import { isOnboardingDone, resetOnboarding } from '@/lib/onboarding';
-import { fontFamilies, fontSizes, radius, shadows, spacing, type ColorPalette } from '@/theme';
+import { fontFamilies, fontSizes, lightColors, radius, shadows, spacing, type ColorPalette } from '@/theme';
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
@@ -110,7 +110,16 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     fontSize: fontSizes.hero,
     lineHeight: fontSizes.hero,
     fontFamily: fontFamilies.bold,
-    color: colors.coral,
+    // `lightColors.cream`, e não `colors.cream`: esta tela tem fundo de FOTO
+    // escurecida nos dois temas, então a cor do texto não pode seguir o tema.
+    // O token inverte no escuro (#FAF5EA vira #1B212B) e o headline sumiria.
+    //
+    // Cream e não coral: medido sobre a foto com o gradiente por cima, o fundo
+    // fica em luminância ~0,09. O coral dava 2,79:1 — abaixo do mínimo de 3:1
+    // pra texto grande. Cream dá 6,85:1. E tira o headline da disputa com o
+    // amarelo do logo acima e do botão abaixo: o texto vira a âncora neutra e
+    // o amarelo fica reservado pra marca e pra ação.
+    color: lightColors.cream,
     letterSpacing: -0.5,
     marginBottom: spacing.md,
     textShadowColor: 'rgba(0,0,0,0.4)',
