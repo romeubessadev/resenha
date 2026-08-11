@@ -54,10 +54,22 @@ export default function SignupScreen() {
     setLoading(false);
 
     if (signUpError) {
+      // A causa REAL só existe aqui — o texto que vai pra tela é sempre
+      // genérico de propósito (mensagem de servidor não é pra usuário ler).
+      // Sem este log, um cadastro que falha é indistinguível de outro: foi
+      // exatamente o que aconteceu quando o envio de e-mail caiu e não havia
+      // como saber se era senha, rede, e-mail repetido ou o hook.
+      if (__DEV__) console.error('[signup] falhou:', signUpError.code, signUpError.status, signUpError.message);
+
       if (signUpError.message.includes('already registered')) {
         setError(t('signup.errorAlreadyRegistered'));
       } else if (signUpError.code === 'over_email_send_rate_limit') {
         setError(t('signup.errorRateLimit'));
+      } else if (signUpError.message.includes('hook')) {
+        // O cadastro em si passou; quem falhou foi o envio do e-mail. Vale uma
+        // mensagem própria: "tenta de novo" não resolve, e a pessoa fica
+        // repetindo um gesto que não tem como dar certo.
+        setError(t('signup.errorEmailSend'));
       } else {
         setError(t('signup.errorGeneric'));
       }

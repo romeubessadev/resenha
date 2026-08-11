@@ -957,6 +957,10 @@ const pt = {
   'signup.errorAlreadyRegistered': 'Este e-mail já está cadastrado.',
   'signup.errorRateLimit': 'Você já pediu um código pra esse e-mail há pouco. Aguarde um instante e tente de novo.',
   'signup.errorGeneric': 'Não deu pra criar a conta. Tenta de novo.',
+  // Falha no ENVIO do e-mail, não no cadastro. Não manda tentar de novo: o
+  // gesto não tem como dar certo enquanto o envio estiver quebrado, e repetir
+  // ainda esbarra no limite de e-mails do servidor.
+  'signup.errorEmailSend': 'Não deu pra enviar o e-mail de confirmação. Já estamos vendo isso — tenta daqui a pouco.',
 
   'entrar.title': 'Entrar',
   'entrar.subtitle': 'Bom te ver de novo por aqui.',
