@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, Image,
 } from 'react-native';
@@ -9,6 +9,7 @@ import { BackButton, Button, Input } from '@/components';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTheme } from '@/hooks/useTheme';
 import { supabase } from '@/lib/supabase';
+import { isOnboardingDone } from '@/lib/onboarding';
 import { fontFamilies, fontSizes, spacing, type ColorPalette } from '@/theme';
 
 export default function EntrarScreen() {
@@ -20,6 +21,22 @@ export default function EntrarScreen() {
   const { t } = useLanguage();
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
+  const [tourDone, setTourDone] = useState(false);
+
+  useEffect(() => {
+    isOnboardingDone().then(setTourDone);
+  }, []);
+
+  // Mesma regra do "Bora rachar" em login.tsx: quem nunca viu o tour passa por
+  // ele antes do cadastro — a ordem Onboarding → Paywall → Auth que o
+  // CLAUDE.md define. Este link ia DIRETO pro formulário e furava o funil
+  // inteiro pra quem chegasse por "já tenho conta" e mudasse de ideia.
+  //
+  // Sem leitura do storage ainda, manda pro tour: ele é pulável, e repeti-lo
+  // incomoda menos do que sonegá-lo.
+  function handleCreateAccount() {
+    router.push(tourDone ? '/(pre-auth)/signup' : '/(pre-auth)/onboarding');
+  }
 
   async function handleLogin() {
     const cleanEmail = email.trim().toLowerCase();
@@ -142,7 +159,7 @@ export default function EntrarScreen() {
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>{t('entrar.footerText')}</Text>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push('/(pre-auth)/signup')}>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleCreateAccount}>
           <Text style={styles.footerLink}>{t('entrar.footerLink')}</Text>
         </TouchableOpacity>
       </View>

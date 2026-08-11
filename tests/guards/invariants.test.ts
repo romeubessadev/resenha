@@ -256,6 +256,32 @@ describe('nada sensível no client', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+// Fluxo Onboarding → Paywall → Auth
+//
+// O CLAUDE.md define essa ordem porque a pessoa se engaja e vê o paywall ANTES
+// de criar conta. O link "Criar conta" do entrar.tsx ia direto pro formulário
+// e furava o funil pra quem entrasse por "já tenho conta" e mudasse de ideia.
+// ═══════════════════════════════════════════════════════════════════════════
+describe('nada leva ao cadastro sem passar pelo tour', () => {
+  it('toda navegação pro signup checa se o tour já foi visto', () => {
+    // Exceção: o paywall é o PASSO SEGUINTE do funil — quem chega lá já viu o
+    // tour, então mandar pro cadastro dali é o caminho correto.
+    const excecoes = ['app/(pre-auth)/paywall.tsx'];
+
+    const hits = sourceFiles()
+      .filter(f => /['"]\/\(pre-auth\)\/signup['"]/.test(f.code))
+      .filter(f => !excecoes.includes(f.rel))
+      .filter(f => !f.code.includes('isOnboardingDone'))
+      .map(f => f.rel);
+
+    expect(
+      hits,
+      `Roteie com \`tourDone ? '/(pre-auth)/signup' : '/(pre-auth)/onboarding'\`.${fail(hits)}`,
+    ).toEqual([]);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
 // Texto de erro do SERVIDOR não chega na tela
 //
 // `queryErrorMessage` decidia por `error instanceof Error`, na crença de que o
