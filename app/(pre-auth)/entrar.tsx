@@ -43,8 +43,14 @@ export default function EntrarScreen() {
     }
 
     // Conta existe mas o e-mail nunca foi confirmado: reenvia o código
-    // e leva pra tela de verificação
-    if (signInError.message.includes('Email not confirmed')) {
+    // e leva pra tela de verificação.
+    //
+    // Discrimina pelo `code`, não pelo texto: o servidor manda
+    // `email_not_confirmed` junto de "Email not confirmed", e casar pela
+    // mensagem quebra em silêncio se a redação mudar — aí quem tem conta e
+    // senha certas cai em "E-mail ou senha incorretos" e não tem saída.
+    // É o mesmo erro que deixava o OTP dizer "expirou" pra código errado.
+    if (signInError.code === 'email_not_confirmed') {
       await supabase.auth.resend({ type: 'signup', email: cleanEmail });
       setLoading(false);
       router.push({
