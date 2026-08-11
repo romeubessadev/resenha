@@ -16,7 +16,7 @@ type Props = {
 };
 
 // Visualização fullscreen da foto — tap em qualquer lugar (ou no X) fecha.
-// Sem pinch-zoom: aqui é só foto de perfil (do rolê ou da pessoa), não precisa
+// Sem pinch-zoom: aqui é só foto de perfil (da resenha ou da pessoa), não precisa
 // de detalhe.
 export function PhotoViewerModal({ visible, onClose, photoUrl }: Props) {
   const insets = useSafeAreaInsets();

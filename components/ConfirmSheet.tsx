@@ -45,7 +45,7 @@ type Props = {
   /** A ação não pode acontecer agora, e o motivo é uma REGRA (saldo pendente,
    *  por exemplo), não um erro. Preenchido, o sheet troca a mensagem e os
    *  botões por um card de aviso — a pessoa lê e fecha, sem apertar num botão
-   *  que ia falhar. Mesmo tratamento que o "Sair do rolê" já dá ao caso. */
+   *  que ia falhar. Mesmo tratamento que o "Sair da resenha" já dá ao caso. */
   blocked?: { title: string; message: string } | null;
 };
 
@@ -53,7 +53,7 @@ type Props = {
  * Confirmação no formato do app: sheet ancorado embaixo, ação sólida em largura
  * cheia e "Cancelar" como texto puro embaixo dela.
  *
- * A anatomia é a do "Sair do rolê" (LeaveGroupSheet), que é a confirmação mais
+ * A anatomia é a do "Sair da resenha" (LeaveGroupSheet), que é a confirmação mais
  * elaborada que o app tem — inclusive o estado bloqueado. Botões lado a lado
  * (como o sheet de apagar despesa ainda faz) dão o mesmo peso visual pra sair e
  * pra confirmar; empilhado, a ação é o que se vê primeiro e o cancelar não
@@ -80,7 +80,7 @@ export function ConfirmSheet({
 
       {blocked ? (
         // Sem botão de ação nem cancelar: não há o que confirmar. Fechar no X é
-        // a única saída, igual ao estado bloqueado do "Sair do rolê".
+        // a única saída, igual ao estado bloqueado do "Sair da resenha".
         <View style={styles.warnCard}>
           <View style={styles.warnIconCircle}>
             <AlertCircle size={16} color={colors.coral} strokeWidth={2} />

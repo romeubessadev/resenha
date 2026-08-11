@@ -87,7 +87,7 @@ export function MemberActionsSheet({ visible, onClose, onClosed, groupId, member
     : removing;
 
   // Modelo do WhatsApp: qualquer admin rebaixa qualquer admin — só quem criou
-  // o rolê é intocável, e esse caso o `canActOn` da tela de participantes já
+  // a resenha é intocável, e esse caso o `canActOn` da tela de participantes já
   // barra antes de abrir este sheet.
   const showTornarAdmin = member?.role === 'member';
   const showRemoverAdmin = member?.role === 'admin';

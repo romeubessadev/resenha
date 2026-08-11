@@ -26,7 +26,7 @@ type Props = {
   people: PersonGroup[];
 };
 
-// Bullets mostram o valor real de cada rolê (moeda própria) — o "Total" é
+// Bullets mostram o valor real de cada resenha (moeda própria) — o "Total" é
 // convertido pra moeda principal do usuário, mesma lente da Carteira.
 function buildBullets(person: PersonGroup): string {
   return groupByGroup(person.items).map(g => `• ${g.groupName}: ${formatMoney(Math.abs(g.net))}`).join('\n');
@@ -113,7 +113,7 @@ export function BatchSettleSheet({ visible, onClose, people }: Props) {
       : person.items.some(i => i.direction === 'in' && i.status !== 'settled');
   }
 
-  /** Aba "a receber": registra o recebimento de todos os rolês dessa pessoa. */
+  /** Aba "a receber": registra o recebimento de todos as resenhas dessa pessoa. */
   async function handleResolve(person: PersonGroup) {
     setPendingPersonId(person.personId);
     try {
@@ -128,16 +128,16 @@ export function BatchSettleSheet({ visible, onClose, people }: Props) {
     }
   }
 
-  /** Aba "a pagar": marca os rolês dessa pessoa, com o comprovante escolhido. */
+  /** Aba "a pagar": marca as resenhas dessa pessoa, com o comprovante escolhido. */
   async function handleConfirmMarkPaid(proofUri: string | null, mimeType: string | null) {
     if (!confirmingPerson) return;
     const items = confirmingPerson.items.filter(i => i.direction === 'out' && i.status === 'pending');
     setConfirmSaving(true);
     try {
       for (const item of items) {
-        // Um upload por acerto, mesmo sendo a mesma foto pros vários rolês:
+        // Um upload por acerto, mesmo sendo a mesma foto pros várias resenhas:
         // "Marquei sem querer" apaga o arquivo do comprovante, e um path
-        // compartilhado deixaria os outros rolês apontando pra um arquivo
+        // compartilhado deixaria os outras resenhas apontando pra um arquivo
         // que não existe mais.
         const proofPath = proofUri
           ? await uploadSettlementProof(item.groupId, myUserId, item.personId, proofUri, mimeType ?? 'image/jpeg')
@@ -152,7 +152,7 @@ export function BatchSettleSheet({ visible, onClose, people }: Props) {
     }
   }
 
-  /** Aba "a pagar": desfaz a marcação de todos os rolês marcados dessa pessoa. */
+  /** Aba "a pagar": desfaz a marcação de todas as resenhas marcadas dessa pessoa. */
   async function handleUndo() {
     if (!undoingPerson) return;
     try {
@@ -256,14 +256,14 @@ export function BatchSettleSheet({ visible, onClose, people }: Props) {
                 const relevantDirection = tab === 'pagar' ? 'out' : 'in';
                 // Já marquei como pago e tô esperando a outra pessoa confirmar —
                 // sem isso, o botão só aparecia desabilitado, sem explicar o motivo.
-                // Vale pra ALGUM rolê da pessoa: é o que o selo conta.
+                // Vale pra ALGUMA resenha da pessoa: é o que o selo conta.
                 const waitingConfirmation = tab === 'pagar' && person.items.some(i => i.direction === 'out' && i.status === 'waiting');
                 // Saldo sem nenhuma despesa por trás — mesma ideia do SettleUpSheet
                 // (provavelmente a despesa que gerou essa cobrança foi apagada).
                 const hasNoExpenses = person.items.some(i => i.direction === relevantDirection && i.hasNoExpenses);
 
                 // Tinte só quando NÃO sobrou nada pra marcar: o card agrega N
-                // rolês, e com um marcado e outro em aberto o fundo amarelo
+                // resenhas, e com um marcado e outro em aberto o fundo amarelo
                 // diria "tudo em espera" — o selo já conta a parte marcada.
                 const allWaiting = waitingConfirmation && !resolvable;
 
@@ -295,7 +295,7 @@ export function BatchSettleSheet({ visible, onClose, people }: Props) {
                     )}
 
                     {/* Mesma regra do TransferCard, traduzida pro card que
-                        agrega N rolês: aparece pra quem DEVE e enquanto sobrar
+                        agrega N resenhas: aparece pra quem DEVE e enquanto sobrar
                         algo pra marcar (`resolvable`). Some quando tudo já foi
                         marcado, e nunca na aba "A receber" — ali a chave seria
                         a minha, que eu já vejo no meu perfil. */}
@@ -320,8 +320,8 @@ export function BatchSettleSheet({ visible, onClose, people }: Props) {
                       {/* Sem nada pra marcar, este slot era um botão morto a
                           50% dizendo "Marcar como pago". Vira o desfazer, como
                           no TransferCard. No estado misto ele não aparece: o
-                          marcar ainda tem função, e desfazer UM rolê se faz no
-                          sheet do rolê, que é onde dá pra ver qual é. */}
+                          marcar ainda tem função, e desfazer UMA resenha se faz no
+                          sheet da resenha, que é onde dá pra ver qual é. */}
                       {allWaiting ? (
                         <TouchableOpacity
                           style={[styles.resolveBtn, styles.undoBtn]}

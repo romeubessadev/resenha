@@ -39,10 +39,10 @@ export type ExpenseDetail = {
   createdByMe: boolean;
   date: string;
   receiptPath: string | null;
-  /** Taxa de câmbio (moeda do rolê → USD) carimbada no momento do lançamento
+  /** Taxa de câmbio (moeda da resenha → USD) carimbada no momento do lançamento
    *  — null se o registro é anterior a essa coluna, ou se `fx_rates` ainda
    *  não tinha essa moeda cacheada naquele momento. */
-  /** Moeda/valor que a pessoa efetivamente digitou/ditou, se diferente da moeda do rolê. */
+  /** Moeda/valor que a pessoa efetivamente digitou/ditou, se diferente da moeda da resenha. */
   /** Id da receita de recorrência (ver hooks/useRecurrence.ts) quando essa despesa nasceu de uma. */
   recurrenceId: string | null;
   participants: ExpenseParticipantDetail[];

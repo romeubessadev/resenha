@@ -3,14 +3,14 @@ import type { PixKeyType } from '@/lib/pix';
 
 export type PersonGroup = {
   personId: string; personName: string; personWhatsapp: string | null; personPhotoUrl: string | null;
-  /** Dado de perfil, igual a nome e whatsapp: vale pra pessoa, não pro rolê. */
+  /** Dado de perfil, igual a nome e whatsapp: vale pra pessoa, não pra resenha. */
   personPixKey: string | null; personPixKeyType: PixKeyType | null;
   net: number; items: WalletTx[];
 };
 
-// Uma pessoa pode aparecer em rolês de moedas diferentes — soma sempre
+// Uma pessoa pode aparecer em resenhas de moedas diferentes — soma sempre
 // convertendo cada lançamento com `convert` primeiro (os `items` guardados
-// continuam com o valor cru na moeda de cada rolê, pra quem precisar montar
+// continuam com o valor cru na moeda de cada resenha, pra quem precisar montar
 // mensagem/acerto com o valor real, ex. BatchSettleSheet). `convert` deve
 // ser a mesma função usada pra exibir cada lançamento na lista (ex.
 // `toMineAtTxRate`), senão a lista "por movimentação" e "por pessoa" podem
@@ -32,7 +32,7 @@ export function groupByPerson(items: WalletTx[], convert: (tx: WalletTx) => numb
 
 export type GroupBucket = { groupId: string; groupName: string; net: number; items: WalletTx[] };
 
-// Cada bucket é sempre 1 rolê só — soma direto, e todo rolê é em reais.
+// Cada bucket é sempre 1 resenha só — soma direto, e toda resenha é em reais.
 export function groupByGroup(items: WalletTx[]): GroupBucket[] {
   const map = new Map<string, GroupBucket>();
   for (const tx of items) {

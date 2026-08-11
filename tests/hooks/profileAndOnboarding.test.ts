@@ -81,8 +81,8 @@ describe('useUpdateMyProfile', () => {
     expect(h.mock.of('update')[0].values).toEqual({ pix_key: null, pix_key_type: null });
   });
 
-  it('o nome tem alcance de rolê e de despesa — invalida os dois', async () => {
-    // O nome aparece na lista de membros de cada rolê e nos participantes de
+  it('o nome tem alcance de resenha e de despesa — invalida os dois', async () => {
+    // O nome aparece na lista de membros de cada resenha e nos participantes de
     // cada despesa; sem isso ele só mudava no perfil até reabrir o app.
     h = createHarness({ session, tables: { profiles: [perfil()] } });
     const { result } = await h.runReady(() => useUpdateMyProfile());
@@ -157,13 +157,13 @@ describe('useUpdateMyAvatar', () => {
 });
 
 // ───────────────────────────────────────────────────────────────────────────
-describe('useOnboardingGroup — o rolê do tour virando rolê de verdade', () => {
+describe('useOnboardingGroup — a resenha do tour viranda resenha de verdade', () => {
   const respostas = { groupType: 'viagem' as const, split: 'equal' as const, name: 'Praia' };
 
   /** Espera o efeito assíncrono do hook terminar. */
   const assentar = () => new Promise(r => setTimeout(r, 30));
 
-  it('cria o rolê com o nome e a divisão que a pessoa escolheu no tour', async () => {
+  it('cria a resenha com o nome e a divisão que a pessoa escolheu no tour', async () => {
     await saveOnboardingAnswers(respostas);
     h = createHarness({ session, tables: { group_members: [] }, rpc: { create_group_with_owner: () => ({}) } });
     h.run(() => useOnboardingGroup());
@@ -172,7 +172,7 @@ describe('useOnboardingGroup — o rolê do tour virando rolê de verdade', () =
     expect(h.mock.of('rpc')[0].args).toMatchObject({ p_name: 'Praia', p_default_split_type: 'equal' });
   });
 
-  it('as respostas só são apagadas DEPOIS de o rolê existir', async () => {
+  it('as respostas só são apagadas DEPOIS de a resenha existir', async () => {
     // Senão uma falha de rede perderia o que a pessoa configurou.
     await saveOnboardingAnswers(respostas);
     h = createHarness({ session, tables: { group_members: [] }, rpc: { create_group_with_owner: () => ({}) } });
@@ -197,7 +197,7 @@ describe('useOnboardingGroup — o rolê do tour virando rolê de verdade', () =
     expect(await getOnboardingAnswers()).toMatchObject({ name: 'Praia' });
   });
 
-  it('quem NÃO terminou o tour não ganha rolê', async () => {
+  it('quem NÃO terminou o tour não ganha resenha', async () => {
     await saveOnboardingAnswers({ groupType: 'viagem', split: null, name: null });
     h = createHarness({ session, tables: { group_members: [] } });
     h.run(() => useOnboardingGroup());
@@ -206,9 +206,9 @@ describe('useOnboardingGroup — o rolê do tour virando rolê de verdade', () =
     expect(h.mock.rpcNames()).not.toContain('create_group_with_owner');
   });
 
-  it('conta que JÁ TEM rolê não recebe o rolê do tour', async () => {
+  it('conta que JÁ TEM resenha não recebe a resenha do tour', async () => {
     // Quem fez o tour e no fim entrou numa conta antiga não pode achar um
-    // "Rolê da praia" perdido no meio dos rolês de verdade dela.
+    // "Resenha da praia" perdido no meio das resenhas de verdade dela.
     await saveOnboardingAnswers(respostas);
     h = createHarness({
       session,
@@ -233,14 +233,21 @@ describe('useOnboardingGroup — o rolê do tour virando rolê de verdade', () =
 
   it('tenta UMA vez por montagem, mesmo com re-render', async () => {
     // Sem a trava, o re-render que o próprio insert provoca reentraria aqui
-    // antes de as respostas terem sido limpas — e criaria dois rolês.
+    // antes de as respostas terem sido limpas — e criaria duas resenhas.
     await saveOnboardingAnswers(respostas);
     h = createHarness({ session, tables: { group_members: [] }, rpc: { create_group_with_owner: () => ({}) } });
     const { rerender } = h.run(() => useOnboardingGroup());
     rerender();
     rerender();
-    await assentar();
 
-    expect(h.mock.rpcNames().filter(n => n === 'create_group_with_owner')).toHaveLength(1);
+    const chamadas = () => h.mock.rpcNames().filter(n => n === 'create_group_with_owner');
+    // Espera a criação acontecer — `assentar()` sozinho é tempo fixo e já
+    // falhou com a máquina sob carga, contando 0 em vez de 1.
+    await waitFor(() => expect(chamadas()).toHaveLength(1));
+    // E só então confirma que ela não se repetiu: `waitFor` para na primeira
+    // vez que dá certo, então sem esta segunda espera uma chamada duplicada
+    // logo depois passaria batida.
+    await assentar();
+    expect(chamadas()).toHaveLength(1);
   });
 });

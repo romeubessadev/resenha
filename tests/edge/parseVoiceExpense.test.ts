@@ -112,7 +112,7 @@ describe('quem pode usar', () => {
     expect(fn.fetchCalls).toHaveLength(0);
   });
 
-  it('quem não é do rolê recebe 404 — a RLS não devolve membro nenhum', async () => {
+  it('quem não é da resenha recebe 404 — a RLS não devolve membro nenhum', async () => {
     const fn = await load({ membros: [] });
     const res = await fn.call(pedido());
 
@@ -176,19 +176,19 @@ describe('a despesa extraída', () => {
     expect((await (await fn.call(pedido())).json()).amount).toBe(10.99);
   });
 
-  it('quem pagou vira EU quando a IA devolve id que não é do rolê', async () => {
+  it('quem pagou vira EU quando a IA devolve id que não é da resenha', async () => {
     const fn = await load({ extraido: { title: 'X', amount: 10, paidById: 'nao-existe' } });
     expect((await (await fn.call(pedido())).json()).paidById).toBe(EU);
   });
 
-  it('participante que não é do rolê é descartado', async () => {
+  it('participante que não é da resenha é descartado', async () => {
     const fn = await load({
       extraido: { title: 'X', amount: 10, participantIds: [EU, 'intruso', BRUNO] },
     });
     expect((await (await fn.call(pedido())).json()).participantIds).toEqual([EU, BRUNO]);
   });
 
-  it('quem ARQUIVOU o rolê não é oferecido à IA', async () => {
+  it('quem ARQUIVOU a resenha não é oferecido à IA', async () => {
     // Arquivar exige estar quite; incluir a pessoa numa despesa nova a deixaria
     // devendo de novo sem ela saber.
     const fn = await load({
@@ -294,7 +294,7 @@ describe('divisão', () => {
     expect((await (await fn.call(pedido())).json()).shares).toEqual({ [EU]: 2, [BRUNO]: 1 });
   });
 
-  it('valores exatos ignoram id que não é do rolê', async () => {
+  it('valores exatos ignoram id que não é da resenha', async () => {
     const fn = await load({
       extraido: {
         title: 'X', amount: 30, splitType: 'exact',

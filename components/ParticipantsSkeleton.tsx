@@ -10,7 +10,7 @@ import { fontFamilies, fontSizes, radius, spacing, type ColorPalette } from '@/t
 // Contorno da tela de participantes, mostrado enquanto o grupo ainda não tem
 // dado em cache (primeira entrada). Segue o GroupDetailSkeleton: o que já se
 // sabe sem carregar nada fica real (voltar, título da tela) e só o que depende
-// do fetch vira osso — nome do rolê, contagem e as linhas de participante.
+// do fetch vira osso — nome da resenha, contagem e as linhas de participante.
 export function ParticipantsSkeleton() {
   const insets = useSafeAreaInsets();
   const { t } = useLanguage();

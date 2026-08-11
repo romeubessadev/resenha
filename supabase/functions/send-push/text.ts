@@ -120,14 +120,14 @@ export function buildPushText(kind: string, language: Language, meta: PushMeta):
 
     case 'member_joined':
       return {
-        'pt-BR': { title: `${actor} entrou no rolê`, body: group },
+        'pt-BR': { title: `${actor} entrou na resenha`, body: group },
         en: { title: `${actor} joined the group`, body: group },
         es: { title: `${actor} se unió al grupo`, body: group },
       }[language];
 
     case 'member_left':
       return {
-        'pt-BR': { title: `${actor} saiu do rolê`, body: group },
+        'pt-BR': { title: `${actor} saiu da resenha`, body: group },
         en: { title: `${actor} left the group`, body: group },
         es: { title: `${actor} salió del grupo`, body: group },
       }[language];
@@ -154,7 +154,7 @@ export function buildPushText(kind: string, language: Language, meta: PushMeta):
           ? { 'pt-BR': `Nome atualizado para ${meta.newName}`, en: `Name updated to ${meta.newName}`, es: `Nombre actualizado a ${meta.newName}` }
           : { 'pt-BR': 'Foto atualizada', en: 'Photo updated', es: 'Foto actualizada' };
       return {
-        'pt-BR': { title: `${actor} editou o rolê ${group}`, body: bodyMap['pt-BR'] },
+        'pt-BR': { title: `${actor} editou a resenha ${group}`, body: bodyMap['pt-BR'] },
         en: { title: `${actor} edited the group ${group}`, body: bodyMap.en },
         es: { title: `${actor} editó el grupo ${group}`, body: bodyMap.es },
       }[language];

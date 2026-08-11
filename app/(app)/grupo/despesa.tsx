@@ -133,7 +133,7 @@ export default function DespesaDetailScreen() {
   const { data: lancamentos } = useExpenses(expense?.groupId);
   const { paymentsOnlyBalances } = useGroupBalances(expense?.groupId);
   const groupMembers = group?.members ?? [];
-  // Editar/apagar é de quem pagou, de quem LANÇOU ou de admin do rolê (mesma
+  // Editar/apagar é de quem pagou, de quem LANÇOU ou de admin da resenha (mesma
   // regra da RLS expenses_update/delete_payer_creator_or_admin) — sem essa
   // checagem o botão aparecia pra todo mundo e só falhava ao confirmar.
   // Quem lançou entrou na conta: lançar em nome de outro é o fluxo
@@ -144,7 +144,7 @@ export default function DespesaDetailScreen() {
   const myGroupRole = groupMembers.find(m => m.isMe)?.role;
   const isGroupAdmin = myGroupRole === 'owner' || myGroupRole === 'admin';
   const canManageExpense = !!expense?.paidByMe || !!expense?.createdByMe || isGroupAdmin;
-  // Apagar a última despesa do rolê pode deixar alguém com saldo pendente
+  // Apagar a última despesa da resenha pode deixar alguém com saldo pendente
   // (pagamento já confirmado, sem mais nenhuma despesa por perto pra
   // explicar o motivo) — ver hooks/useGroupBalances.ts.
   const isLastExpense = lancamentos.filter(l => l.type === 'expense').length === 1;
@@ -219,7 +219,7 @@ export default function DespesaDetailScreen() {
   // volta a ser a de sempre.
   //
   // E só pra quem pode mesmo pausar: a policy expense_recurrences_update_owner_
-  // or_admin é do criador da receita ou admin/dono do rolê. Quem só pagou a
+  // or_admin é do criador da receita ou admin/dono da resenha. Quem só pagou a
   // despesa apaga a ocorrência, mas o update da série seria filtrado pela RLS
   // sem afetar linha nenhuma — a opção prometeria parar a repetição e não
   // pararia, calada.

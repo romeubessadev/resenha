@@ -3,7 +3,7 @@
 // Antes isto caía no stub vazio, o que bastava enquanto nada exercitava
 // persistência local. `lib/onboarding.ts` exercita: é ele que guarda as
 // respostas do tour ANTES do cadastro e as entrega pra criação do primeiro
-// rolê depois — o caminho que o CLAUDE.md descreve como "dados de antes do
+// resenha depois — o caminho que o CLAUDE.md descreve como "dados de antes do
 // cadastro migram pro banco após o signup". Testar isso pede um storage que
 // de fato guarde.
 const store = new Map<string, string>();

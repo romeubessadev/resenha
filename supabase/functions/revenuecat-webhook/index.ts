@@ -4,7 +4,7 @@
 // Alvo do webhook do RevenueCat (Project settings → Integrations → Webhooks).
 // Só esta function pode escrever profiles.is_premium/premium_since — o
 // banco revogou o UPDATE dessas colunas do role authenticated,
-// então "virar Bros+" só acontece de verdade por aqui.
+// então "virar Premium" só acontece de verdade por aqui.
 //
 // PREPARADA, AINDA NÃO LIGADA: falta (1) instalar o SDK client e chamar
 // Purchases.configure/logIn com o uuid do Supabase como app_user_id — é

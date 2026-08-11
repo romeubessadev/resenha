@@ -146,10 +146,10 @@ function splitDetail(
 
 /**
  * Valor + moeda "a mostrar" de uma despesa (criada/editada/apagada): regra 4
- * do handoff — se foi lançada numa moeda diferente da moeda do rolê, mostra o
+ * do handoff — se foi lançada numa moeda diferente da moeda da resenha, mostra o
  * valor original digitado, não o convertido pra moeda do grupo.
  */
-// Todo rolê é em reais: não há mais "moeda original" diferente da do rolê, e
+// Toda resenha é em reais: não há mais "moeda original" diferente da da resenha, e
 // as colunas que a guardavam saíram do banco.
 function expenseDisplayAmount(payload: { amount: number }) {
   return payload.amount;

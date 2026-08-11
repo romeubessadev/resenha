@@ -70,7 +70,7 @@ async function launchGallery(texts: PickImageTexts, opts: PickImageOptions): Pro
 }
 
 // Menu "Tirar foto / Escolher da galeria" reusado em todo fluxo que anexa uma
-// imagem (perfil, foto do rolê, comprovante) — os textos vêm de fora porque o
+// imagem (perfil, foto da resenha, comprovante) — os textos vêm de fora porque o
 // hook de i18n só existe dentro de componentes, não aqui.
 export function pickImage(texts: PickImageTexts, opts: PickImageOptions = {}): Promise<ImagePicker.ImagePickerAsset | null> {
   return new Promise(resolve => {

@@ -267,7 +267,7 @@ export default function AjustesScreen() {
               <Zap size={20} color={colors.ink} fill={colors.ink} strokeWidth={0} />
             </View>
             <View style={styles.planTextCol}>
-              <Text style={styles.planTitle}>{t('profile.brosPlusPlan')}</Text>
+              <Text style={styles.planTitle}>{t('profile.premiumPlan')}</Text>
               <Text style={styles.planSubtitle}>{t('profile.activeHelper')}</Text>
             </View>
             <Check size={20} color={colors.ink} strokeWidth={2.4} />
@@ -363,7 +363,7 @@ export default function AjustesScreen() {
           <Text style={styles.logoutLabel}>{t('profile.logout')}</Text>
         </TouchableOpacity>
 
-        <Text style={styles.footer}>Bros · v0.1</Text>
+        <Text style={styles.footer}>Resenha · v0.1</Text>
       </ScrollView>
       </SwipeTabs>
 

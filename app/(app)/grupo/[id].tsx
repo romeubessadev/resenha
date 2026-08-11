@@ -42,7 +42,7 @@ const TAB_ORDER: Tab[] = ['resumo', 'despesas', 'saldos', 'historico'];
 
 // Avatares já pré-carregados nessa sessão do app — evita re-esperar o
 // Image.prefetch (e flashar o skeleton inteiro) toda vez que se revisita
-// um rolê cuja foto já foi carregada antes.
+// uma resenha cuja foto já foi carregada antes.
 const prefetchedAvatarUrls = new Set<string>();
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -70,7 +70,7 @@ function groupByDay(items: LancamentoItem[], language: Language): { label: strin
 // Linha da lista virtualizada de despesas — achata os grupos por dia num único
 // array (header + itens) pra caber num FlatList, que precisa de uma lista
 // plana pra virtualizar (só monta as linhas visíveis em tela, mesmo com
-// centenas de despesas no rolê).
+// centenas de despesas na resenha).
 // Busca sem acento: "jose" acha "José", "voce" acha "você". Mesma técnica do
 // slugify em lib/insightsExport.ts — a regex é montada por fromCharCode em vez
 // de literal.
@@ -188,7 +188,7 @@ export default function GroupDetailScreen() {
   });
 
   // Troca de aba (Resumo ↔ Despesas ↔ Saldos ↔ Histórico) por swipe horizontal —
-  // mesmo componente/padrão da tabbar de baixo (Rolês ↔ Carteira ↔ Perfil). Não
+  // mesmo componente/padrão da tabbar de baixo (Resenhas ↔ Carteira ↔ Perfil). Não
   // troca com algum sheet aberto por cima, pra não confundir com o gesto do sheet.
   const sheetsOpen = menuOpen || editSheetOpen || inviteSheetOpen || leaveSheetOpen
     || settleUpOpen || limitSheetOpen || paywallOpen || !!deleteTarget || photoViewerOpen;
@@ -212,7 +212,7 @@ export default function GroupDetailScreen() {
   const isOwner = myRole === 'owner';
   const isAdminOrOwner = myRole === 'owner' || myRole === 'admin';
 
-  // Apagar a última despesa do rolê pode deixar alguém com saldo pendente
+  // Apagar a última despesa da resenha pode deixar alguém com saldo pendente
   // (pagamento já confirmado, sem mais nenhuma despesa por perto pra
   // explicar o motivo) — ver hooks/useGroupBalances.ts. Avisa antes de
   // confirmar, sem mexer em nada automaticamente.
@@ -230,7 +230,7 @@ export default function GroupDetailScreen() {
   // lado nunca apaga nem para nada a mais.
   //
   // E só pra quem pode mesmo pausar: a policy expense_recurrences_update_
-  // owner_or_admin é do criador da receita ou admin/dono do rolê. Quem só pagou
+  // owner_or_admin é do criador da receita ou admin/dono da resenha. Quem só pagou
   // a despesa apaga a ocorrência, mas o update da série seria filtrado pela RLS
   // sem afetar linha nenhuma — a opção prometeria parar a repetição e não
   // pararia, calada.
@@ -258,7 +258,7 @@ export default function GroupDetailScreen() {
   // cobra primeiro — é a data que o card do Resumo anuncia.
   const activeRecurrences = recurrences.filter(r => r.status === 'active');
   // Arquivar exige saldo zerado, mas o materializador não olha
-  // `archived_at`: a série continua lançando e o saldo volta a mexer — num rolê
+  // `archived_at`: a série continua lançando e o saldo volta a mexer — numa resenha
   // que saiu da lista de ativos e não entra mais no "Saldo geral". A regra
   // protege o momento do arquivamento e não o dia seguinte, então aqui o app
   // avisa. Pagador ou participante dá no mesmo: os dois mexem no saldo.
@@ -307,9 +307,9 @@ export default function GroupDetailScreen() {
   // `history[0]` é o evento mais recente (a query já vem `order('at', desc)`) e
   // é o que faz apagar despesa contar como atividade: despesa é hard delete, e
   // sem o log a conta olhava só as linhas vivas e ANDAVA PRA TRÁS ao apagar a
-  // mais recente. Idem editar despesa, membro entrar/sair, renomear o rolê.
+  // mais recente. Idem editar despesa, membro entrar/sair, renomear a resenha.
   //
-  // Os lançamentos continuam na conta porque rolê antigo não tem
+  // Os lançamentos continuam na conta porque resenha antigo não tem
   // evento nenhum. `createdAt`, não `date`: atividade é quando algo aconteceu,
   // e a data da despesa pode ser retroativa ou futura. Mesma conta de useGroups,
   // pra lista e detalhe baterem.
@@ -338,7 +338,7 @@ export default function GroupDetailScreen() {
   }
 
   // Desarquivar não pergunta nada: é reversível e não mexe em dado de ninguém.
-  // Arquivar some com o rolê da lista, então confirma.
+  // Arquivar some com a resenha da lista, então confirma.
   function handleToggleArchive() {
     if (!group) return;
     if (group.archivedAt) {
@@ -813,7 +813,7 @@ export default function GroupDetailScreen() {
                   ? t('groupDetail.paidByOtherSubtitle', { name: l.paidByName, amount: formatMoney(Math.abs(l.myShare)) })
                   : t('groupDetail.paidByOtherNotInSubtitle', { name: l.paidByName });
               // Editar/apagar pelo swipe é de quem pagou, de quem LANÇOU ou de
-              // admin do rolê — mesma regra da RLS (expenses_update/delete_
+              // admin da resenha — mesma regra da RLS (expenses_update/delete_
               // payer_creator_or_admin) e da tela de detalhe (grupo/despesa.tsx).
               // `isAdminOrOwner` e não só 'admin': dono é admin pro
               // is_group_admin() do banco, e a UI nem expõe os dois papéis.
@@ -981,7 +981,7 @@ export default function GroupDetailScreen() {
         onParticipants={() => router.push({ pathname: '/(app)/grupo/participantes' as never, params: { groupId: id } })}
         onInsights={() => router.push({ pathname: '/(app)/grupo/insight' as never, params: { groupId: id } })}
         onRename={() => { afterMenuCloseRef.current = () => setEditSheetOpen(true); }}
-        // Encadeado como o "Editar rolê" ao lado: arquivar abre uma
+        // Encadeado como o "Editar resenha" ao lado: arquivar abre uma
         // confirmação, que é outro Modal — precisa esperar o menu fechar.
         onToggleArchive={() => { afterMenuCloseRef.current = handleToggleArchive; }}
         onLeave={() => { afterMenuCloseRef.current = () => setLeaveSheetOpen(true); }}
@@ -989,7 +989,7 @@ export default function GroupDetailScreen() {
 
       {/* Saldo pendente bloqueia arquivar no servidor. Em vez de deixar
           a pessoa apertar e falhar, o sheet já abre explicando — mesmo
-          tratamento do "Sair do rolê". O Alert do catch continua existindo
+          tratamento do "Sair da resenha". O Alert do catch continua existindo
           porque o servidor bloqueia por um segundo motivo que o client não
           conhece: acerto marcado como pago esperando confirmação. */}
       <ConfirmSheet

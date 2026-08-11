@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // categories
 //
-// Lista fixa e global de categorias — igual em todo rolê, sem criação manual
+// Lista fixa e global de categorias — igual em toda resenha, sem criação manual
 // nem por IA. `key` é o valor salvo em expenses.category_id/
 // expense_recurrences.category_id (texto, não mais uuid de uma tabela por
-// rolê). Nome vem de i18n (nameKey); cor é um token do tema (não um hex
+// resenha). Nome vem de i18n (nameKey); cor é um token do tema (não um hex
 // fixo) — resolvida em useCategories via useTheme(), pra respeitar dark
 // mode e usar a paleta de marca de verdade.
 //

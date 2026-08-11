@@ -76,7 +76,7 @@ function statusOf(active: boolean, paused: boolean): RecurrenceStatus {
 
 const STATUS_RANK: Record<RecurrenceStatus, number> = { active: 0, paused: 1, finished: 2 };
 
-/** Recorrências vivas do rolê, na ordem da tela: as que vão cobrar primeiro no
+/** Recorrências vivas da resenha, na ordem da tela: as que vão cobrar primeiro no
  *  topo, paradas embaixo.
  *
  *  Lê `expense_recurrences` DIRETO, e não as despesas que ela gerou: uma série

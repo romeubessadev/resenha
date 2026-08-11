@@ -13,7 +13,7 @@ import { formatMoney } from '@/lib/currencies';
 import { parseDateOnly, rhythmLabel } from '@/lib/recurrence';
 import { fontFamilies, fontSizes, radius, spacing, type ColorPalette } from '@/theme';
 
-// As séries que estão lançando sozinhas neste rolê, abertas pelo card do Resumo.
+// As séries que estão lançando sozinhas nesta resenha, abertas pelo card do Resumo.
 //
 // O card diz que EXISTE algo se repetindo; este sheet diz o QUÊ, e principalmente
 // se aquilo mexe no bolso de quem está olhando — sem ele a pessoa precisa caçar o
@@ -178,7 +178,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
   rowPressed: {
     opacity: 0.6,
   },
-  // Mesma bolinha da lista de despesas do rolê — aqui cada linha é de uma
+  // Mesma bolinha da lista de despesas da resenha — aqui cada linha é de uma
   // categoria diferente, então o ícone volta a ser o rosto da despesa.
   catCircle: {
     width: 40,

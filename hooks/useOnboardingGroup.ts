@@ -6,21 +6,21 @@ import { clearOnboardingAnswers, getOnboardingAnswers, isReadyToCreateGroup } fr
 import { useAuth } from './useAuth';
 
 /**
- * Materializa o rolê que a pessoa configurou no tour, uma vez, logo que ela
- * entra no app com sessão. É o que faz a tela 5 do tour ("Seu rolê tá montado")
+ * Materializa a resenha que a pessoa configurou no tour, uma vez, logo que ela
+ * entra no app com sessão. É o que faz a tela 5 do tour ("Sua resenha tá montado")
  * ser verdade: as respostas ficam no AsyncStorage antes do cadastro e viram
- * rolê de verdade aqui — o caminho que o CLAUDE.md define.
+ * resenha de verdade aqui — o caminho que o CLAUDE.md define.
  *
  * Mora no layout de (app), e não na tela de boas-vindas, pra se auto-corrigir:
  * se o app for fechado no meio do cadastro, a próxima abertura tenta de novo.
  *
  * Três guardas, todas necessárias:
- *  · só cria pra quem terminou as perguntas e nomeou o rolê (viu a tela 5);
- *  · só cria se a conta não tiver NENHUM rolê — quem fez o tour e no fim entrou
- *    numa conta que já existia não recebe um "Rolê da praia" perdido no meio
- *    dos rolês de verdade dela;
- *  · só limpa as respostas depois do rolê existir, então falha de rede não
- *    perde o que ela configurou e não cria dois rolês.
+ *  · só cria pra quem terminou as perguntas e nomeou a resenha (viu a tela 5);
+ *  · só cria se a conta não tiver NENHUMA resenha — quem fez o tour e no fim entrou
+ *    numa conta que já existia não recebe um "Resenha da praia" perdido no meio
+ *    das resenhas de verdade dela;
+ *  · só limpa as respostas depois da resenha existir, então falha de rede não
+ *    perde o que ela configurou e não cria dois resenhas.
  */
 export function useOnboardingGroup() {
   const { session } = useAuth();
@@ -47,7 +47,7 @@ export function useOnboardingGroup() {
           .select('group_id', { count: 'exact', head: true })
           .eq('user_id', userId);
         if (countError || (count ?? 0) > 0) {
-          if (__DEV__) console.warn('[onboarding] não criou — rolês existentes:', count, countError);
+          if (__DEV__) console.warn('[onboarding] não criou — resenhas existentes:', count, countError);
           return;
         }
 

@@ -107,7 +107,7 @@ describe('computeBalances', () => {
     expect(balances).toEqual({ a: 0, b: 0 });
   });
 
-  it('conta pagamento em rolê já sem despesa (despesa apagada depois de paga)', () => {
+  it('conta pagamento em resenha já sem despesa (despesa apagada depois de paga)', () => {
     const balances = computeBalances(['a', 'b'], [], [], [{ from_user: 'b', to_user: 'a', amount: 20 }]);
     expect(balances).toEqual({ a: -20, b: 20 });
   });
@@ -152,7 +152,7 @@ describe('simplifyDebts', () => {
 });
 
 describe('integração: despesa → saldo → transferência', () => {
-  it('quita o rolê quando as transferências sugeridas são executadas', () => {
+  it('quita a resenha quando as transferências sugeridas são executadas', () => {
     const expenses: BalanceExpense[] = [
       { id: 'e1', amount: 120.5, paid_by: 'a', split_type: 'equal' },
       { id: 'e2', amount: 33.33, paid_by: 'b', split_type: 'shares' },

@@ -107,7 +107,7 @@ export default function LancarDespesaScreen() {
   const { createExpense } = useCreateExpense();
   const isPremium = useIsPremium();
   const isOnline = useIsOnline();
-  // Quem arquivou o rolê (pra si) some das opções de "quem pagou"/"dividir
+  // Quem arquivou a resenha (pra si) some das opções de "quem pagou"/"dividir
   // com" — arquivar exige estar quite, então incluir de
   // novo essa pessoa numa despesa nova a colocaria devendo sem ela saber.
   const members = useMemo(() => (group?.members ?? []).filter(m => !m.archivedAt), [group]);
@@ -115,7 +115,7 @@ export default function LancarDespesaScreen() {
   const form = useExpenseForm({
     members, meId, groupId,
     seedDefaults: true,
-    // Despesa nova abre na divisão padrão do rolê — a resposta de "como
+    // Despesa nova abre na divisão padrão da resenha — a resposta de "como
     // costumam dividir" do onboarding de quem criou. Continua trocável aqui.
     initialSplitType: group?.defaultSplitType as SplitType | undefined,
   });
@@ -190,7 +190,7 @@ export default function LancarDespesaScreen() {
   }, [aiRecurrenceFreq, aiRecurrenceIntervalDays, aiRecurrenceStartObj, aiRecurrenceEndObj, isPremium]);
 
   // Fundo escurecido e painel animam juntos (fade + slide), igual ao BottomSheetModal —
-  // dá a mesma sensação natural de abertura das outras sheets do app (ex: Compartilhar rolê).
+  // dá a mesma sensação natural de abertura das outras sheets do app (ex: Compartilhar resenha).
   const overlayOpacity = useSharedValue(0);
   const panelTranslateY = useSharedValue(PANEL_CLOSED_OFFSET);
 

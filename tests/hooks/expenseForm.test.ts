@@ -42,7 +42,7 @@ describe('como o formulário nasce', () => {
     expect(montar().result.current.paidById).toBe(ANA);
   });
 
-  it('abre na divisão padrão do rolê quando ela vem', async () => {
+  it('abre na divisão padrão da resenha quando ela vem', async () => {
     const { result } = montar(TRES, { initialSplitType: 'shares' });
     expect(result.current.dividirTipo).toBe('por_valores');
     expect(result.current.splitType).toBe('shares');
@@ -127,8 +127,8 @@ describe('digitar um valor exato à mão', () => {
     expect(result.current.restante).toBe(-20);
   });
 
-  it('o ajuste conta PARTICIPANTES, não o tamanho do rolê', async () => {
-    // Um rolê de 3 rachando um Uber entre 2 é exatamente onde o ajuste ajuda.
+  it('o ajuste conta PARTICIPANTES, não o tamanho da resenha', async () => {
+    // Uma resenha de 3 rachando um Uber entre 2 é exatamente onde o ajuste ajuda.
     const { result } = montar();
     await act(async () => { result.current.toggleParticipant(CARLA); });
     await act(async () => { result.current.handleValorChange('10000'); });

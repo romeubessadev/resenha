@@ -106,7 +106,7 @@ async function fetchLancamentos(groupId: string, myUserId: string, t: (key: Tran
       // Fallback pro created_at enquanto a coluna `date` não existir: em
       // despesa antiga (ou enquanto o cache de schema do PostgREST não
       // recarregou) o campo vem undefined, e sem isso a ordenação abaixo
-      // estoura e derruba a tela inteira do rolê.
+      // estoura e derruba a tela inteira da resenha.
       date: e.date ?? e.created_at,
       createdAt: e.created_at,
       splitCount: parts.length,

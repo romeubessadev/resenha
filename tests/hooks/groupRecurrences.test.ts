@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 //
-// A lista de recorrências do rolê. O que ela decide e ninguém mais decide:
+// A lista de recorrências da resenha. O que ela decide e ninguém mais decide:
 // em que ESTADO cada série está (ativa, pausada, encerrada), em que ponto da
 // série a pessoa está, e qual despesa o "Ver despesa" abre.
 import { describe, it, expect, afterEach } from 'vitest';

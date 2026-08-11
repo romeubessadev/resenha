@@ -4,7 +4,7 @@
 // versão nativa (usePushToken.ts), pra quem importa não precisar checar
 // plataforma — o bundler escolhe o arquivo certo sozinho pela extensão.
 
-export const NOTIF_PREF_KEY = 'bros:notif';
+export const NOTIF_PREF_KEY = 'resenha:notif';
 
 export async function registerPushToken(_userId: string): Promise<void> {}
 

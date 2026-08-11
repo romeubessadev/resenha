@@ -111,7 +111,7 @@ describe('buildInsightsPdfHtml', () => {
     buildInsightsPdfHtml({
       groupName: 'Viagem',
       periodLabel: 'Março 2026',
-      scopeLabel: 'Total do rolê',
+      scopeLabel: 'Total da resenha',
       total: 500,
       categories: [{ key: 'c1', label: 'Restaurante', amount: 300, pct: 60 }],
       expenses: [despesa()],
@@ -123,7 +123,7 @@ describe('buildInsightsPdfHtml', () => {
     });
 
   it('escapa HTML vindo de nome digitado pelo usuário', () => {
-    // Nome de rolê e título de despesa são texto livre — sem escapar, um `<`
+    // Nome de resenha e título de despesa são texto livre — sem escapar, um `<`
     // quebraria a tabela do PDF.
     const out = html({ groupName: '<script>alert(1)</script>' });
     expect(out).not.toContain('<script>alert(1)</script>');

@@ -7,7 +7,7 @@
 // premium.
 //
 // Categoria: a IA escolhe uma das 7 fixas (ver _shared/categories.ts) — não há
-// mais categoria por rolê/criada pela IA. O app ATUAL ignora esse campo: desde
+// mais categoria por resenha/criada pela IA. O app ATUAL ignora esse campo: desde
 // que o ditado virou duas fases (preenche o form, e a fila categoriza depois de
 // salvar, igual ao lançamento digitado), quem decide é a categorize-expense. O
 // campo continua na resposta porque app já publicado lê `category.id` direto —
@@ -116,7 +116,7 @@ async function extractExpense(
     'Ex.: "Lança linguiça, 100 reais" → title = "Linguiça", não "Lançar linguiça".',
     '',
     '── amount ──',
-    'Valor como número puro (sem símbolo de moeda). Todo rolê é em reais, então é sempre o número em reais — ' +
+    'Valor como número puro (sem símbolo de moeda). Toda resenha é em reais, então é sempre o número em reais — ' +
       'se a pessoa mencionar outra moeda, extraia o número mesmo assim e NUNCA converta. Entenda valores por ' +
       'extenso, com decimais e gírias comuns de dinheiro:',
     '"85 reais" → 85 | "cinquenta reais" → 50 | "trinta e cinco e cinquenta" → 35.5 | "vinte pila" → 20 | ' +
@@ -520,7 +520,7 @@ Deno.serve(async req => {
     if (membersErr || !memberRows || memberRows.length === 0) {
       return json({ error: 'group_not_found' }, 404);
     }
-    // Quem arquivou o rolê (pra si) não entra na lista que a IA enxerga —
+    // Quem arquivou a resenha (pra si) não entra na lista que a IA enxerga —
     // mesma regra do formulário manual (lancar.tsx): arquivar exige estar
     // quite, incluir a pessoa numa despesa nova a colocaria devendo de novo
     // sem ela saber.

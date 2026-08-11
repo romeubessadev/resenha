@@ -17,7 +17,7 @@ export type GroupCategory = {
   icon: LucideIcon;
 };
 
-/** Lista fixa e global de categorias, traduzida — igual em todo rolê, sem
+/** Lista fixa e global de categorias, traduzida — igual em toda resenha, sem
  *  busca no banco (não existe mais tabela de categoria por grupo). A cor vem
  *  de um token do tema (light/dark), não de um hex fixo. O parâmetro
  *  `groupId` fica só por compatibilidade de assinatura com quem já chama
@@ -59,7 +59,7 @@ async function fetchCategoryUsage(groupId: string): Promise<Record<string, numbe
   return counts;
 }
 
-/** Quantas despesas do rolê já usam cada categoria — só informativo (mostrado
+/** Quantas despesas da resenha já usam cada categoria — só informativo (mostrado
  *  no picker), já que as 7 categorias são fixas e nunca podem ser apagadas. */
 export function useCategoryUsage(groupId: string | undefined) {
   const query = useQuery({

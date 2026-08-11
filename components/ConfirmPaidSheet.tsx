@@ -190,7 +190,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     fontFamily: fontFamilies.semibold,
     color: colors.ink,
   },
-  // 52 em largura cheia, igual à ação do ConfirmSheet e do "Sair do rolê" —
+  // 52 em largura cheia, igual à ação do ConfirmSheet e do "Sair da resenha" —
   // era 48 e metade da linha, dividindo espaço com um cancelar.
   confirmBtn: {
     alignItems: 'center',

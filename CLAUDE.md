@@ -1,4 +1,4 @@
-# BROS
+# RESENHA
 
 ## Comportamento
 
@@ -42,16 +42,16 @@
 - "Última atividade" e qualquer medida de recência vêm de `group_events`, nunca
   de `max(created_at)` de tabela com hard delete (despesa é hard delete).
   (Por quê: a conta sobre linhas vivas ignora apagar/editar e chega a ANDAR PRA
-  TRÁS — apagar a despesa mais recente derruba o max pra anterior, e o rolê que
+  TRÁS — apagar a despesa mais recente derruba o max pra anterior, e a resenha que
   você acabou de mexer aparece como "há 4 dias". Já custou QUATRO migrations pra
-  acertar. Some `group_events` às fontes em vez de trocá-las: rolê antigo não
+  acertar. Some `group_events` às fontes em vez de trocá-las: resenha antiga não
   tem evento, e somando o valor nunca regride.)
 - Acerto passa SEMPRE por `settlements`: `record_receipt` quando o credor registra
   o recebimento, `confirm_settlement` quando o devedor marcou e o credor confirma.
   Nunca INSERT direto em `payments`.
   (Por quê: o evento de histórico e o push pro devedor penduram no UPDATE de
   `settlements` pra 'confirmed'. Inserindo em `payments` o saldo zera em
-  SILÊNCIO: o outro não é avisado, nada aparece no histórico do rolê, e a
+  SILÊNCIO: o outro não é avisado, nada aparece no histórico da resenha, e a
   marcação "Já paguei" dele fica pendurada pra sempre porque nada confirma
   aquela linha. A RPC `record_receipt` existe exatamente pra isso e mesmo assim
   passou batido — são três telas com "Já recebi" e uma seguiu chamando o
@@ -60,13 +60,13 @@
   camadas, e as três são necessárias: `invalidateQueries` no `onSuccess` da mutação
   (só alcança o aparelho de quem fez), invalidação ao RECEBER push
   (`hooks/usePushToken.ts`) e `SHARED_STALE_TIME` nas queries de dado compartilhado.
-  Query nova que mostra dado de rolê nasce com ele. Qual mutação invalida o quê
+  Query nova que mostra dado de resenha nasce com ele. Qual mutação invalida o quê
   mora em `lib/queryKeys.ts`.
   (Por quê: sozinha, a invalidação deixa a Carteira mentindo até a pessoa arrastar
   pra atualizar — foi o sintoma que abriu isso. O push cobre o app aberto, mas não
   existe pra despesa editada ou apagada, e some com push desligado ou no Expo Go;
   o staleTime é o que segura esses furos, não o mecanismo principal. Antes de
-  trocar tudo isso por realtime, medir: é um canal POR rolê — `postgres_changes`
+  trocar tudo isso por realtime, medir: é um canal POR resenha — `postgres_changes`
   filtra com um `eq` só — mais migration de publication, RLS e debounce.)
 
 ## Comandos
@@ -99,6 +99,23 @@
 - Ícone novo de categoria precisa: bater com a DESCRIÇÃO da categoria, não só
   com o nome (`bebidas` inclui suco e café, então não pode ser um chopp), e ter
   silhueta legível a 16px, que é o menor tamanho de uso.
+- "resenha" é o GRUPO — o que antes se chamava "rolê". Feminino: "a resenha",
+  "essa resenha", "nenhuma resenha", "resenha arquivada". Plural "resenhas".
+  (Por quê: o app passou a se chamar Resenha, e a palavra virou o nome da coisa
+  que a pessoa cria — churras, viagem, casa. A troca não foi substituir palavra:
+  "rolê" é masculino e "resenha" é feminino, então artigo, contração, pronome e
+  particípio mudaram junto em 277 lugares. Um find-and-replace teria produzido
+  "o resenha", "esse resenha", "Resenha criado" — e produziu, em 10 pontos que
+  só apareceram numa varredura de concordância.)
+- O app NÃO se autodenomina no texto: onde antes lia-se "o Bros já sabe quem
+  paga o quê", hoje é "a gente já sabe". A única exceção é a mensagem de
+  CONVITE (`invite.shareMessage`), que sai pelo WhatsApp pra quem ainda não
+  conhece o produto — ali o nome é informação, não marca. Mesmo critério do
+  header de CSV abaixo.
+  (Por quê: com o grupo chamado "resenha", dizer "a Resenha" no texto colocaria
+  a mesma palavra duas vezes com sentidos diferentes na mesma frase — "monta
+  sua primeira resenha pra ver como a Resenha funciona".)
+- O plano pago é **"Premium"**, sem marca. Era "Bros+".
 - Vocabulário de dinheiro — três sentidos, não misturar:
   - "bancar" é quem desembolsou pro ESTABELECIMENTO, e é o padrão em toda a UI
     do app: resumo, lista, detalhe, formulário, busca, histórico e a etiqueta
@@ -122,7 +139,7 @@
     `payments` — o MESMO registro da aba `settle.settledTab`. Virou "Acertados",
     e o par de status da Carteira é pendente/acertado
     (`wallet.pending`/`wallet.settled`).
-  (Por quê: "Você pagou" e "A pagar" moravam na MESMA linha de stats do rolê
+  (Por quê: "Você pagou" e "A pagar" moravam na MESMA linha de stats da resenha
   apontando pra dinheiros que não conversam — um saiu do seu bolso pro bar, o
   outro você deve pra galera. Duas fronteiras mais estreitas já foram tentadas
   e caíram: "só onde colide" e "campo vs. narração". As duas deixavam a lista

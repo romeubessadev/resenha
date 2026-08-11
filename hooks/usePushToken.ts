@@ -13,7 +13,7 @@ import { useAuth } from './useAuth';
  *  aqui, e não na tela, porque quem tem que obedecer a ela é o registro do
  *  token logo abaixo — antes a chave era local de ajustes.tsx e ninguém além
  *  do próprio switch a lia, então desligar não desligava nada. */
-export const NOTIF_PREF_KEY = 'bros:notif';
+export const NOTIF_PREF_KEY = 'resenha:notif';
 
 /** Ausente = nunca mexeu no switch: vale a permissão do SO. Só um 'false'
  *  explícito bloqueia. */
@@ -46,7 +46,7 @@ Notifications.setNotificationHandler({
 });
 if (Platform.OS === 'android') {
   Notifications.setNotificationChannelAsync('default', {
-    name: 'Bros',
+    name: 'Resenha',
     importance: Notifications.AndroidImportance.DEFAULT,
   });
 }
@@ -97,7 +97,7 @@ export function usePushToken(): void {
   const qc = useQueryClient();
 
   // O push é o ÚNICO sinal que este aparelho recebe de mudança feita por outra
-  // pessoa do rolê — não há realtime, e `invalidateQueries` só alcança quem fez
+  // pessoa da resenha — não há realtime, e `invalidateQueries` só alcança quem fez
   // a mudança. Sem isto o aviso chegava na barra de notificação e a tela atrás
   // dele continuava com o número velho até expirar o SHARED_STALE_TIME.
   //
@@ -114,7 +114,7 @@ export function usePushToken(): void {
       qc.invalidateQueries({ queryKey: queryKeys.wallet });
       qc.invalidateQueries({ queryKey: queryKeys.myGroups });
 
-      // A rota do push carrega o rolê em `id` (tela do rolê) ou `groupId`
+      // A rota do push carrega a resenha em `id` (tela da resenha) ou `groupId`
       // (participantes) — ver buildRoute na Edge Function send-push. Lembrete de
       // saldo aberto aponta pra Carteira e não traz nenhum dos dois.
       const groupId = data?.params?.id || data?.params?.groupId;

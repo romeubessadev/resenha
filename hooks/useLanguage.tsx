@@ -14,7 +14,7 @@ const LANGUAGE: Language = 'pt-BR';
 // `t` e o objeto devolvido são MÓDULO, não criados por render.
 //
 // Não é micro-otimização: várias telas usam `t` como dependência de useMemo
-// (useCategories, insight, o filtro de busca do rolê). Na versão de contexto
+// (useCategories, insight, o filtro de busca da resenha). Na versão de contexto
 // isso era inofensivo, porque `t` nascia uma vez no provider, lá em cima, e
 // sobrevivia aos re-renders dos filhos. Um `t` novo a cada chamada faria esses
 // useMemo recalcularem sempre, devolvendo array novo toda vez — e quem depende

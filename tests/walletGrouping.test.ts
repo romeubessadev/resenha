@@ -74,7 +74,7 @@ describe('groupByPerson', () => {
     expect(groups[0].personPixKeyType).toBe('email');
   });
 
-  it('agrupa a mesma pessoa mesmo vindo de rolês diferentes', () => {
+  it('agrupa a mesma pessoa mesmo vindo de resenhas diferentes', () => {
     const groups = groupByPerson(
       [tx({ groupId: 'g1', amount: 10 }), tx({ groupId: 'g2', amount: 25 })],
       identity,
@@ -98,7 +98,7 @@ describe('groupByPerson', () => {
 });
 
 describe('groupByGroup', () => {
-  it('soma por rolê com o sinal da direção', () => {
+  it('soma por resenha com o sinal da direção', () => {
     const buckets = groupByGroup([
       tx({ groupId: 'g1', amount: 30, direction: 'in' }),
       tx({ groupId: 'g1', amount: 10, direction: 'out' }),
@@ -109,7 +109,7 @@ describe('groupByGroup', () => {
     expect(buckets.find(b => b.groupId === 'g2')!.net).toBe(-7);
   });
 
-  it('preserva o nome do rolê e os itens', () => {
+  it('preserva o nome da resenha e os itens', () => {
     const buckets = groupByGroup([tx({ groupId: 'g9', groupName: 'Churrasco' })]);
     expect(buckets[0].groupName).toBe('Churrasco');
     expect(buckets[0].items).toHaveLength(1);

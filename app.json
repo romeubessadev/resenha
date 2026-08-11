@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Bros",
+    "name": "Resenha",
     "slug": "bros",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "bros",
+    "scheme": "resenha",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": false,
@@ -42,15 +42,15 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "O Bros usa suas fotos para você escolher uma imagem para o grupo.",
-          "cameraPermission": "O Bros usa a câmera para você tirar uma foto do grupo.",
+          "photosPermission": "Para você escolher a foto da resenha na sua galeria.",
+          "cameraPermission": "Para você tirar a foto da resenha na hora.",
           "microphonePermission": false
         }
       ],
       [
         "expo-camera",
         {
-          "cameraPermission": "O Bros usa a câmera para ler o QR Code de um grupo.",
+          "cameraPermission": "Para ler o QR Code de uma resenha.",
           "microphonePermission": false,
           "recordAudioAndroid": false
         }
@@ -58,7 +58,7 @@
       [
         "expo-audio",
         {
-          "microphonePermission": "O Bros usa o microfone para você lançar uma despesa falando."
+          "microphonePermission": "Para você lançar uma despesa falando."
         }
       ],
       "expo-font",

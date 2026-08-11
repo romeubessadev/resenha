@@ -10,7 +10,7 @@ const G = 'g1';
 type Row = Record<string, unknown>;
 
 /**
- * Um rolê com duas pessoas. `expenses` e `events` são os dois lados da conta de
+ * Uma resenha com duas pessoas. `expenses` e `events` são os dois lados da conta de
  * recência: despesa é hard delete, então a lista de despesas VIVAS sozinha anda
  * pra trás quando a mais recente é apagada — e é o evento que segura.
  */
@@ -80,8 +80,8 @@ describe('useGroups — recência (migrations 0077, 0078, 0082, 0083)', () => {
   });
 
   it('a despesa GANHA do evento quando é mais nova — o evento é SOMADO, não substitui', async () => {
-    // Rolê anterior à 0027 não tem evento nenhum; trocar as fontes em vez de
-    // somar faria a recência desses rolês desaparecer.
+    // Resenha anterior à 0027 não tem evento nenhum; trocar as fontes em vez de
+    // somar faria a recência desses resenhas desaparecer.
     const result = await load(scenario({
       groupCreatedAt: '2026-01-01T00:00:00Z',
       expenses: [{ id: 'e1', created_at: '2026-09-01T00:00:00Z' }],
@@ -92,7 +92,7 @@ describe('useGroups — recência (migrations 0077, 0078, 0082, 0083)', () => {
 
   it('APAGAR a despesa mais recente NÃO faz a recência andar pra trás', async () => {
     // O coração do bug: apagar a despesa mais nova derrubava o max pra anterior
-    // e o rolê que você acabou de mexer aparecia como "há 4 dias".
+    // e a resenha que você acabou de mexer aparecia como "há 4 dias".
     const antes = await load(scenario({
       groupCreatedAt: '2026-01-01T00:00:00Z',
       expenses: [
@@ -116,7 +116,7 @@ describe('useGroups — recência (migrations 0077, 0078, 0082, 0083)', () => {
     expect(depois.current.data[0].lastActivityAt).toBe('2026-09-02T00:00:00Z');
   });
 
-  it('rolê sem evento, sem despesa e sem pagamento cai na criação — nunca vazio', async () => {
+  it('resenha sem evento, sem despesa e sem pagamento cai na criação — nunca vazio', async () => {
     const result = await load(scenario({ groupCreatedAt: '2026-02-02T00:00:00Z', lastEventAt: null }));
     expect(result.current.data[0].lastActivityAt).toBe('2026-02-02T00:00:00Z');
   });
@@ -223,7 +223,7 @@ describe('useGroups — erro', () => {
     const { result } = h.run(() => useGroups());
     await waitFor(() => expect(result.current.error).toBeTruthy());
 
-    expect(result.current.error).toBe('Erro ao carregar rolês');
+    expect(result.current.error).toBe('Erro ao carregar resenhas');
     expect(result.current.error).not.toContain('row-level security');
     expect(result.current.data).toEqual([]);
   });

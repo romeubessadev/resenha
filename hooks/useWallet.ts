@@ -24,7 +24,7 @@ export type WalletTx = {
   personPixKeyType: PixKeyType | null;
   groupId: string;
   groupName: string;
-  /** Moeda do rolê onde essa movimentação aconteceu — `amount` está nessa moeda. */
+  /** Moeda da resenha onde essa movimentação aconteceu — `amount` está nessa moeda. */
   createdAt: string;
   amount: number;
   direction: 'in' | 'out';
@@ -35,9 +35,9 @@ export type WalletTx = {
    *  porque desfazer a marcação apaga o arquivo — sem ele aqui, o Acertar em
    *  lote desfaria a linha e deixaria a imagem órfã no storage. */
   proofPath: string | null;
-  /** Taxa (moeda do rolê → USD) carimbada no momento do pagamento — só existe
+  /** Taxa (moeda da resenha → USD) carimbada no momento do pagamento — só existe
    *  pra status 'settled' (linha vem de `payments`); null nos outros status. */
-  /** O rolê dessa movimentação não tem nenhuma despesa lançada agora — sinal
+  /** A resenha dessa movimentação não tem nenhuma despesa lançada agora — sinal
    *  de que a despesa que gerou essa cobrança foi apagada depois de já paga
    *  (ver hooks/useGroupBalances.ts, mesma ideia aplicada aqui pra Carteira). */
   hasNoExpenses: boolean;

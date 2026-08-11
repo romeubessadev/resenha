@@ -7,7 +7,7 @@ import { ExpenseListSkeleton } from './ExpenseListSkeleton';
 import { useTheme } from '@/hooks/useTheme';
 import { radius, spacing, type ColorPalette } from '@/theme';
 
-// Contorno da tela de detalhe do rolê, mostrado enquanto o grupo ainda não
+// Contorno da tela de detalhe da resenha, mostrado enquanto o grupo ainda não
 // tem dado em cache (primeira entrada). Header fica real/funcional — só o
 // conteúdo abaixo (hero, saldo, tabs, lista) é placeholder.
 export function GroupDetailSkeleton() {

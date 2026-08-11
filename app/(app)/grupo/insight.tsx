@@ -387,7 +387,7 @@ export default function InsightScreen() {
                     <View style={styles.categoryContent}>
                       <View style={styles.categoryHeaderRow}>
                         {/* Mesmo par ícone+cor que a despesa mostra na lista do
-                            rolê: quem olha o gráfico reconhece de onde a fatia
+                            resenha: quem olha o gráfico reconhece de onde a fatia
                             veio sem precisar ler o rótulo. */}
                         <View style={[styles.categoryIconCircle, { backgroundColor: getCategoryChipColor(item.color) }]}>
                           <CategoryIcon icon={item.icon} size={20} color={item.color} />
@@ -704,7 +704,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     fontFamily: fontFamilies.semibold,
     color: colors.textPrimary,
   },
-  // Mesma linha da lista de rolês (GroupCard): padding 12, raio 2xl, realce
+  // Mesma linha da lista de resenhas (GroupCard): padding 12, raio 2xl, realce
   // `surface` ao pressionar e nada de traço — quem separa uma categoria da
   // outra são os 12+12 de padding, e é padding (não gap da lista) pra que a
   // faixa inteira seja tocável e o realce cubra ela toda.
@@ -735,11 +735,11 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    // 12, igual ao vão entre ícone e título na lista de despesas do rolê.
+    // 12, igual ao vão entre ícone e título na lista de despesas da resenha.
     gap: spacing.sm + 4,
   },
   categoryIconCircle: {
-    // 40/20/16 é a medida de lista do app (despesa no rolê, HistoryFeed,
+    // 40/20/16 é a medida de lista do app (despesa na resenha, HistoryFeed,
     // seletor de categoria) — ver a regra em components/CategoryIcon.tsx.
     width: 40,
     height: 40,

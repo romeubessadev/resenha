@@ -86,7 +86,7 @@ function wrapper(language: Language, title: string, preheader: string, bodyHtml:
         <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%; max-width:440px;">
           <tr>
             <td align="center" style="background-color:#F5C518; border-radius:20px 20px 0 0; padding:22px 24px 20px;">
-              <img src="${LOGO_URL}" alt="Bros" width="96" height="48" style="display:block; border:0; outline:none; text-decoration:none; height:48px; width:auto;" />
+              <img src="${LOGO_URL}" alt="Resenha" width="96" height="48" style="display:block; border:0; outline:none; text-decoration:none; height:48px; width:auto;" />
             </td>
           </tr>
           <tr>
@@ -108,9 +108,9 @@ function wrapper(language: Language, title: string, preheader: string, bodyHtml:
 }
 
 const SIGNATURE: Record<Language, string> = {
-  'pt-BR': 'Time Bros 💛',
-  en: 'The Bros Team 💛',
-  es: 'Equipo Bros 💛',
+  'pt-BR': 'Time Resenha 💛',
+  en: 'The Resenha Team 💛',
+  es: 'Equipo Resenha 💛',
 };
 
 // ── Signup e Recovery (mesmo template ilustrado, textos diferentes) ────────
@@ -126,31 +126,31 @@ type CodeEmailText = {
 
 const SIGNUP_TEXT: Record<Language, CodeEmailText> = {
   'pt-BR': {
-    subject: 'Seu código de confirmação Bros',
-    title: 'Seu código Bros',
-    preheader: 'Use este código pra confirmar seu e-mail no Bros. Ele vale por poucos minutos.',
+    subject: 'Seu código de confirmação Resenha',
+    title: 'Seu código Resenha',
+    preheader: 'Use este código pra confirmar seu e-mail na Resenha. Ele vale por poucos minutos.',
     heading: 'Bora confirmar seu e-mail',
-    body: 'Use o código abaixo pra terminar seu cadastro no Bros. Não compartilha com ninguém, tá?',
+    body: 'Use o código abaixo pra terminar seu cadastro na Resenha. Não compartilha com ninguém, tá?',
     codeLabel: 'SEU CÓDIGO',
     expiry: 'O código expira em alguns minutos.',
     ignore: 'Se não foi você que pediu, pode ignorar esse e-mail.',
   },
   en: {
-    subject: 'Your Bros confirmation code',
-    title: 'Your Bros code',
-    preheader: 'Use this code to confirm your email on Bros. It expires in a few minutes.',
+    subject: 'Your Resenha confirmation code',
+    title: 'Your Resenha code',
+    preheader: 'Use this code to confirm your email on Resenha. It expires in a few minutes.',
     heading: "Let's confirm your email",
-    body: 'Use the code below to finish signing up on Bros. Keep it to yourself.',
+    body: 'Use the code below to finish signing up on Resenha. Keep it to yourself.',
     codeLabel: 'YOUR CODE',
     expiry: 'This code expires in a few minutes.',
     ignore: "If you didn't request this, you can ignore this email.",
   },
   es: {
-    subject: 'Tu código de confirmación de Bros',
-    title: 'Tu código Bros',
-    preheader: 'Usa este código para confirmar tu correo en Bros. Vence en unos minutos.',
+    subject: 'Tu código de confirmación de Resenha',
+    title: 'Tu código Resenha',
+    preheader: 'Usa este código para confirmar tu correo en Resenha. Vence en unos minutos.',
     heading: 'Vamos a confirmar tu correo',
-    body: 'Usa el código de abajo para terminar tu registro en Bros. No lo compartas con nadie.',
+    body: 'Usa el código de abajo para terminar tu registro en Resenha. No lo compartas con nadie.',
     codeLabel: 'TU CÓDIGO',
     expiry: 'El código vence en unos minutos.',
     ignore: 'Si no fuiste tú quien lo pidió, puedes ignorar este correo.',
@@ -160,7 +160,7 @@ const SIGNUP_TEXT: Record<Language, CodeEmailText> = {
 const RECOVERY_TEXT: Record<Language, CodeEmailText> = {
   'pt-BR': {
     subject: 'Seu código pra redefinir a senha',
-    title: 'Redefinir senha no Bros',
+    title: 'Redefinir senha na Resenha',
     preheader: 'Use este código no app para criar uma nova senha. Ele vale por poucos minutos.',
     heading: 'Redefinir sua senha',
     body: 'Recebemos um pedido para redefinir a senha da sua conta. Use o código abaixo no app para criar uma nova senha.',
@@ -170,7 +170,7 @@ const RECOVERY_TEXT: Record<Language, CodeEmailText> = {
   },
   en: {
     subject: 'Your password reset code',
-    title: 'Reset your Bros password',
+    title: 'Reset your Resenha password',
     preheader: 'Use this code in the app to create a new password. It expires in a few minutes.',
     heading: 'Reset your password',
     body: "We received a request to reset your account's password. Use the code below in the app to create a new password.",
@@ -180,7 +180,7 @@ const RECOVERY_TEXT: Record<Language, CodeEmailText> = {
   },
   es: {
     subject: 'Tu código para restablecer la contraseña',
-    title: 'Restablecer contraseña en Bros',
+    title: 'Restablecer contraseña en Resenha',
     preheader: 'Usa este código en la app para crear una contraseña nueva. Vence en unos minutos.',
     heading: 'Restablece tu contraseña',
     body: 'Recibimos una solicitud para restablecer la contraseña de tu cuenta. Usa el código de abajo en la app para crear una contraseña nueva.',
@@ -217,24 +217,24 @@ function recoveryEmail(language: Language, token: string): { subject: string; ht
 
 const GENERIC_TEXT: Record<Exclude<EmailActionType, 'signup' | 'recovery'>, Record<Language, { subject: string; heading: string; body: string }>> = {
   magiclink: {
-    'pt-BR': { subject: 'Seu código de acesso Bros', heading: 'Entrar no Bros', body: 'Use o código abaixo pra entrar na sua conta.' },
-    en: { subject: 'Your Bros sign-in code', heading: 'Sign in to Bros', body: 'Use the code below to sign in to your account.' },
-    es: { subject: 'Tu código de acceso a Bros', heading: 'Entrar a Bros', body: 'Usa el código de abajo para entrar a tu cuenta.' },
+    'pt-BR': { subject: 'Seu código de acesso Resenha', heading: 'Entrar na Resenha', body: 'Use o código abaixo pra entrar na sua conta.' },
+    en: { subject: 'Your Resenha sign-in code', heading: 'Sign in to Resenha', body: 'Use the code below to sign in to your account.' },
+    es: { subject: 'Tu código de acceso a Resenha', heading: 'Entrar a Resenha', body: 'Usa el código de abajo para entrar a tu cuenta.' },
   },
   email_change: {
-    'pt-BR': { subject: 'Confirme seu novo e-mail', heading: 'Confirmar novo e-mail', body: 'Use o código abaixo pra confirmar a troca de e-mail da sua conta Bros.' },
-    en: { subject: 'Confirm your new email', heading: 'Confirm new email', body: 'Use the code below to confirm the email change on your Bros account.' },
-    es: { subject: 'Confirma tu nuevo correo', heading: 'Confirmar nuevo correo', body: 'Usa el código de abajo para confirmar el cambio de correo de tu cuenta Bros.' },
+    'pt-BR': { subject: 'Confirme seu novo e-mail', heading: 'Confirmar novo e-mail', body: 'Use o código abaixo pra confirmar a troca de e-mail da sua conta Resenha.' },
+    en: { subject: 'Confirm your new email', heading: 'Confirm new email', body: 'Use the code below to confirm the email change on your Resenha account.' },
+    es: { subject: 'Confirma tu nuevo correo', heading: 'Confirmar nuevo correo', body: 'Usa el código de abajo para confirmar el cambio de correo de tu cuenta Resenha.' },
   },
   reauthentication: {
-    'pt-BR': { subject: 'Seu código de confirmação', heading: 'Confirmar que é você', body: 'Use o código abaixo pra confirmar essa ação na sua conta Bros.' },
-    en: { subject: 'Your confirmation code', heading: "Confirm it's you", body: 'Use the code below to confirm this action on your Bros account.' },
-    es: { subject: 'Tu código de confirmación', heading: 'Confirmar que eres tú', body: 'Usa el código de abajo para confirmar esta acción en tu cuenta Bros.' },
+    'pt-BR': { subject: 'Seu código de confirmação', heading: 'Confirmar que é você', body: 'Use o código abaixo pra confirmar essa ação na sua conta Resenha.' },
+    en: { subject: 'Your confirmation code', heading: "Confirm it's you", body: 'Use the code below to confirm this action on your Resenha account.' },
+    es: { subject: 'Tu código de confirmación', heading: 'Confirmar que eres tú', body: 'Usa el código de abajo para confirmar esta acción en tu cuenta Resenha.' },
   },
   invite: {
-    'pt-BR': { subject: 'Você foi convidado pro Bros', heading: 'Bem-vindo ao Bros', body: 'Use o código abaixo pra ativar seu convite.' },
-    en: { subject: "You've been invited to Bros", heading: 'Welcome to Bros', body: 'Use the code below to activate your invite.' },
-    es: { subject: 'Te invitaron a Bros', heading: 'Bienvenido a Bros', body: 'Usa el código de abajo para activar tu invitación.' },
+    'pt-BR': { subject: 'Você foi convidado pra Resenha', heading: 'Bem-vindo à Resenha', body: 'Use o código abaixo pra ativar seu convite.' },
+    en: { subject: "You've been invited to Resenha", heading: 'Welcome to Resenha', body: 'Use the code below to activate your invite.' },
+    es: { subject: 'Te invitaron a Resenha', heading: 'Bienvenido a Resenha', body: 'Usa el código de abajo para activar tu invitación.' },
   },
 };
 
@@ -249,7 +249,7 @@ function genericEmail(actionType: Exclude<EmailActionType, 'signup' | 'recovery'
       </tr>
     </table>
   `;
-  return { subject: g.subject, html: wrapper(language, 'Bros', g.subject, body) };
+  return { subject: g.subject, html: wrapper(language, 'Resenha', g.subject, body) };
 }
 
 function buildEmail(actionType: string, language: Language, token: string): { subject: string; html: string } {

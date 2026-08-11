@@ -85,10 +85,10 @@ Deno.serve(async req => {
     }
 
     // Moeda única desde que `groups.currency` foi dropada. Constante, e não
-    // lida do rolê: esta função continuou pedindo a coluna depois do drop, o
+    // lida da resenha: esta função continuou pedindo a coluna depois do drop, o
     // SELECT inteiro passou a falhar por 'column groups.currency does not
     // exist' e — como só o `data` era desestruturado — o erro sumia. Resultado:
-    // `group` vinha null e TODO push saía sem o nome do rolê ("Nova despesa
+    // `group` vinha null e TODO push saía sem o nome da resenha ("Nova despesa
     // em ", "Você virou admin do ").
     const groupCurrency = 'BRL';
 
@@ -98,7 +98,7 @@ Deno.serve(async req => {
         .from('groups').select('name').eq('id', body.groupId).maybeSingle();
       // O erro não pode mais passar calado — foi o silêncio que segurou o bug
       // acima em pé.
-      if (groupErr) console.error('[send-push] falha ao ler o rolê:', groupErr);
+      if (groupErr) console.error('[send-push] falha ao ler a resenha:', groupErr);
       groupName = group?.name ?? null;
     }
 

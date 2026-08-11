@@ -9,8 +9,8 @@
  *
  * Sem isto, toda tela do app tinha o mesmo defeito: `query.error` continua
  * preenchido depois de uma tentativa falha, mesmo com `query.data` intacto, e
- * as telas checavam só o erro. Uma oscilação de rede de um segundo derrubava o
- * rolê inteiro pra "não foi possível carregar".
+ * as telas checavam só o erro. Uma oscilação de rede de um segundo derrubava a
+ * resenha inteira pra "não foi possível carregar".
  *
  * `data === undefined` e não `!data`: lista vazia (`[]`) é dado — significa
  * "carregou e não tem nada", que é diferente de "não carregou".

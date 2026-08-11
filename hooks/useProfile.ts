@@ -61,11 +61,11 @@ export function useUpdateMyProfile() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: queryKeys.myProfile });
-      // main_currency afeta as telas de agregação (convertem por rolê a partir dela).
+      // main_currency afeta as telas de agregação (convertem por resenha a partir dela).
       qc.invalidateQueries({ queryKey: queryKeys.myGroups });
       qc.invalidateQueries({ queryKey: queryKeys.wallet });
       // O nome tem o mesmo alcance da foto — aparece na lista de membros de
-      // cada rolê e nos participantes de cada despesa.
+      // cada resenha e nos participantes de cada despesa.
       qc.invalidateQueries({ queryKey: queryKeys.allGroupDetails });
       qc.invalidateQueries({ queryKey: queryKeys.allExpenseDetails });
     },
@@ -92,8 +92,8 @@ export function useUpdateMyAvatar() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: queryKeys.myProfile });
-      // A foto é embutida em toda tela que lista gente: cards de rolê, membros
-      // do rolê, pessoas da Carteira e participantes de uma despesa. Sem isto,
+      // A foto é embutida em toda tela que lista gente: cards de resenha, membros
+      // da resenha, pessoas da Carteira e participantes de uma despesa. Sem isto,
       // a nova foto só aparecia no perfil até o app reabrir.
       qc.invalidateQueries({ queryKey: queryKeys.myGroups });
       qc.invalidateQueries({ queryKey: queryKeys.wallet });

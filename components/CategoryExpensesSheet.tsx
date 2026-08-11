@@ -24,7 +24,7 @@ function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-// Dia e mês da despesa, no lugar onde a lista do rolê põe o ícone: aqui todas
+// Dia e mês da despesa, no lugar onde a lista da resenha põe o ícone: aqui todas
 // as despesas são da mesma categoria, então repetir o ícone dela em cada linha
 // não diria nada — e Receipt, o outro candidato, já significa "despesa SEM
 // categoria" (ver components/CategoryIcon.tsx), o oposto do que este sheet é.
@@ -217,7 +217,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     alignItems: 'center',
     gap: spacing.sm,
   },
-  // Mesma largura do círculo de ícone que a lista do rolê usa nesse lugar, pra
+  // Mesma largura do círculo de ícone que a lista da resenha usa nesse lugar, pra
   // que o título comece na mesma coluna nas duas telas.
   //
   // `gray200` e não `surface`: o painel do sheet é `background` (branco puro no

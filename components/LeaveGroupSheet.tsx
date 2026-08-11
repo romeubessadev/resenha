@@ -61,7 +61,7 @@ export function LeaveGroupSheet({ visible, onClose, onClosed, groupId, isOwner, 
       router.replace('/grupos');
     } catch (err) {
       // TEMPORÁRIO: mostra o erro real (em vez da mensagem genérica) pra
-      // diagnosticar por que "Sair do rolê" não estava removendo o grupo da
+      // diagnosticar por que "Sair da resenha" não estava removendo o grupo da
       // lista — reverter pra t('common.tryAgain') depois de confirmado.
       console.error('[LeaveGroupSheet] handleLeave falhou:', err);
       Alert.alert(t('leaveGroup.leaveFailedTitle'), err instanceof Error ? err.message : String(err));

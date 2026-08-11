@@ -4,11 +4,11 @@ import { SkeletonBone as Bone } from './SkeletonBone';
 import { useTheme } from '@/hooks/useTheme';
 import { radius, spacing, type ColorPalette } from '@/theme';
 
-// Placeholder da aba Resumo do rolê: o grid 2×2 de números + a linha de
+// Placeholder da aba Resumo da resenha: o grid 2×2 de números + a linha de
 // contagem embaixo.
 //
 // Separado do GroupDetailSkeleton de propósito: aquele cobre a tela inteira
-// quando o rolê ainda não existe em cache; este é pro caso em que o rolê JÁ
+// quando a resenha ainda não existe em cache; este é pro caso em que a resenha JÁ
 // carregou (header, hero e saldo estão na tela) e só faltam os saldos e as
 // despesas. São dois momentos diferentes, com quantidades diferentes de tela
 // pra preencher.

@@ -78,14 +78,14 @@ describe('payload e pré-condições', () => {
 });
 
 describe('o texto que chega no aparelho', () => {
-  it('leva o nome do rolê — não uma frase pela metade', async () => {
+  it('leva o nome da resenha — não uma frase pela metade', async () => {
     // Foi o que quebrou: a function pedia `groups.currency`, coluna dropada
     // pela 0099. O SELECT inteiro falhava, o erro era descartado e TODO push
     // saía sem o nome ("Nova despesa em ", "Você virou admin do ").
     const fn = await load();
     await fn.call(evento({ kind: 'member_joined' }));
 
-    expect(mensagemEnviada(fn)).toMatchObject({ title: 'Bruno entrou no rolê', body: 'Viagem' });
+    expect(mensagemEnviada(fn)).toMatchObject({ title: 'Bruno entrou na resenha', body: 'Viagem' });
   });
 
   it('não pede nenhuma coluna que o schema não tem mais', async () => {
@@ -108,14 +108,14 @@ describe('o texto que chega no aparelho', () => {
     const res = await fn.call(evento());
 
     expect(await res.json()).toMatchObject({ ok: true });
-    expect(mensagemEnviada(fn)?.title).toBe('Bruno entrou no rolê');
+    expect(mensagemEnviada(fn)?.title).toBe('Bruno entrou na resenha');
   });
 
   it('ator desconhecido vira "Alguém", não vazio', async () => {
     const fn = await load({ tables: tabelas({ profiles: [{ id: EU, language: 'pt-BR' }] }) });
     await fn.call(evento());
 
-    expect(mensagemEnviada(fn)?.title).toBe('Alguém entrou no rolê');
+    expect(mensagemEnviada(fn)?.title).toBe('Alguém entrou na resenha');
   });
 
   it('o push carrega o destino do toque', async () => {
@@ -127,7 +127,7 @@ describe('o texto que chega no aparelho', () => {
     });
   });
 
-  it('lembrete de saldo aberto aponta pra Carteira, não pro rolê', async () => {
+  it('lembrete de saldo aberto aponta pra Carteira, não pra resenha', async () => {
     const fn = await load();
     await fn.call(evento({ kind: 'reminder_open_balance', metadata: { role: 'creditor', balance: 80 } }));
 

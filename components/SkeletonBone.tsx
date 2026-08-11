@@ -23,7 +23,7 @@ export function SkeletonBone({ style }: Props) {
 const createStyles = (colors: ColorPalette) => StyleSheet.create({
   // `gray200`, não `surface`: surface é a cor de fundo de card do app, então
   // osso em surface some sempre que o skeleton desenha dentro de um card (o
-  // cupom da despesa, o card de saldo do rolê). gray200 é um passo além disso
+  // cupom da despesa, o card de saldo da resenha). gray200 é um passo além disso
   // e aparece tanto sobre o fundo da página quanto sobre card, nos dois temas.
   bone: {
     backgroundColor: colors.gray200,

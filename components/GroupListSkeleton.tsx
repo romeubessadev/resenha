@@ -3,7 +3,7 @@ import { SkeletonBone as Bone } from './SkeletonBone';
 import { radius } from '@/theme';
 
 // Placeholder no formato do GroupCard, mostrado enquanto a lista de
-// rolês ainda não tem dado em cache (primeira entrada no app).
+// resenhas ainda não tem dado em cache (primeira entrada no app).
 export function GroupListSkeleton() {
   return (
     <View>

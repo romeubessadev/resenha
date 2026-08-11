@@ -207,7 +207,7 @@ export function ExpenseFormFields({ members, membersLoading, form, categorySlot,
   return (
     <>
       {/* Chips: data · quem pagou. Sem seletor de moeda — a despesa é sempre
-          lançada na moeda do rolê, então não havia escolha a fazer aqui. */}
+          lançada na moeda da resenha, então não havia escolha a fazer aqui. */}
       <View style={styles.topChipsRow}>
         <TouchableOpacity style={styles.topChip} onPress={() => setShowDatePicker(true)} activeOpacity={0.7}>
           <Text style={styles.topChipLabel}>{dateChipLabel(date, language, t)}</Text>
@@ -503,9 +503,9 @@ export function ExpenseFormFields({ members, membersLoading, form, categorySlot,
                 ]} />
               </View>
               {/* Anuncia o recálculo automático em vez de deixar descobrirem.
-                  Só existe no rolê de 2, que é o único tamanho onde ele roda —
+                  Só existe na resenha de 2, que é o único tamanho onde ele roda —
                   sem esta linha, o mesmo modo se comportaria diferente conforme
-                  o tamanho do rolê e nada na tela explicaria. */}
+                  o tamanho da resenha e nada na tela explicaria. */}
               {selecionados.length === 2 && (
                 <Text style={styles.modeFooter}>{t('expenseForm.exactAutoPair')}</Text>
               )}

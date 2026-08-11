@@ -102,7 +102,7 @@ describe('buildPushText — o vocabulário de dinheiro', () => {
   });
 });
 
-describe('buildPushText — rolê editado', () => {
+describe('buildPushText — resenha editada', () => {
   it('nome e foto juntos viram uma frase só', () => {
     const texto = buildPushText('group_edited', 'pt-BR', { ...meta, nameChanged: true, avatarChanged: true })!;
     expect(texto.body).toBe('Nome e foto atualizados');

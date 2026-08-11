@@ -43,8 +43,8 @@ const baseTables = (over: Record<string, MockRow[]> = {}): Record<string, MockRo
 let h: Harness;
 afterEach(() => h?.dispose());
 
-describe('useGroup — o detalhe do rolê', () => {
-  it('monta o rolê com seus membros e diz qual sou eu', async () => {
+describe('useGroup — o detalhe da resenha', () => {
+  it('monta a resenha com seus membros e diz qual sou eu', async () => {
     h = createHarness({ session, tables: baseTables() });
     const { result } = h.run(() => useGroup(GROUP));
     await waitFor(() => expect(result.current.data).toBeTruthy());
@@ -102,7 +102,7 @@ describe('useGroup — o detalhe do rolê', () => {
     const { result } = h.run(() => useGroup(GROUP));
     await waitFor(() => expect(result.current.error).toBeTruthy());
 
-    expect(result.current.error).toBe('Erro ao carregar rolê');
+    expect(result.current.error).toBe('Erro ao carregar resenha');
     expect(result.current.error).not.toContain('row-level security');
   });
 
@@ -114,7 +114,7 @@ describe('useGroup — o detalhe do rolê', () => {
   });
 });
 
-describe('editar o rolê', () => {
+describe('editar a resenha', () => {
   it('manda só os campos que mudaram', async () => {
     h = createHarness({ session, tables: baseTables() });
     const { result } = await h.runReady(() => useUpdateGroup());
@@ -125,7 +125,7 @@ describe('editar o rolê', () => {
   });
 
   it('trocar só a FOTO não invalida a Carteira', async () => {
-    // Foto não aparece lá, e o fetch da Carteira varre todos os seus rolês.
+    // Foto não aparece lá, e o fetch da Carteira varre todos os suas resenhas.
     h = createHarness({ session, tables: baseTables() });
     const { result } = await h.runReady(() => useUpdateGroup());
 
@@ -135,7 +135,7 @@ describe('editar o rolê', () => {
     expect(h.invalidatedNames()).toEqual(expect.arrayContaining(['group', 'my-groups', 'group-history']));
   });
 
-  it('trocar o NOME invalida a Carteira — cada linha mostra de que rolê é', async () => {
+  it('trocar o NOME invalida a Carteira — cada linha mostra de que resenha é', async () => {
     h = createHarness({ session, tables: baseTables() });
     const { result } = await h.runReady(() => useUpdateGroup());
 
@@ -145,7 +145,7 @@ describe('editar o rolê', () => {
   });
 });
 
-describe('arquivar o rolê', () => {
+describe('arquivar a resenha', () => {
   it('vai pela RPC, que é quem conhece as regras', async () => {
     h = createHarness({ session, tables: baseTables(), rpc: { set_my_group_archived: () => ({}) } });
     const { result } = await h.runReady(() => useSetGroupArchived());
@@ -155,7 +155,7 @@ describe('arquivar o rolê', () => {
     expect(h.mock.of('rpc')[0]).toMatchObject({ name: 'set_my_group_archived', args: { gid: GROUP, archived: true } });
   });
 
-  it('rolê com conta em aberto não arquiva, e o erro é RECONHECÍVEL pela tela', async () => {
+  it('resenha com conta em aberto não arquiva, e o erro é RECONHECÍVEL pela tela', async () => {
     // A tela precisa distinguir este caso pra explicar o que falta (0036).
     h = createHarness({
       session, tables: baseTables(),
@@ -191,7 +191,7 @@ describe('arquivar o rolê', () => {
 });
 
 describe('mexer nos membros', () => {
-  it('remover apaga a linha do membro naquele rolê', async () => {
+  it('remover apaga a linha do membro naquela resenha', async () => {
     h = createHarness({ session, tables: baseTables() });
     const { result } = await h.runReady(() => useRemoveMember());
 
@@ -224,7 +224,7 @@ describe('mexer nos membros', () => {
   });
 
   it('promover é UPDATE direto; rebaixar passa por RPC', async () => {
-    // Rebaixar precisa garantir que não fica rolê sem admin (0091).
+    // Rebaixar precisa garantir que não fica resenha sem admin (0091).
     h = createHarness({ session, tables: baseTables(), rpc: { demote_admin: () => ({}) } });
     const promover = await h.runReady(() => usePromoteToAdmin());
     await promover.result.current.promoteToAdmin(GROUP, BRUNO);
@@ -236,8 +236,8 @@ describe('mexer nos membros', () => {
   });
 });
 
-describe('sair do rolê', () => {
-  it('com mais gente, só remove a MINHA linha — o rolê continua', async () => {
+describe('sair da resenha', () => {
+  it('com mais gente, só remove a MINHA linha — a resenha continua', async () => {
     h = createHarness({ session, tables: baseTables() });
     const { result } = await h.runReady(() => useLeaveGroup());
 
@@ -247,7 +247,7 @@ describe('sair do rolê', () => {
     expect(h.mock.of('delete')[0].filters).toContainEqual({ op: 'eq', column: 'user_id', value: ANA });
   });
 
-  it('sendo o ÚLTIMO membro, sair apaga o rolê inteiro', async () => {
+  it('sendo o ÚLTIMO membro, sair apaga a resenha inteira', async () => {
     const t = baseTables();
     t.group_members = [t.group_members[0]];
     h = createHarness({ session, tables: t });
@@ -258,9 +258,9 @@ describe('sair do rolê', () => {
     expect(h.mock.of('delete').some(c => c.table === 'groups')).toBe(true);
   });
 
-  it('rolê travado (sem admin) não apaga em silêncio — a saída FALHA', async () => {
+  it('resenha travada (sem admin) não apaga em silêncio — a saída FALHA', async () => {
     // A RLS exige is_group_admin. Sem esse check seguíamos apagando a foto de
-    // um rolê que continuava de pé (0058).
+    // uma resenha que continuava de pé (0058).
     const t = baseTables();
     t.group_members = [t.group_members[0]];
     h = createHarness({ session, tables: t, fail: { 'groups:delete': 'permissão negada' } });
@@ -269,8 +269,8 @@ describe('sair do rolê', () => {
     await expect(result.current.leaveGroup(GROUP)).rejects.toBeTruthy();
   });
 
-  it('sair tira as dívidas do rolê da Carteira', async () => {
-    // Sem isto elas continuavam lá, apontando pra um rolê que a pessoa não vê.
+  it('sair tira as dívidas da resenha da Carteira', async () => {
+    // Sem isto elas continuavam lá, apontando pra uma resenha que a pessoa não vê.
     h = createHarness({ session, tables: baseTables() });
     const { result } = await h.runReady(() => useLeaveGroup());
 
@@ -280,7 +280,7 @@ describe('sair do rolê', () => {
   });
 });
 
-describe('foto do rolê', () => {
+describe('foto da resenha', () => {
   // `uploadGroupAvatar` lê o arquivo local com `fetch(uri)` — o jsdom não
   // implementa. O stub só devolve bytes; o que se testa é a ORDEM e por onde
   // a gravação passa.
@@ -317,8 +317,8 @@ describe('foto do rolê', () => {
 
   it('foto escolhida NA CRIAÇÃO grava por RPC, não por UPDATE', async () => {
     // O gatilho de histórico não sabe que aquilo faz parte da criação — pelo
-    // UPDATE, o rolê nasceria com "fulano editou o rolê" logo depois de
-    // "fulano criou o rolê".
+    // UPDATE, a resenha nasceria com "fulano editou a resenha" logo depois de
+    // "fulano criou a resenha".
     const restaurar = comArquivoLocal();
     h = createHarness({ session, tables: baseTables(), rpc: { set_group_avatar_on_create: () => ({}) } });
     const { result } = await h.runReady(() => useUpdateGroupAvatar());
@@ -343,7 +343,7 @@ describe('foto do rolê', () => {
     expect(h.mock.of('update')[0].values).toEqual({ avatar_path: null });
   });
 
-  it('a foto nova alcança a lista de rolês e o histórico', async () => {
+  it('a foto nova alcança a lista de resenhas e o histórico', async () => {
     const restaurar = comArquivoLocal();
     h = createHarness({ session, tables: baseTables() });
     const { result } = await h.runReady(() => useUpdateGroupAvatar());
@@ -366,7 +366,7 @@ describe('foto do rolê', () => {
 
   it('falha ao REMOVER propaga antes de apagar o arquivo', async () => {
     // Se o UPDATE falhou, a linha ainda aponta pro arquivo — apagá-lo deixaria
-    // o rolê com foto quebrada.
+    // a resenha com foto quebrada.
     h = createHarness({ session, tables: baseTables(), fail: { 'groups:update': 'boom' } });
     const { result } = await h.runReady(() => useUpdateGroupAvatar());
 
@@ -390,7 +390,7 @@ describe('foto do rolê', () => {
 });
 
 describe('erro do banco não passa calado', () => {
-  // Foi um erro DESCARTADO que fez todo push sair sem o nome do rolê. Estes
+  // Foi um erro DESCARTADO que fez todo push sair sem o nome da resenha. Estes
   // testes fixam que cada caminho de escrita propaga em vez de engolir.
   const casos: [string, string, (h: Harness) => Promise<unknown>][] = [
     ['contagem de despesas', 'expenses:select', async harness => {
@@ -412,10 +412,10 @@ describe('erro do banco não passa calado', () => {
 
   it.each(casos)('falha na %s vira erro na tela', async (_nome, chave, rodar) => {
     h = createHarness({ session, tables: baseTables(), fail: { [chave]: 'boom' } });
-    expect(await rodar(h)).toBe('Erro ao carregar rolê');
+    expect(await rodar(h)).toBe('Erro ao carregar resenha');
   });
 
-  it('editar o rolê propaga a falha', async () => {
+  it('editar a resenha propaga a falha', async () => {
     h = createHarness({ session, tables: baseTables(), fail: { 'groups:update': 'boom' } });
     const { result } = await h.runReady(() => useUpdateGroup());
     await expect(result.current.updateGroup(GROUP, { name: 'X' })).rejects.toMatchObject({ message: 'boom' });
@@ -450,7 +450,7 @@ describe('erro do banco não passa calado', () => {
   });
 
   it('falha ao CONTAR membros aborta a saída', async () => {
-    // Sem a contagem não dá pra saber se sair apaga o rolê ou só a sua linha.
+    // Sem a contagem não dá pra saber se sair apaga a resenha ou só a sua linha.
     h = createHarness({ session, tables: baseTables(), fail: { 'group_members:select': 'boom' } });
     const { result } = await h.runReady(() => useLeaveGroup());
     await expect(result.current.leaveGroup(GROUP)).rejects.toMatchObject({ message: 'boom' });
@@ -466,7 +466,7 @@ describe('sair sendo o último membro', () => {
 
   it('RLS que barra em SILÊNCIO (zero linhas) vira falha explícita', async () => {
     // O delete não dá erro — simplesmente não apaga nada. Sem este check,
-    // seguíamos pra apagar a foto de um rolê que continuava de pé.
+    // seguíamos pra apagar a foto de uma resenha que continuava de pé.
     const t = soEu();
     t.groups = [];
     h = createHarness({ session, tables: t });
@@ -475,7 +475,7 @@ describe('sair sendo o último membro', () => {
     await expect(result.current.leaveGroup(GROUP)).rejects.toThrow(/leave_group_delete_blocked/);
   });
 
-  it('rolê com foto apaga o arquivo junto', async () => {
+  it('resenha com foto apaga o arquivo junto', async () => {
     const t = soEu();
     (t.groups[0] as Record<string, unknown>).avatar_path = 'g1/foto.jpg';
     h = createHarness({ session, tables: t });
@@ -490,7 +490,7 @@ describe('sair sendo o último membro', () => {
 });
 
 describe('regenerar o código de convite', () => {
-  it('pede o código novo ao banco e grava no rolê', async () => {
+  it('pede o código novo ao banco e grava na resenha', async () => {
     // O código não é sorteado no client: a RPC garante que é único.
     h = createHarness({
       session, tables: baseTables(),

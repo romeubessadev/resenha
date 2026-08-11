@@ -27,7 +27,7 @@ const COPY_KEYS: Record<PaywallReason, { eyebrow: TranslationKey; title: Transla
 };
 
 // Fixos, sempre nesta ordem, independente do motivo do gatilho — o objetivo é
-// mostrar o pacote Bros+ inteiro, não só o item que travou.
+// mostrar o pacote Premium inteiro, não só o item que travou.
 //
 // Emoji, e não lucide: é a MESMA lista da tela de paywall pós-onboarding
 // (app/(pre-auth)/paywall.tsx), e as duas precisam bater — duas telas com cara

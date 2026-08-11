@@ -10,7 +10,7 @@
 // components/CategoryIcon.tsx.
 //
 // SEM gate premium, de propósito. Categoria não é dado pessoal, é COMPARTILHADO:
-// num rolê de cinco pessoas, o Insight que uma delas paga pra ver depende de
+// numa resenha de cinco pessoas, o Insight que uma delas paga pra ver depende de
 // como as outras quatro categorizaram. Deixar isso na mão de quem não vê a tela
 // (e portanto não tem motivo pra caprichar) seria vender um relatório e
 // terceirizar a qualidade dele. O que se cobra é ver agrupado, comparar
@@ -26,7 +26,7 @@
 // editar a despesa, e hoje qualquer membro pode lançar em nome de
 // outro. Um UPDATE do client falharia calado — zero linhas — sempre que a
 // despesa fosse paga por outra pessoa. Aqui a checagem é a certa: precisa ser
-// MEMBRO do rolê, verificado com o token de quem chamou, e só então a service
+// MEMBRO da resenha, verificado com o token de quem chamou, e só então a service
 // role escreve.
 //
 // Nunca cria a despesa em si.
@@ -120,11 +120,11 @@ Deno.serve(async req => {
     // Título lido do banco, e não do corpo do pedido: é a fonte da verdade, e
     // a leitura serve de checagem de acesso ao mesmo tempo. A policy
     // `expenses_select_member` só devolve linha pra quem é membro do
-    // rolê — despesa inexistente e despesa de rolê alheio caem os dois aqui,
+    // resenha — despesa inexistente e despesa de resenha alheio caem os dois aqui,
     // sem precisar de consulta separada a group_members.
     //
     // Sem checagem de is_premium (ver cabeçalho): categoria é dado
-    // compartilhado do rolê, não um recurso individual.
+    // compartilhado da resenha, não um recurso individual.
     const { data: expense, error: expenseErr } = await userClient
       .from('expenses')
       .select('id, title, category_id, recurrence_id')

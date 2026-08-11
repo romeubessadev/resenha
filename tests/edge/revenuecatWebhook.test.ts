@@ -1,4 +1,4 @@
-// A function que concede e revoga o Bros+.
+// A function que concede e revoga o Premium.
 //
 // É o único caminho que escreve `profiles.is_premium`: a 0032 revogou o UPDATE
 // dessas colunas do role `authenticated`, então virar premium só acontece aqui.
@@ -131,7 +131,7 @@ describe('eventos que REVOGAM — e os que não revogam', () => {
 
   it('CANCELLATION NÃO revoga — o acesso vale até expirar de fato', async () => {
     // Desligar a auto-renovação não é perder o acesso. Revogar aqui tiraria o
-    // Bros+ de quem ainda pagou pelo mês corrente; a revogação chega depois,
+    // Premium de quem ainda pagou pelo mês corrente; a revogação chega depois,
     // como EXPIRATION.
     const fn = await load({ tables: { profiles: [{ id: USER, is_premium: true }] } });
     const res = await fn.call(evento('CANCELLATION'));

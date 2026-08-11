@@ -36,11 +36,11 @@ export type GroupDetail = {
   avatarPath: string | null;
   inviteCode: string;
   archivedAt: string | null;
-  /** Divisão que uma despesa nova assume neste rolê — vem da
+  /** Divisão que uma despesa nova assume nesta resenha — vem da
    *  resposta do onboarding de quem criou. Cada despesa pode mudar a sua. */
   defaultSplitType: string;
   createdAt: string;
-  /** Rolê com pelo menos 1 despesa não pode mais trocar de moeda (EditGroupSheet). */
+  /** Resenha com pelo menos 1 despesa não pode mais trocar de moeda (EditGroupSheet). */
   hasExpenses: boolean;
   members: GroupMember[];
 };
@@ -141,8 +141,8 @@ export function useUpdateGroup() {
       qc.invalidateQueries({ queryKey: queryKeys.group(groupId) });
       qc.invalidateQueries({ queryKey: queryKeys.myGroups });
       qc.invalidateQueries({ queryKey: queryKeys.groupHistory(groupId) });
-      // Só o nome: cada linha da Carteira mostra de que rolê é a dívida. Foto
-      // não aparece lá, e o fetch dela é caro (varre todos os seus rolês).
+      // Só o nome: cada linha da Carteira mostra de que resenha é a dívida. Foto
+      // não aparece lá, e o fetch dela é caro (varre todos os suas resenhas).
       if (changes.name !== undefined) qc.invalidateQueries({ queryKey: queryKeys.wallet });
     },
   });
@@ -211,12 +211,12 @@ export function useUpdateGroupAvatar() {
     },
   });
 
-  // Foto escolhida ENQUANTO se cria o rolê. Grava pela RPC, e não pelo UPDATE
+  // Foto escolhida ENQUANTO se cria a resenha. Grava pela RPC, e não pelo UPDATE
   // acima, porque o gatilho de histórico não tem como saber que aquilo faz
-  // parte da criação — sem isto, criar um rolê com foto registrava "fulano
-  // editou o rolê" logo depois de "fulano criou o rolê".
+  // parte da criação — sem isto, criar uma resenha com foto registrava "fulano
+  // editou a resenha" logo depois de "fulano criou a resenha".
   //
-  // A foto não pode subir antes do rolê existir: o caminho no bucket começa
+  // A foto não pode subir antes da resenha existir: o caminho no bucket começa
   // pelo id, e a policy de INSERT exige ser membro desse id. Então os
   // dois passos são obrigatórios — o que muda é quem declara a intenção.
   const createMutation = useMutation({
@@ -267,7 +267,7 @@ export function useRemoveMember() {
       qc.invalidateQueries({ queryKey: queryKeys.groupBalances(groupId) });
       qc.invalidateQueries({ queryKey: queryKeys.groupHistory(groupId) });
       // Tirar alguém redistribui a divisão das despesas dele, então os saldos
-      // que a Carteira mostra desse rolê mudam junto.
+      // que a Carteira mostra dessa resenha mudam junto.
       qc.invalidateQueries({ queryKey: queryKeys.wallet });
       // Quem sai pode ser criador ou pagador de uma série, e um trigger
       // pausa ela no banco — sem isto, quem removeu continuaria vendo "ativa"
@@ -351,8 +351,8 @@ export function useLeaveGroup() {
         const { data: deletedRows, error } = await supabase.from('groups').delete().eq('id', groupId).select();
         if (error) throw error;
         // RLS (groups_delete_admin) exige is_group_admin — se a linha não sumiu,
-        // a pessoa não tinha owner/admin (rolê "travado").
-        // Sem esse check, seguíamos pra apagar a foto mesmo com o rolê intacto.
+        // a pessoa não tinha owner/admin (resenha "travado").
+        // Sem esse check, seguíamos pra apagar a foto mesmo com a resenha intacto.
         if (!deletedRows || deletedRows.length === 0) {
           throw new Error(`leave_group_delete_blocked (groupId=${groupId}, userId=${userId})`);
         }
@@ -368,8 +368,8 @@ export function useLeaveGroup() {
       qc.invalidateQueries({ queryKey: queryKeys.group(groupId) });
       qc.invalidateQueries({ queryKey: queryKeys.myGroups });
       qc.invalidateQueries({ queryKey: queryKeys.groupHistory(groupId) });
-      // Sair (ou apagar, no caminho de membro único) tira o rolê da Carteira —
-      // sem isto as dívidas dele continuavam lá, apontando pra um rolê que a
+      // Sair (ou apagar, no caminho de membro único) tira a resenha da Carteira —
+      // sem isto as dívidas dele continuavam lá, apontando pra uma resenha que a
       // pessoa não vê mais.
       qc.invalidateQueries({ queryKey: queryKeys.wallet });
     },

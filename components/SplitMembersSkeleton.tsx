@@ -4,7 +4,7 @@ import { SkeletonBone as Bone } from './SkeletonBone';
 import { useTheme } from '@/hooks/useTheme';
 import { radius, spacing, type ColorPalette } from '@/theme';
 
-// Contorno da lista de quem divide a despesa, enquanto os membros do rolê
+// Contorno da lista de quem divide a despesa, enquanto os membros da resenha
 // carregam. O resto do formulário já está na tela — só este bloco espera.
 export function SplitMembersSkeleton() {
   const { colors } = useTheme();

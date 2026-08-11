@@ -28,7 +28,7 @@ const BRUNO = 'bruno';
 
 const session = { user: { id: ANA } };
 
-/** Um rolê com Ana e Bruno e uma despesa de R$100 paga pelo Bruno, dividida
+/** Uma resenha com Ana e Bruno e uma despesa de R$100 paga pelo Bruno, dividida
  *  igualmente — o cenário mínimo em que existe dívida.
  *
  *  Tipado como linha de mock, e não pelo literal: vários testes ajustam uma
@@ -109,7 +109,7 @@ const updateBase = (over: Record<string, unknown> = {}) => ({
 });
 
 // ───────────────────────────────────────────────────────────────────────────
-describe('useExpenses — a lista do rolê', () => {
+describe('useExpenses — a lista da resenha', () => {
   it('junta despesa e acerto numa lista só, com o nome de quem bancou', async () => {
     h = createHarness({
       session,
@@ -321,7 +321,7 @@ describe('criar despesa', () => {
     expect(h.mock.of('invoke')[0].name).toBe('categorize-expense');
   });
 
-  it('invalida tudo que MOSTRA a despesa, não só a lista do rolê', async () => {
+  it('invalida tudo que MOSTRA a despesa, não só a lista da resenha', async () => {
     h = withMutations({ session, tables: baseTables() });
     const { result } = await h.runReady(() => useCreateExpense());
 
@@ -711,7 +711,7 @@ describe('apagar despesa', () => {
 
 // ───────────────────────────────────────────────────────────────────────────
 describe('nenhum erro do banco passa calado', () => {
-  // Foi um erro DESCARTADO que fez todo push sair sem o nome do rolê. Aqui se
+  // Foi um erro DESCARTADO que fez todo push sair sem o nome da resenha. Aqui se
   // fixa que cada leitura e cada escrita propaga em vez de engolir.
   it.each([
     ['despesas', 'expenses:select'],

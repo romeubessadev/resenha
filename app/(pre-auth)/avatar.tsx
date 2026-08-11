@@ -43,7 +43,7 @@ export default function AvatarScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + spacing.lg }]}>
-      <Text style={styles.logo}>Bros</Text>
+      <Text style={styles.logo}>Resenha</Text>
 
       <View style={styles.header}>
         <Text style={styles.title}>{t('avatar.title')}</Text>

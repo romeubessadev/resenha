@@ -50,7 +50,7 @@ describe('acerto nunca escreve direto em payments', () => {
 // Frescura de dado compartilhado — as três camadas
 // ═══════════════════════════════════════════════════════════════════════════
 describe('frescura de dado compartilhado', () => {
-  // Toda query que mostra dado que OUTRA pessoa do rolê pode mudar.
+  // Toda query que mostra dado que OUTRA pessoa da resenha pode mudar.
   // `myProfile` fica fora: só o dono altera o próprio perfil.
   const SHARED_QUERY_HOOKS = [
     'hooks/useCategories.ts',
@@ -120,7 +120,7 @@ describe('frescura de dado compartilhado', () => {
 // Recência — migrations 0077, 0078, 0082, 0083
 // ═══════════════════════════════════════════════════════════════════════════
 describe('recência nunca sai só de max(created_at)', () => {
-  it('a lista de rolês usa group_last_activity (que lê group_events)', () => {
+  it('a lista de resenhas usa group_last_activity (que lê group_events)', () => {
     expect(readSource('hooks/useGroups.ts').code).toContain('group_last_activity');
   });
 

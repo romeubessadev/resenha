@@ -22,7 +22,7 @@ type Props = {
    *
    *  Sem isto, o scroll NATIVO reivindica todo arrasto vertical e este `Pan`
    *  nunca ativa — a tela simplesmente não se move. Só funcionava onde havia
-   *  uma região não-rolável pra começar o arrasto (o hero do detalhe do rolê).
+   *  uma região não-rolável pra começar o arrasto (o hero do detalhe da resenha).
    *  Declarando os dois como simultâneos, cada um faz a sua parte: o scroll
    *  rola quando tem pra onde ir, e este traduz o conteúdo quando `scrollY`
    *  já está em 0. */

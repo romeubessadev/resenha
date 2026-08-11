@@ -12,7 +12,7 @@ const BRUNO = 'bruno';
 const CARLA = 'carla';
 const session = { user: { id: ANA } };
 
-/** Ana e Bruno num rolê, com uma despesa de R$100 que o Bruno bancou e os dois
+/** Ana e Bruno numa resenha, com uma despesa de R$100 que o Bruno bancou e os dois
  *  dividem — Ana deve 50 a ele. */
 const umaDivida = (over: Record<string, unknown[]> = {}) => ({
   group_members: [
@@ -131,7 +131,7 @@ describe('useWallet — o que eu devo e o que me devem', () => {
     expect(result.current.data.map(t => t.id)).not.toContain('p1');
   });
 
-  it('junta rolês diferentes numa lista só, do mais recente pro mais antigo', async () => {
+  it('junta resenhas diferentes numa lista só, do mais recente pro mais antigo', async () => {
     h = createHarness({
       session,
       tables: {
@@ -174,7 +174,7 @@ describe('useWallet — o que eu devo e o que me devem', () => {
     });
   });
 
-  it('rolê sem NENHUMA despesa marca hasNoExpenses — a despesa paga foi apagada', async () => {
+  it('resenha sem NENHUMA despesa marca hasNoExpenses — a despesa paga foi apagada', async () => {
     h = createHarness({
       session,
       tables: umaDivida({
@@ -188,14 +188,14 @@ describe('useWallet — o que eu devo e o que me devem', () => {
     const { result } = h.run(() => useWallet());
     await waitFor(() => expect(result.current.data.length).toBeGreaterThan(0));
 
-    // Toda linha desse rolê carrega a marca — é o rolê que está sem despesa,
+    // Toda linha dessa resenha carrega a marca — é a resenha que está sem despesa,
     // não a linha. (Sobra o pagamento quitado E o saldo que ele inverteu:
     // sem despesa pra sustentar a dívida, quem pagou vira credor.)
     expect(result.current.data.every(t => t.hasNoExpenses)).toBe(true);
     expect(result.current.data.some(t => t.status === 'settled')).toBe(true);
   });
 
-  it('sem nenhum rolê, devolve vazio sem ir buscar despesa', async () => {
+  it('sem nenhuma resenha, devolve vazio sem ir buscar despesa', async () => {
     h = createHarness({ session, tables: { group_members: [] } });
     const { result } = h.run(() => useWallet());
     await waitFor(() => expect(result.current.loading).toBe(false));

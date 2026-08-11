@@ -20,9 +20,9 @@ type Props = {
   toId: string;
   toName: string;
   toPhotoUrl?: string | null;
-  /** Valor já formatado na moeda do rolê. */
+  /** Valor já formatado na moeda da resenha. */
   amountLabel: string;
-  /** "≈ <valor na moeda do usuário>" — só quando a moeda do rolê difere da do usuário. */
+  /** "≈ <valor na moeda do usuário>" — só quando a moeda da resenha difere da do usuário. */
   role: Role;
   status: Status;
   loading?: boolean;

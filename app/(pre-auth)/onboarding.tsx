@@ -58,7 +58,7 @@ const QUESTION_STEPS = 2;
 const ADVANCE_DELAY_MS = 180;
 /** Último passo do tour; daí sai pro paywall. */
 const LAST_STEP = 5;
-/** Passo da prévia do rolê. */
+/** Passo da prévia da resenha. */
 const PREVIEW_STEP = 3;
 /** Passo da vitrine de voz e quanto tempo a "gravação" encenada dura. */
 const VOICE_STEP = 4;
@@ -175,12 +175,12 @@ export default function OnboardingScreen() {
       title, amount, people: join([t('onboarding.voiceMe'), ...friends]),
     });
   }, [selectedSplit, selectedType.value, demo, t]);
-  // Nome do rolê: o que ela digitou, ou a sugestão do tipo enquanto não mexeu.
+  // Nome da resenha: o que ela digitou, ou a sugestão do tipo enquanto não mexeu.
   const groupName = answers.name ?? t(selectedType.demoName);
 
   // Grava a sugestão assim que a prévia aparece. Sem isto, quem não editava o
-  // campo terminava o tour com `name` nulo — a tela mostrava "Rolê da praia",
-  // nada era salvo, e o rolê não nascia depois do cadastro.
+  // campo terminava o tour com `name` nulo — a tela mostrava "Resenha da praia",
+  // nada era salvo, e a resenha não nascia depois do cadastro.
   useEffect(() => {
     if (step !== PREVIEW_STEP || answers.name !== null) return;
     setAnswers(prev => {
@@ -385,13 +385,13 @@ export default function OnboardingScreen() {
             <View style={styles.previewCard}>
               <View style={styles.previewHeader}>
                 {/* Iniciais, e não o emoji do tipo: é assim que o app desenha
-                    rolê sem foto (ver CreateRoleSheet). Como o nome é editável,
+                    resenha sem foto (ver CreateRoleSheet). Como o nome é editável,
                     as iniciais acompanham o que a pessoa digita — a prévia
-                    mostra o avatar que o rolê vai ter de verdade. */}
+                    mostra o avatar que a resenha vai ter de verdade. */}
                 <Avatar name={groupName} id="onboarding-preview" variant="warm" size={56} />
                 <View style={styles.previewHeaderText}>
                   <Text style={styles.previewEyebrow}>{t('onboarding.previewNewGroup')}</Text>
-                  {/* Editável: é este nome que vira o rolê de verdade depois do
+                  {/* Editável: é este nome que vira a resenha de verdade depois do
                       cadastro, então a tela 5 mostra exatamente o que vai existir. */}
                   <TextInput
                     style={styles.previewNameInput}
@@ -404,9 +404,9 @@ export default function OnboardingScreen() {
                     maxLength={60}
                     returnKeyType="done"
                   />
-                  {/* O rolê nasce só com você — quem entra é quem aceitar o
+                  {/* A resenha nasce só com você — quem entra é quem aceitar o
                       convite. Anunciar "4 pessoas" aqui prometeria membros que
-                      não existem no rolê criado. */}
+                      não existem na resenha criada. */}
                   <Text style={styles.previewMembers}>{t('onboarding.previewSolo')}</Text>
                 </View>
               </View>
@@ -706,7 +706,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     color: colors.textSecondary,
   },
 
-  // ── Tipo de rolê ────────────────────────────────────────────────────────────
+  // ── Tipo de resenha ────────────────────────────────────────────────────────────
   typeGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -798,7 +798,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     color: colors.textSecondary,
   },
 
-  // ── Prévia do rolê ──────────────────────────────────────────────────────────
+  // ── Prévia da resenha ──────────────────────────────────────────────────────────
   stepScroll: {
     flex: 1,
   },

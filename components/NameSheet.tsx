@@ -11,7 +11,7 @@ import { fontFamilies, fontSizes, radius, type ColorPalette } from '@/theme';
 
 /** Mesmo teto do campo antigo, que era editado direto no hero. Corta na
  *  digitação em vez de recusar ao salvar: o limite existe pra o nome caber na
- *  lista de participantes e no card do rolê, não pra ser uma regra a decorar. */
+ *  lista de participantes e no card da resenha, não pra ser uma regra a decorar. */
 const NAME_MAX = 40;
 
 type Props = {

@@ -3,7 +3,7 @@ import { useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { lightColors, darkColors, type ColorPalette } from '@/theme';
 
-const THEME_KEY = 'bros:theme';
+const THEME_KEY = 'resenha:theme';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
 type ResolvedScheme = 'light' | 'dark';

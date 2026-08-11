@@ -81,7 +81,7 @@ export function createSupabaseMock(config: MockConfig = {}) {
     let recorded = false;
     /** `select('id', { count: 'exact', head: true })` — a contagem é o dado, e
      *  com `head` não vem linha nenhuma. Vários hooks decidem por ela (se o
-     *  rolê tem despesa, se sobrou membro), então devolver `undefined` fazia o
+     *  resenha tem despesa, se sobrou membro), então devolver `undefined` fazia o
      *  teste exercitar o ramo errado sem reclamar. */
     let wantsCount = false;
     let headOnly = false;

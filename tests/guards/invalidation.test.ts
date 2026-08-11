@@ -5,7 +5,7 @@ import { readSource } from './source';
 // O contrato de invalidação — a 1ª das três camadas de frescura.
 //
 // A regra do CLAUDE.md: "invalide tudo que MOSTRA o dado que você mexeu, não só
-// a tela de onde a mutação partiu". Despesa aparece na lista do rolê, no saldo,
+// a tela de onde a mutação partiu". Despesa aparece na lista da resenha, no saldo,
 // no histórico, na Carteira e na contagem por categoria.
 //
 // Estes guards não executam mutação nenhuma — travam a LISTA. Existem porque a
@@ -79,7 +79,7 @@ describe('mutação de despesa invalida tudo que mostra despesa', () => {
       expect(falta, `${nome} esqueceu: ${falta.join(', ')}. Invalida hoje: ${got.join(', ')}`).toEqual([]);
     });
 
-    it(`${nome}: invalida a contagem por categoria e as recorrências do rolê`, () => {
+    it(`${nome}: invalida a contagem por categoria e as recorrências da resenha`, () => {
       const got = onSuccessOf(expenses, marker);
       expect(got).toContain('categoryUsage');
       expect(got).toContain('groupRecurrences');
@@ -122,7 +122,7 @@ describe('mudança de perfil alcança onde nome e foto estão embutidos', () => 
   // Nome e foto são copiados em cada lista de membros e em cada despesa, então
   // trocar a foto sem os prefixos deixa a cara velha espalhada pelo app.
   for (const fn of ['useUpdateMyProfile', 'useUpdateMyAvatar'] as const) {
-    it(`${fn}: perfil + prefixos de rolê e despesa`, () => {
+    it(`${fn}: perfil + prefixos de resenha e despesa`, () => {
       const got = keysIn(handlerBlock(exportedFn(profile, fn), 'onSuccess'));
       const falta = ['myProfile', 'allGroupDetails', 'allExpenseDetails'].filter(k => !got.includes(k));
       expect(falta, `${fn} esqueceu: ${falta.join(', ')}`).toEqual([]);

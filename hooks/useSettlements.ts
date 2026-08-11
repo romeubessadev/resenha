@@ -48,7 +48,7 @@ async function fetchSettlementRows(groupId: string): Promise<SettlementRow[]> {
 
 /**
  * Junta as transferências mínimas (já calculadas por useGroupBalances via
- * simplifyDebts) com as settlements em andamento no rolê. Uma settlement
+ * simplifyDebts) com as settlements em andamento na resenha. Uma settlement
  * "stale" — cujo valor não bate mais com o recalculado agora, porque uma
  * despesa nova mudou o saldo — é ignorada e o par volta pro estado pending.
  */

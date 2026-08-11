@@ -18,7 +18,7 @@ export type GroupSummary = {
   memberNames: string[];
   memberIds: string[];
   memberPhotoUrls: (string | null)[];
-  /** Moeda do rolê (não a do usuário) — cada rolê tem a sua. */
+  /** Moeda da resenha (não a do usuário) — cada resenha tem a sua. */
   /** Já convertido pra moeda principal do usuário (useGroups é tela de agregação). */
   netBalance: number;
   archived: boolean;
@@ -73,7 +73,7 @@ async function fetchGroupSummaries(userId: string): Promise<GroupSummary[]> {
     .in('group_id', groupIds);
   if (payErr) throw payErr;
 
-  // Último evento de cada rolê. É o que faz apagar despesa contar como
+  // Último evento de cada resenha. É o que faz apagar despesa contar como
   // atividade — despesa é hard delete, então a conta abaixo, sozinha, olha só
   // as linhas vivas e anda pra trás ao apagar a mais recente.
   const { data: lastEvents, error: evErr } = await supabase
@@ -96,7 +96,7 @@ async function fetchGroupSummaries(userId: string): Promise<GroupSummary[]> {
     const myArchivedAt = myArchivedAtByGroup.get(g.id) ?? null;
 
     const groupPaymentsRaw = (payments ?? []).filter(p => p.group_id === g.id);
-    // Despesas e pagamentos continuam na conta porque rolê antigo não
+    // Despesas e pagamentos continuam na conta porque resenha antigo não
     // tem evento nenhum pra `group_last_activity` achar.
     const lastEventAt = lastEventAtByGroup.get(g.id);
     const activityDates = [
@@ -165,7 +165,7 @@ export function useCreateGroup() {
       if (!session?.user.id) throw new Error(t('errors.sessionInvalid'));
 
       // RPC faz os dois inserts (groups + group_members) numa transação só —
-      // se o limite de rolês (trigger em group_members) travar, nenhum dos
+      // se o limite de resenhas (trigger em group_members) travar, nenhum dos
       // dois sobe, em vez de deixar um grupo órfão sem membro.
       // O gerador de tipos do Supabase não enxerga nullability de parâmetro de
       // função (só de coluna) — `p_avatar_key text` aceita null em runtime
@@ -174,7 +174,7 @@ export function useCreateGroup() {
         .rpc('create_group_with_owner', {
           p_name: name, p_avatar_key: avatarKey as string,
           // Omitido, o banco assume 'equal' — mesmo comportamento de antes pra
-          // quem cria rolê fora do onboarding.
+          // quem cria resenha fora do onboarding.
           ...(defaultSplitType ? { p_default_split_type: defaultSplitType } : {}),
         });
       if (error) {
@@ -230,7 +230,7 @@ export function useJoinGroup() {
     onSuccess: group => {
       qc.invalidateQueries({ queryKey: queryKeys.myGroups });
       qc.invalidateQueries({ queryKey: queryKeys.groupHistory(group.id) });
-      // Rolê que já tinha despesa entra com dívida — ela precisa aparecer na
+      // Resenha que já tinha despesa entra com dívida — ela precisa aparecer na
       // Carteira na hora, não só na próxima vez que ela expirar.
       qc.invalidateQueries({ queryKey: queryKeys.wallet });
     },

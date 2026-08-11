@@ -47,7 +47,7 @@ export default function GruposScreen() {
   const displayed = activeTab === 'arquivados' ? arquivados : ativos;
 
   // Busca só aparece quando a aba atual (Ativos/Arquivados, cada uma com
-  // sua própria contagem) tem rolê suficiente pra justificar filtrar.
+  // sua própria contagem) tem resenha suficiente pra justificar filtrar.
   const showSearch = displayed.length >= 6;
   const searchQueryNormalized = showSearch ? searchQuery.trim().toLowerCase() : '';
   const filteredDisplayed = searchQueryNormalized
@@ -101,7 +101,7 @@ export default function GruposScreen() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <SwipeTabs onSwipeLeft={() => { if (!sheetsOpen) router.replace('/carteira'); }}>
       {/* Faixa de botões fixa, FORA do PullToRefresh — mesma anatomia do
-          detalhe do rolê, e pelo mesmo motivo declarado lá: dentro do gesto,
+          detalhe da resenha, e pelo mesmo motivo declarado lá: dentro do gesto,
           um toque no botão mexe no conteúdo e "pisca". */}
       <View style={styles.topBar}>
         <Image source={require('@/assets/logo-resenha.png')} style={styles.logo} resizeMode="contain" />
@@ -138,8 +138,8 @@ export default function GruposScreen() {
         stickyHeaderIndices={[1]}
         contentContainerStyle={{ paddingBottom: spacing.xxl + 52 }}
       >
-      {/* O saldo é somado a partir dos rolês: sem dado ele daria R$ 0,00 com a
-          legenda "somando todos os seus rolês ativos" — uma afirmação que a
+      {/* O saldo é somado a partir das resenhas: sem dado ele daria R$ 0,00 com a
+          legenda "somando todos os suas resenhas ativass" — uma afirmação que a
           tela ainda não pode fazer. Vira osso até a consulta responder. */}
       <View style={styles.header}>
         <View style={styles.balanceBlock}>
@@ -359,7 +359,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     backgroundColor: colors.background,
   },
   // Faixa de botões que fica fixa, fora do PullToRefresh — mesma anatomia da
-  // faixa de ícones do detalhe do rolê.
+  // faixa de ícones do detalhe da resenha.
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -553,7 +553,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     color: colors.primary,
   },
 
-  // ── CTA "Criar novo rolê" ─────────────────────────────────
+  // ── CTA "Criar nova resenha" ─────────────────────────────────
   ctaCard: {
     flexDirection: 'row',
     alignItems: 'center',

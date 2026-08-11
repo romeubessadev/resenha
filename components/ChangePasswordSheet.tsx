@@ -137,8 +137,8 @@ export function ChangePasswordSheet({ visible, onClose }: Props) {
       </View>
 
       {/* Sem "Cancelar": o X do cabeçalho já fecha, e é assim que os outros
-          sheets de formulário do app se comportam (WhatsApp, Criar rolê,
-          Editar rolê). */}
+          sheets de formulário do app se comportam (WhatsApp, Criar resenha,
+          Editar resenha). */}
       <TouchableOpacity
         style={[styles.saveBtn, !canSubmit && styles.saveBtnDisabled]}
         onPress={handleSave}

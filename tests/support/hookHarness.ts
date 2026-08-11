@@ -72,7 +72,7 @@ export function createHarness(config: MockConfig = {}) {
      *
      * O provider lê `supabase.auth.getSession()` dentro de um efeito, então no
      * primeiro render `session` ainda é null. Toda mutação que exige sessão
-     * (criar e editar despesa, sair do rolê) estoura "Sessão inválida" se for
+     * (criar e editar despesa, sair da resenha) estoura "Sessão inválida" se for
      * chamada nesse instante — falha de CORRIDA do teste, não da regra.
      */
     runReady: async <T,>(hook: () => T) => {

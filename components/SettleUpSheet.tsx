@@ -77,13 +77,13 @@ export function SettleUpSheet({ visible, onClose, groupId, focusUserId }: Props)
   const settledCards = settled.flatMap(s => {
     const fromMember = memberById.get(s.fromUserId);
     const toMember = memberById.get(s.toUserId);
-    // Quem saiu do rolê não está mais em group.members e ficaria sem nome —
+    // Quem saiu da resenha não está mais em group.members e ficaria sem nome —
     // mesmo comportamento da lista de pendentes.
     if (!fromMember || !toMember) return [];
     return [{ settlement: s, fromMember, toMember }];
   });
 
-  // O total soma TODOS os acertos do rolê, inclusive os entre outras duas
+  // O total soma TODOS os acertos da resenha, inclusive os entre outras duas
   // pessoas — é o número que explica a lista que está logo abaixo. O recorte
   // pessoal vem separado em recebido/pago: somar os dois num "seu total" só
   // misturaria dinheiro que entrou com dinheiro que saiu. O que sobra (acertos
@@ -211,7 +211,7 @@ export function SettleUpSheet({ visible, onClose, groupId, focusUserId }: Props)
     const fromName = fromMember?.name ?? '';
     const toName = toMember?.name ?? '';
     const amount = formatMoney(tx.amount);
-    const groupName = group?.name ?? 'rolê';
+    const groupName = group?.name ?? 'resenha';
 
     if (role === 'debtor') {
       const toFirstName = toName.split(' ')[0];
@@ -502,7 +502,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
   },
   // Neutra, e não na cor da marca: na paleta do app o amarelo do primary é
   // quase o mesmo do warning, então acento vira "atenção" aos olhos. E 'a
-  // acertar' não é estado de alerta, é o estado normal de um rolê em
+  // acertar' não é estado de alerta, é o estado normal de uma resenha em
   // andamento. Com só o verde colorido, ele volta a significar algo — a
   // seleção da aba já é dita pelo fundo e pelo semibold.
   tabLabelActivePendentes: {

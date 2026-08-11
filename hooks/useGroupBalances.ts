@@ -39,10 +39,10 @@ async function fetchBalances(groupId: string): Promise<{
   const balances = computeBalances(memberIds, expenses as BalanceExpense[], participants ?? [], payments);
   const transfers = simplifyDebts(balances);
   // Saldo que sobraria só com os pagamentos, sem nenhuma despesa — usado pra
-  // avisar antes de apagar a última despesa do rolê (ver grupo/[id].tsx e
+  // avisar antes de apagar a última despesa da resenha (ver grupo/[id].tsx e
   // grupo/despesa.tsx): um pagamento já confirmado continua de pé mesmo que
   // a despesa que motivou seja apagada depois, e isso pode deixar alguém
-  // com saldo pendente num rolê que parece "vazio".
+  // com saldo pendente numa resenha que parece "vazio".
   const paymentsOnlyBalances = computeBalances(memberIds, [], [], payments);
   return { balances, transfers, paymentsOnlyBalances };
 }

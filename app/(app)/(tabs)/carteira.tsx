@@ -68,8 +68,8 @@ export default function CarteiraScreen() {
     scrollY.value = e.contentOffset.y;
   });
 
-  // Todo rolê é em reais, então somar é somar — não há mais conversão entre a
-  // moeda do rolê e a do usuário nesta tela de agregação.
+  // Toda resenha é em reais, então somar é somar — não há mais conversão entre a
+  // moeda da resenha e a do usuário nesta tela de agregação.
   const toMine = (t: { amount: number }) => t.amount;
 
   const nonSettled = txs.filter(t => t.status !== 'settled');
@@ -641,7 +641,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
   },
   // O respiro entre as linhas mora no padding delas, não num gap da lista:
   // assim a faixa inteira é tocável e o realce de pressionar cobre ela toda —
-  // mesmo modelo da lista de despesas do rolê e da lista de rolês. A margem
+  // mesmo modelo da lista de despesas da resenha e da lista de resenhas. A margem
   // negativa faz o realce sangrar 12px pra cada lado sem desalinhar o
   // conteúdo com o resto da tela.
   txRow: {

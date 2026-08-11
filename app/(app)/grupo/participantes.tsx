@@ -34,7 +34,7 @@ function sortMembers(members: GroupMember[], language: string): GroupMember[] {
 }
 
 // Modelo do WhatsApp: admin age sobre qualquer um, menos sobre quem criou o
-// rolê. O papel 'owner' continua existindo no banco, mas some da interface —
+// resenha. O papel 'owner' continua existindo no banco, mas some da interface —
 // pra quem usa, existe só "admin"; o dono é um admin que ninguém rebaixa.
 //
 // A proteção do criador é o que evita guerra de rebaixamento e o que garante
@@ -317,7 +317,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     color: colors.textPrimary,
   },
   // Selo de verificado: fundo verde lavado com ícone e texto no verde cheio —
-  // o mesmo par "lavagem + cor cheia" que o Histórico do rolê usa. O escudo é
+  // o mesmo par "lavagem + cor cheia" que o Histórico da resenha usa. O escudo é
   // CHEIO (fill) com o traço na cor do fundo, então o "check" aparece vazado —
   // só de contorno o ícone some a 13px. Escapa do padrão uppercase dos
   // micro-rótulos da tela (PAGOU, countLabel) porque aqui não é rótulo de
@@ -355,7 +355,7 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     color: colors.textSecondary,
   },
 
-  // ── Sair do rolê ──────────────────────────────────────────────────────────────
+  // ── Sair da resenha ──────────────────────────────────────────────────────────────
   leaveBtn: {
     flexDirection: 'row',
     alignItems: 'center',

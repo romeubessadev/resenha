@@ -210,7 +210,7 @@ export function useExpenseForm({ members, meId, groupId, initialSplitType, seedD
   // resposta e caía num form em branco — e o "por partes" nascia inválido, com
   // o envio bloqueado até tocar em cada pessoa uma vez.
   //
-  // `members` chega pela query do rolê, então no primeiro render a lista está
+  // `members` chega pela query da resenha, então no primeiro render a lista está
   // vazia e não há o que semear — daí o efeito, e não um valor inicial.
   const seeded = useRef(false);
   useEffect(() => {
@@ -255,10 +255,10 @@ export function useExpenseForm({ members, meId, groupId, initialSplitType, seedD
   }, [seedDefaults, memberIdsKey, selecionadosKey, valor]);
 
   function loadFromExpense(expense: ExpenseDetail) {
-    // Sempre o valor na moeda do rolê, mesmo em despesa antiga que guardou
+    // Sempre o valor na moeda da resenha, mesmo em despesa antiga que guardou
     // `original_currency`/`original_amount`: o formulário não converte mais, e
     // carregar o valor original faria a edição gravar o número da moeda antiga
-    // como se fosse da moeda do rolê.
+    // como se fosse da moeda da resenha.
     setValor(formatAmountForInput(expense.amount));
     setDescricao(expense.title);
     // Extrai ano/mês/dia direto da string, sem passar por new Date(iso) —
@@ -295,7 +295,7 @@ export function useExpenseForm({ members, meId, groupId, initialSplitType, seedD
       // move: "qual dos outros absorve" não tem resposta, e os números pulariam
       // debaixo do dedo de quem digita. Lá o "Restante" do rodapé assume.
       //
-      // Conta os PARTICIPANTES, não o tamanho do rolê: um rolê de 4 rachando um
+      // Conta os PARTICIPANTES, não o tamanho da resenha: uma resenha de 4 rachando um
       // Uber entre 2 é exatamente onde o ajuste ajuda, e a versão anterior desta
       // linha olhava pro `members` e deixava esse caso de fora.
       const outro = participantes.length === 2 && selecionados.includes(id)
@@ -333,11 +333,11 @@ export function useExpenseForm({ members, meId, groupId, initialSplitType, seedD
   }
 
   // ── Derivado ─────────────────────────────────────────────────────────────────
-  // `valor` é digitado NA MOEDA DO ROLÊ — não há mais seletor de moeda no
+  // `valor` é digitado NA MOEDA DA RESENHA — não há mais seletor de moeda no
   // lançamento, então não há conversão: o que se digita é o total.
   //
   // Antes isto convertia a partir de uma `entryCurrency` que nascia da moeda do
-  // PERFIL. Com o seletor fora e o símbolo exibido sendo o do rolê, um perfil
+  // PERFIL. Com o seletor fora e o símbolo exibido sendo o da resenha, um perfil
   // em outra moeda digitava 100, via "R$ 100" e gravava o valor convertido —
   // errado e silencioso.
   const totalNum          = parseBRL(valor);

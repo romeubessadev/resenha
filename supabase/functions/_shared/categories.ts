@@ -2,7 +2,7 @@
 // _shared/categories.ts
 //
 // Mesma lista fixa de lib/categories.ts (client) — categoria é global, não
-// mais por rolê. Duplicado aqui porque edge functions (Deno) não importam do
+// mais por resenha. Duplicado aqui porque edge functions (Deno) não importam do
 // app RN; mantenha as duas listas em sincronia. `label` é só pro prompt da
 // IA (não precisa de i18n completo — o client já traduz o nome de exibição
 // a partir da própria `key`). Sem cor aqui — a cor é um token do tema

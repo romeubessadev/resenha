@@ -21,8 +21,8 @@ const completo: OnboardingAnswers = { groupType: 'viagem', split: 'equal', name:
 
 beforeEach(() => resetStorage());
 
-describe('isReadyToCreateGroup — quem ganha rolê criado no cadastro', () => {
-  it('só quem respondeu tudo E nomeou o rolê', () => {
+describe('isReadyToCreateGroup — quem ganha resenha criada no cadastro', () => {
+  it('só quem respondeu tudo E nomeou a resenha', () => {
     expect(isReadyToCreateGroup(completo)).toBe(true);
   });
 
@@ -65,7 +65,7 @@ describe('as respostas do tour', () => {
     expect(await getOnboardingAnswers()).toEqual(EMPTY_ANSWERS);
   });
 
-  it('falha ao salvar é engolida: no pior caso o rolê nasce sem os padrões', async () => {
+  it('falha ao salvar é engolida: no pior caso a resenha nasce sem os padrões', async () => {
     setStorageFailing(true);
     await expect(saveOnboardingAnswers(completo)).resolves.toBeUndefined();
   });

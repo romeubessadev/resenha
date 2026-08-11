@@ -4,7 +4,7 @@ import { useOnboardingGroup } from '@/hooks/useOnboardingGroup';
 
 export default function AppLayout() {
   const { session, loading } = useAuth();
-  // Cria o rolê que a pessoa configurou no tour, se houver algum pendente.
+  // Cria a resenha que a pessoa configurou no tour, se houver algum pendente.
   useOnboardingGroup();
 
   if (loading) return null;
