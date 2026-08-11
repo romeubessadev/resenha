@@ -39,7 +39,26 @@ export default function VerificarCodigoScreen() {
   }, [resendIn]);
 
   function handleChange(text: string, index: number) {
-    const char = text.slice(-1);
+    // Só dígito: o preenchimento automático e a colagem trazem lixo junto
+    // (espaço, hífen, o texto em volta do código no e-mail).
+    const digitos = text.replace(/\D/g, '');
+
+    // Mais de um dígito de uma vez = colagem ou preenchimento automático do
+    // sistema, que entrega o código INTEIRO num campo só. Antes daqui saía
+    // `text.slice(-1)`, então o código chegava e sobrava só o último dígito —
+    // o atalho do celular parecia não funcionar.
+    if (digitos.length > 1) {
+      const next = [...code];
+      for (let i = 0; i < digitos.length && index + i < CODE_LENGTH; i++) {
+        next[index + i] = digitos[i];
+      }
+      setCode(next);
+      const ultimo = Math.min(index + digitos.length, CODE_LENGTH) - 1;
+      inputRefs.current[ultimo]?.focus();
+      return;
+    }
+
+    const char = digitos.slice(-1);
     const next = [...code];
     next[index] = char;
     setCode(next);
@@ -139,7 +158,15 @@ export default function VerificarCodigoScreen() {
               onFocus={() => setFocusedIndex(i)}
               onBlur={() => setFocusedIndex(prev => (prev === i ? null : prev))}
               keyboardType="number-pad"
-              maxLength={1}
+              // Declara que este campo espera um código de uso único. Sem
+              // isto o sistema não OFERECE o código: no iOS ele não aparece na
+              // barra do teclado, no Android o autofill não sugere.
+              textContentType="oneTimeCode"
+              autoComplete="one-time-code"
+              // CODE_LENGTH, não 1: o preenchimento automático entrega os seis
+              // dígitos num campo só, e com limite 1 o sistema os corta antes
+              // de `handleChange` ver. Quem reparte entre as caixas é o handler.
+              maxLength={CODE_LENGTH}
               selectTextOnFocus
               textAlign="center"
             />

@@ -206,7 +206,14 @@ function brandedCodeEmail(text: CodeEmailText, language: Language, token: string
     </table>
     <p style="margin:0 0 4px; font-size:13px; line-height:1.55; color:#8A8FA3;">${text.expiry}<br />${text.ignore}</p>
   `;
-  return { subject: text.subject, html: wrapper(language, text.title, text.preheader, body) };
+  // O código vai na FRENTE do assunto, não no fim: a prévia da notificação
+  // corta o texto, e o começo é a única parte garantida. Assim a pessoa lê o
+  // código na tela de bloqueio sem abrir o e-mail — e é o mesmo formato que os
+  // detectores de código do iOS e do Android procuram.
+  return {
+    subject: `${token} — ${text.subject}`,
+    html: wrapper(language, text.title, text.preheader, body),
+  };
 }
 
 function signupEmail(language: Language, token: string): { subject: string; html: string } {
@@ -253,7 +260,7 @@ function genericEmail(actionType: Exclude<EmailActionType, 'signup' | 'recovery'
       </tr>
     </table>
   `;
-  return { subject: g.subject, html: wrapper(language, 'Resenha', g.subject, body) };
+  return { subject: `${token} — ${g.subject}`, html: wrapper(language, 'Resenha', g.subject, body) };
 }
 
 function buildEmail(actionType: string, language: Language, token: string): { subject: string; html: string } {

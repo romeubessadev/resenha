@@ -82,6 +82,27 @@ describe('o e-mail que sai', () => {
     expect(enviado(fn)!.html).toContain('123456');
   });
 
+  it('o código abre o ASSUNTO — dá pra ler sem abrir o e-mail', async () => {
+    // A prévia da notificação corta o texto, então o começo é a única parte
+    // garantida. É também o formato que os detectores de código do iOS e do
+    // Android procuram.
+    const fn = await load();
+    await fn.call(pedido());
+
+    expect(enviado(fn)!.subject.startsWith('123456')).toBe(true);
+  });
+
+  it('o assunto de recuperação também abre com o código', async () => {
+    const fn = await load({
+      payload: payload({
+        email_data: { token: '654321', token_hash: 'h', redirect_to: '', site_url: '', email_action_type: 'recovery' },
+      }),
+    });
+    await fn.call(pedido());
+
+    expect(enviado(fn)!.subject.startsWith('654321')).toBe(true);
+  });
+
   it('cadastro e recuperação têm assuntos DIFERENTES', async () => {
     const cadastro = await load({ payload: payload() });
     await cadastro.call(pedido());
