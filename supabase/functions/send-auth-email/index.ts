@@ -54,7 +54,11 @@ const HOOK_SECRET = Deno.env.get('SEND_EMAIL_HOOK_SECRET')!.replace(/^v1,/, '');
 // Vem do bucket, e não do bundle: cliente de e-mail não carrega asset local —
 // a imagem precisa de uma URL pública. É o mesmo arquivo de assets/, subido
 // pro `email-assets`.
-const LOGO_URL = `${Deno.env.get('SUPABASE_URL')}/storage/v1/object/public/email-assets/logo-resenha.png`;
+//
+// Versão ESCURA (ink), não a amarela que o app usa: a faixa do cabeçalho aqui
+// é #F5C518, e o logo amarelo em cima dela dava contraste 1,05:1 — sumia.
+// Escuro sobre amarelo dá 10,5:1 e mantém a faixa, que é a assinatura da marca.
+const LOGO_URL = `${Deno.env.get('SUPABASE_URL')}/storage/v1/object/public/email-assets/logo-resenha-preto.png`;
 
 function normalizeLanguage(input: unknown): Language {
   if (input === 'pt-BR' || input === 'es') return input;
