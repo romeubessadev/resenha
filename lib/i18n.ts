@@ -943,14 +943,19 @@ const pt = {
   // galera" aparece só no título — quando estava nos dois, a legenda era
   // paráfrase do título e a linha se perdia.
   'login.headline': 'RACHA A CONTA\nCOM A GALERA!',
+  // Três tempos, no mesmo ritmo do "Bora rachar" logo abaixo. "O que rolou" é
+  // a língua da resenha e amarra a palavra ao evento; "a gente faz a conta"
+  // põe o app como parceiro, na voz que ele usa em todo lugar — nunca se
+  // autodenomina, sempre "a gente".
+  //
   // Sem enumerar caso de uso. Uma versão dizia "churras, viagem, casa", e três
   // exemplos com ponto final leem como limite — parecia que o app servia só
   // pra aquilo. Quem abre o leque é a mecânica, não a lista.
   //
   // Afirmativa até o fim. Outra tentativa fechava com "e ninguém sai devendo
   // sem saber": negativa no meio de afirmações, e o "sem saber" ficava sem
-  // complemento — saber o quê? Aqui a segunda parte diz o que se GANHA.
-  'login.cardCopy': 'Cria uma resenha e cada um\nsabe quanto deve.',
+  // complemento — saber o quê?
+  'login.cardCopy': 'Cria a resenha, lança o que rolou\ne a gente faz a conta.',
   'login.cta': 'Bora rachar',
   'login.haveAccount': 'Já tenho conta',
 
