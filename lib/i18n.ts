@@ -940,9 +940,14 @@ const pt = {
   //
   // Sem enumerar caso de uso. A versão anterior dizia "churras, viagem, casa",
   // e três exemplos com ponto final leem como limite: parecia que o app servia
-  // só pra aquilo. Quem abre o leque é a MECÂNICA (cria, chama, racha), não a
+  // só pra aquilo. Quem abre o leque é a MECÂNICA (cria, chama, sabe), não a
   // lista. Quebra manual pra as duas linhas ficarem equilibradas no centro.
-  'login.cardCopy': 'Cria uma resenha, chama a galera\ne ninguém sai devendo sem saber.',
+  //
+  // As três partes são AFIRMATIVAS e na mesma pessoa. Uma tentativa anterior
+  // fechava com "e ninguém sai devendo sem saber": além de negativa no meio de
+  // duas afirmações, o "sem saber" ficava sem complemento — saber o quê? Aqui
+  // a terceira parte diz o que a pessoa GANHA, no mesmo formato das outras.
+  'login.cardCopy': 'Cria uma resenha, chama a galera\ne cada um sabe quanto deve.',
   'login.cta': 'Bora rachar',
   'login.haveAccount': 'Já tenho conta',
 
