@@ -7,7 +7,7 @@ import { Button } from '@/components';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTheme } from '@/hooks/useTheme';
 import { isOnboardingDone, resetOnboarding } from '@/lib/onboarding';
-import { darkColors, fontFamilies, fontSizes, radius, shadows, spacing, type ColorPalette } from '@/theme';
+import { fontFamilies, fontSizes, radius, shadows, spacing, type ColorPalette } from '@/theme';
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
@@ -110,12 +110,11 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     fontSize: fontSizes.hero,
     lineHeight: fontSizes.hero,
     fontFamily: fontFamilies.bold,
-    // `darkColors.coral`, e não `colors.coral`: o fundo aqui é FOTO escurecida
-    // nos dois temas, então a cor não pode seguir o tema do app — e a variante
-    // clara do coral (#FF7643) rende só 2,79:1 sobre esse fundo, abaixo do
-    // mínimo de 3:1 pra texto grande. A variante escura (#FF9166) é a mesma
-    // cor de marca calibrada pra fundo escuro, e dá 3,36:1.
-    color: darkColors.coral,
+    // Amarelo da marca. Sobre a foto com o gradiente (luminância ~0,09) rende
+    // 4,60:1 — melhor que o coral, que dava 2,79:1 na variante clara e 3,36:1
+    // na escura. E `primary` é o MESMO hex nas duas paletas, então aqui não
+    // precisa fixar variante como o coral precisava.
+    color: colors.primary,
     letterSpacing: -0.5,
     marginBottom: spacing.md,
     // A foto tem pontos claros; a sombra segura o texto onde o gradiente não
