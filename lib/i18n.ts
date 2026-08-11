@@ -998,8 +998,10 @@ const pt = {
   'verificarCodigo.resendIn': 'Reenviar em {seconds}s',
   'verificarCodigo.resend': 'Reenviar código',
   'verificarCodigo.changeEmail': 'Trocar email',
-  'verificarCodigo.errorExpired': 'Este código expirou. Toque em "Reenviar código" para receber outro.',
-  'verificarCodigo.errorInvalid': 'Código inválido. Confira os dígitos e tente de novo.',
+  // Uma mensagem só: o servidor devolve o MESMO erro pra código errado e pra
+  // código vencido (ver verificar-codigo.tsx). Ordem das ações pela chance:
+  // errar um dígito é muito mais comum que deixar o código vencer.
+  'verificarCodigo.errorInvalidOrExpired': 'Código inválido ou expirado. Confere os dígitos ou pede um novo.',
   'verificarCodigo.errorResendFailed': 'Não deu pra reenviar o código. Tenta de novo.',
 
   'senhaAlterada.title': 'Senha atualizada!',

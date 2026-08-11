@@ -95,11 +95,17 @@ export default function VerificarCodigoScreen() {
     setLoading(false);
 
     if (verifyError) {
-      setError(
-        verifyError.message.includes('expired')
-          ? t('verificarCodigo.errorExpired')
-          : t('verificarCodigo.errorInvalid')
-      );
+      // UMA mensagem pros dois casos porque o servidor não os separa: código
+      // errado devolve `otp_expired` e "Token has expired or is invalid",
+      // igualzinho a um código vencido. É proposital no GoTrue — dizer "esse
+      // código está errado" confirmaria que existe um código válido pendente
+      // pra aquele e-mail.
+      //
+      // Antes daqui saía `message.includes('expired')`, que casava sempre: o
+      // ramo de "inválido" era inalcançável e quem errava um dígito era
+      // mandado pedir outro código, que é o conselho errado.
+      if (__DEV__) console.error('[otp] falhou:', verifyError.code, verifyError.status, verifyError.message);
+      setError(t('verificarCodigo.errorInvalidOrExpired'));
       return;
     }
 
