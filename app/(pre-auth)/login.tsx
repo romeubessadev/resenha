@@ -47,7 +47,7 @@ export default function LoginScreen() {
           { paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + spacing.lg },
         ]}
       >
-        <Image source={require('@/assets/logo-bros.png')} style={styles.wordmark} resizeMode="contain" />
+        <Image source={require('@/assets/logo-resenha.png')} style={styles.wordmark} resizeMode="contain" />
 
         <View style={styles.bottomBlock}>
           <Text style={styles.headline}>{t('login.headline')}</Text>

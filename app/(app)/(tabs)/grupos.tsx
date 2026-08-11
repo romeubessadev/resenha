@@ -104,7 +104,7 @@ export default function GruposScreen() {
           detalhe do rolê, e pelo mesmo motivo declarado lá: dentro do gesto,
           um toque no botão mexe no conteúdo e "pisca". */}
       <View style={styles.topBar}>
-        <Image source={require('@/assets/logo-bros.png')} style={styles.logo} resizeMode="contain" />
+        <Image source={require('@/assets/logo-resenha.png')} style={styles.logo} resizeMode="contain" />
 
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.qrBtn} onPress={() => setJoinSheetOpen(true)} activeOpacity={0.7}>

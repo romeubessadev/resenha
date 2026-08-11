@@ -51,7 +51,10 @@ const RESEND_FROM_EMAIL = Deno.env.get('RESEND_FROM_EMAIL')!;
 // payload — toda chamada real da Supabase cai em "assinatura inválida".
 const HOOK_SECRET = Deno.env.get('SEND_EMAIL_HOOK_SECRET')!.replace(/^v1,/, '');
 
-const LOGO_URL = `${Deno.env.get('SUPABASE_URL')}/storage/v1/object/public/email-assets/logo-bros.png`;
+// Vem do bucket, e não do bundle: cliente de e-mail não carrega asset local —
+// a imagem precisa de uma URL pública. É o mesmo arquivo de assets/, subido
+// pro `email-assets`.
+const LOGO_URL = `${Deno.env.get('SUPABASE_URL')}/storage/v1/object/public/email-assets/logo-resenha.png`;
 
 function normalizeLanguage(input: unknown): Language {
   if (input === 'pt-BR' || input === 'es') return input;

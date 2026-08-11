@@ -78,7 +78,7 @@ export default function PaywallScreen() {
   return (
     <View style={[styles.root, { paddingTop: insets.top + spacing.md }]}>
       <View style={styles.header}>
-        <Image source={require('@/assets/logo-bros.png')} style={styles.wordmark} resizeMode="contain" />
+        <Image source={require('@/assets/logo-resenha.png')} style={styles.wordmark} resizeMode="contain" />
         {/* Fechar segue pro cadastro, não volta pra capa: o paywall é o último
             passo antes do "Auth" do fluxo, e o X significa "sigo sem assinar". */}
         <TouchableOpacity

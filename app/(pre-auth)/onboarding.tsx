@@ -254,7 +254,7 @@ export default function OnboardingScreen() {
           <TouchableOpacity style={[styles.backBtn, styles.welcomeBackBtn]} onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
             <ArrowLeft size={20} color={colors.textPrimary} strokeWidth={2.2} />
           </TouchableOpacity>
-          <Image source={require('@/assets/logo-bros.png')} style={styles.wordmark} resizeMode="contain" />
+          <Image source={require('@/assets/logo-resenha.png')} style={styles.wordmark} resizeMode="contain" />
         </View>
 
         <View style={styles.welcomeBody}>

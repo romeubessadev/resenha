@@ -91,7 +91,7 @@ export default function SignupScreen() {
         <BackButton />
 
         <View style={styles.logoWrap}>
-          <Image source={require('@/assets/logo-bros.png')} style={styles.logo} resizeMode="contain" />
+          <Image source={require('@/assets/logo-resenha.png')} style={styles.logo} resizeMode="contain" />
         </View>
 
         <View style={styles.hero}>
