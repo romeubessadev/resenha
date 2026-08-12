@@ -863,11 +863,17 @@ const pt = {
   // seguinte ("Como costumam dividir?"). Uma versão anterior era "Que tipo de
   // resenha é o seu?", herdada de quando o grupo tinha outro nome, masculino.
   //
-  // O subtítulo fecha com "a cara de vocês", e não "da sua resenha": o título
-  // já disse "resenha", e repetir a palavra em duas linhas seguidas pesa. O
-  // plural também casa com o passo seguinte, que fala com o grupo todo.
+  // O subtítulo diz EXATAMENTE o que a resposta controla: `demoName` (o nome
+  // sugerido) e `buildDemo` (as despesas de exemplo). Nada além disso muda.
+  //
+  // Duas tentativas anteriores erraram por aqui. "com a cara do seu rolê"
+  // usava o nome antigo do grupo. "deixar tudo com a cara de vocês" prometia
+  // "tudo" quando só nome e exemplos mudam, e falava no plural com um grupo
+  // que ainda não existe — neste passo a pessoa está sozinha, e os amigos do
+  // tour são fictícios. A repetição de "resenha" que motivou os dois some por
+  // corte: a frase simplesmente não precisa da palavra.
   'onboarding.typeTitle': 'Qual vai ser a resenha?',
-  'onboarding.typeSubtitle': 'A gente usa isso pra sugerir um nome e deixar tudo com a cara de vocês.',
+  'onboarding.typeSubtitle': 'A gente usa isso pra sugerir um nome e montar os exemplos.',
   'onboarding.typeViagem': 'Viagem',
   'onboarding.typeViagemDesc': 'Praia, mochilão, road trip',
   'onboarding.typeRepublica': 'Casa',
