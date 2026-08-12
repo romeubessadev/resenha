@@ -198,6 +198,11 @@ export default function InsightScreen() {
     setPickerOpen(false);
   }
 
+  // Sem dado no período não há o que exportar, e o botão fica travado ANTES da
+  // verificação de plano: mostrar o paywall aqui cobraria por um arquivo vazio
+  // — vende o recurso no único momento em que ele não teria o que entregar.
+  const canExport = categoryData.length > 0;
+
   function openExport() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (isPremium) setExportOpen(true);
@@ -228,11 +233,21 @@ export default function InsightScreen() {
         </View>
         <Pressable
           onPress={openExport}
+          disabled={!canExport}
           accessibilityLabel={t('insight.exportButtonLabel')}
+          accessibilityState={{ disabled: !canExport }}
           hitSlop={8}
-          style={({ pressed }) => [styles.exportBtn, pressed && styles.exportBtnPressed]}
+          style={({ pressed }) => [styles.exportBtn, pressed && canExport && styles.exportBtnPressed]}
         >
-          <Download size={20} color={colors.textPrimary} strokeWidth={2.2} />
+          <Download
+            size={20}
+            // Cinza secundário em vez de sumir: o botão continua ali dizendo
+            // que existe, só não agora. Escondê-lo faria a pessoa achar que a
+            // exportação não é um recurso da tela.
+            color={canExport ? colors.textPrimary : colors.textSecondary}
+            strokeWidth={2.2}
+            opacity={canExport ? 1 : 0.4}
+          />
         </Pressable>
       </View>
 
