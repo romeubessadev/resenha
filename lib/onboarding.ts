@@ -5,7 +5,7 @@ const ANSWERS_KEY = 'resenha:onboarding-answers';
 
 export type OnboardingGroupType = 'viagem' | 'republica' | 'galera' | 'outro';
 /** Mesmos valores de `expenses.split_type` — o que a pessoa escolhe aqui vira
- *  o padrão do primeira resenha, então guardar já no vocabulário do banco evita
+ *  o padrão da primeira resenha, então guardar já no vocabulário do banco evita
  *  uma tradução a mais depois. */
 export type OnboardingSplit = 'equal' | 'exact' | 'shares';
 export type OnboardingAnswers = {
@@ -38,7 +38,7 @@ export async function saveOnboardingAnswers(answers: OnboardingAnswers): Promise
   try {
     await AsyncStorage.setItem(ANSWERS_KEY, JSON.stringify(answers));
   } catch {
-    // Não é crítico — no pior caso o primeira resenha nasce sem os padrões.
+    // Não é crítico — no pior caso a primeira resenha nasce sem os padrões.
   }
 }
 

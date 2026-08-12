@@ -118,7 +118,7 @@ const pt = {
   'groups.emptySearchSubtitle': 'Tenta outro nome ou pessoa.',
   'groups.createCta': 'Criar nova resenha',
   'groups.createCtaSubtitle': 'Chama a galera e começa a rachar',
-  'groups.notFoundTitle': 'Resenha não encontrado',
+  'groups.notFoundTitle': 'Resenha não encontrada',
   'groups.notFoundBody': 'Esse QR code não é de nenhuma resenha. Confere com quem te chamou.',
   'groups.joinFailedTitle': 'Não deu pra entrar na resenha',
 
@@ -275,7 +275,7 @@ const pt = {
   'batch.groupsSubtitle': '{count} resenhas · {names}',
   'batch.groupsSubtitleSingular': '{count} resenha · {name}',
   'batch.resolveFailedTitle': 'Não deu pra concluir',
-  'batch.resolveFailedBody': 'Algumas resenhas podem não ter sido marcados. Tenta de novo.',
+  'batch.resolveFailedBody': 'Algumas resenhas podem não ter sido marcadas. Tenta de novo.',
   // O card da Carteira não mostra resenha nenhum — este texto é o único lugar
   // onde dá pra ver o que a marcação some.
   'batch.undoTitle': 'Desfazer a marcação',
@@ -767,7 +767,7 @@ const pt = {
   'participants.statusReceivable': 'tem a receber {amount}',
   'participants.statusOwing': 'tá devendo {amount}',
   'participants.leaveGroup': 'Sair da resenha',
-  'participants.leaveLegendOwner': 'Você só pode sair se o seu saldo estiver zerado. Se você for o único admin, quem entrou primeiro vira admin no seu lugar. A resenha só é apagado se você for o único participante.',
+  'participants.leaveLegendOwner': 'Você só pode sair se o seu saldo estiver zerado. Se você for o único admin, quem entrou primeiro vira admin no seu lugar. A resenha só é apagada se você for o único participante.',
   'participants.leaveLegendMember': 'Só é possível sair se o seu saldo estiver zerado.',
 
   'expenseForm.modeEqual': 'Igual',
@@ -893,24 +893,32 @@ const pt = {
   'onboarding.typeGaleraDesc': 'Bar, churras, aniversário',
   'onboarding.typeOutro': 'Outro',
   'onboarding.typeOutroDesc': 'Qualquer despesa pra dividir',
-  'onboarding.splitTitle': 'Como costumam dividir?',
-  'onboarding.splitSubtitle': 'A gente já configura como padrão. Cada despesa dá pra mudar.',
-  // "Por consumo" de propósito, e não "Exato" como no formulário: aqui a
-  // pergunta é de HÁBITO ("Como costumam dividir?"), então caso de uso é o
-  // registro certo — e o card tem largura e descrição pra bancar a palavra
-  // concreta. No segmented do formulário não dá: lá o mesmo modo também serve
+  // O título encadeia com o passo anterior ("Qual vai ser a resenha?") e ecoa
+  // a capa ("Bora rachar essa conta?"). Como ele é vago de propósito, o
+  // subtítulo é que traz o enquadramento de HÁBITO — diferente do passo do
+  // tipo, onde o título já era específico e o "Escolhe o..." não somava nada.
+  'onboarding.splitTitle': 'E a conta, como vai ser?',
+  'onboarding.splitSubtitle': 'Escolhe o jeito que vocês costumam dividir. Dá pra mudar em cada despesa depois.',
+  // As duas frases são verdade: a resposta vira `default_split_type` da resenha
+  // (useOnboardingGroup passa em `create_group_with_owner`) e o formulário
+  // deixa trocar por despesa.
+  //
+  // "Por consumo" de propósito, e não "Exato" como no formulário: o card tem
+  // largura e descrição pra bancar a palavra concreta, e aqui a pergunta é de
+  // hábito. No segmented do formulário não dá: lá o mesmo modo também serve
   // pra rachar aluguel 700/300, que não é consumo de nada, e quem lê "Consumo"
-  // não acha a opção. Escolher aqui já deixa a resenha com esse padrão
-  // (default_split_type), então ninguém precisa procurar o modo pelo nome
-  // depois. "Partes" é igual ao formulário porque essa serve nas duas.
+  // não acha a opção. "Partes" fica igual ao formulário — essa serve nas duas,
+  // e "Por partes" já foi tentado e trocado justamente pra casar as telas.
   'onboarding.splitEqual': 'Igual',
+  // "o mesmo", não "a mesma parte": "parte" é o nome da opção de baixo, e usar
+  // a palavra aqui embaralha as duas.
   'onboarding.splitEqualDesc': 'Todo mundo paga o mesmo',
   'onboarding.splitExact': 'Por consumo',
   'onboarding.splitExactDesc': 'Cada um paga o que consumiu',
   'onboarding.splitShares': 'Partes',
-  'onboarding.splitSharesDesc': 'Uns pagam mais, outros menos',
+  'onboarding.splitSharesDesc': 'Uns entram com mais, outros com menos',
   'onboarding.previewBadge': 'Pronto!',
-  'onboarding.previewTitle': 'Sua resenha tá montado',
+  'onboarding.previewTitle': 'Sua resenha tá montada',
   'onboarding.previewSubtitle': 'Olha só como ficaria. Vai só faltar chamar a galera de verdade.',
   'onboarding.previewNewGroup': 'Nova resenha',
   'onboarding.previewSolo': 'Só você por enquanto · você é admin',

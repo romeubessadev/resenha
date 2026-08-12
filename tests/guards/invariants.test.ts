@@ -350,3 +350,67 @@ describe('erro de query vira texto do app, nunca do Postgres', () => {
     expect(hits, `Troque a string pelo t('errors.*') correspondente.${fail(hits)}`).toEqual([]);
   });
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// "resenha" concorda no FEMININO
+//
+// A troca de "rolê" (masculino) por "resenha" (feminino) obrigou artigo,
+// contração, pronome e particípio a mudarem junto em 277 lugares. Uma
+// varredura de concordância já tinha pegado 10 sobras — e ainda escaparam
+// QUATRO na UI: "Resenha não encontrado", "podem não ter sido marcados",
+// "só é apagado" e "Sua resenha tá montado".
+//
+// Não pegam em review porque cada uma está no fim de uma frase longa, longe
+// da palavra que rege. Toda string nova de resenha passa por aqui.
+// ═══════════════════════════════════════════════════════════════════════════
+describe('"resenha" concorda no feminino', () => {
+  // Sem `\b` e sem `\w` perto de acento: em JavaScript os dois são definidos
+  // sobre ASCII, então `tá` quebraria a fronteira e "resenha tá montado"
+  // passaria batido — foi exatamente assim que o guard de "rolê" nasceu
+  // vazio. Aqui o limite é explícito: `(?![\p{L}])` com a flag `u`.
+  const DET = ['o', 'os', 'um', 'uns', 'ao', 'aos', 'do', 'dos', 'no', 'nos', 'pelo', 'pelos',
+    'esse', 'este', 'aquele', 'esses', 'estes', 'seu', 'seus', 'meu', 'meus', 'nosso', 'nossos',
+    'primeiro', 'novo', 'novos', 'outro', 'outros', 'todo', 'todos', 'mesmo', 'mesmos'].join('|');
+  const PART = ['criado', 'apagado', 'arquivado', 'montado', 'marcado', 'salvo', 'selecionado',
+    'encontrado', 'deletado', 'removido', 'atualizado', 'compartilhado', 'fechado', 'aberto',
+    'pronto', 'cheio', 'vazio'].map(w => `${w}s?`).join('|');
+
+  // O particípio pode estar até 4 palavras depois ("a resenha só é apagado").
+  const AGREEMENT = new RegExp(
+    `(?:^|[^\p{L}])(?:${DET})[ ](?:primeir[oa][ ])?resenhas?(?![\p{L}])`
+    + `|resenhas?(?![\p{L}])(?:[ ][^ ]+){0,4}[ ](?:${PART})(?![\p{L}])`,
+    'giu',
+  );
+
+  it('o regex reconhece os quatro erros que passaram batido', () => {
+    // Guard sem este teste é guard que pode nunca disparar.
+    for (const s of [
+      'Resenha não encontrado',
+      'Algumas resenhas podem não ter sido marcados.',
+      'A resenha só é apagado se você for o único participante.',
+      'Sua resenha tá montado',
+      'o primeira resenha nasce sem os padrões',
+    ]) {
+      expect(new RegExp(AGREEMENT).test(s), `deveria acusar: ${s}`).toBe(true);
+    }
+  });
+
+  it('o regex não acusa a forma correta', () => {
+    for (const s of [
+      'Resenha não encontrada',
+      'Algumas resenhas podem não ter sido marcadas.',
+      'A resenha só é apagada se você for o único participante.',
+      'Sua resenha tá montada',
+      'Monte uma resenha do seu jeito',
+      'Já tem 5 resenhas rolando.',
+      'nenhuma resenha arquivada',
+    ]) {
+      expect(new RegExp(AGREEMENT).test(s), `não deveria acusar: ${s}`).toBe(false);
+    }
+  });
+
+  it('nenhuma string do app erra a concordância', () => {
+    const hits = findAll(AGREEMENT);
+    expect(hits, `"resenha" é feminino — corrija artigo/particípio.${fail(hits)}`).toEqual([]);
+  });
+});
