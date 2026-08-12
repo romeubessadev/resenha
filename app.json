@@ -1,15 +1,15 @@
 {
   "expo": {
     "name": "Resenha",
-    "slug": "bros",
+    "slug": "resenha",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "resenha",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.bros.app",
+      "bundleIdentifier": "app.resenha",
       "infoPlist": {
         "CFBundleDevelopmentRegion": "pt_BR",
         "CFBundleLocalizations": [
@@ -25,7 +25,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.bros.app",
+      "package": "app.resenha",
       "softwareKeyboardLayoutMode": "resize"
     },
     "platforms": [

@@ -61,7 +61,11 @@ export default function SignupScreen() {
       // como saber se era senha, rede, e-mail repetido ou o hook.
       if (__DEV__) console.error('[signup] falhou:', signUpError.code, signUpError.status, signUpError.message);
 
-      if (signUpError.message.includes('already registered')) {
+      // Pelo `code`, não pelo texto: a mensagem é redação do GoTrue e muda
+      // entre versões sem aviso — quando mudar, o ramo para de casar e o erro
+      // certo vira "Tenta de novo". Mesma armadilha que já custou quatro
+      // correções neste app (queryError, send-push, OTP e login).
+      if (signUpError.code === 'user_already_exists') {
         setError(t('signup.errorAlreadyRegistered'));
       } else if (signUpError.code === 'over_email_send_rate_limit') {
         setError(t('signup.errorRateLimit'));
