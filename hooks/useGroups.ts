@@ -146,6 +146,9 @@ export function useGroups() {
   return {
     data: query.data ?? [],
     loading: query.isFetching,
+    // true só na primeira carga (sem dado em cache ainda) — usar pra gate de skeleton,
+    // ao contrário de `loading`, que também liga em todo refetch de fundo (focus, etc.)
+    isInitialLoading: query.isLoading,
     error: queryErrorMessage(query, t('errors.loadGroupsFailed')),
     refetch: query.refetch,
   };

@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, Image,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { router } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackButton, Button, Input } from '@/components';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -23,9 +24,13 @@ export default function EntrarScreen() {
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [tourDone, setTourDone] = useState(false);
 
-  useEffect(() => {
-    isOnboardingDone().then(setTourDone);
-  }, []);
+  // A cada foco, pelo mesmo motivo de login.tsx: esta tela fica montada quando
+  // manda alguém pro tour, e leitura só na montagem congela o `tourDone`.
+  useFocusEffect(
+    useCallback(() => {
+      isOnboardingDone().then(setTourDone);
+    }, []),
+  );
 
   // Mesma regra do "Bora rachar" em login.tsx: quem nunca viu o tour passa por
   // ele antes do cadastro — a ordem Onboarding → Paywall → Auth que o

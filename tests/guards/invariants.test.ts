@@ -277,11 +277,31 @@ describe('a palavra "rolê" não volta pro texto do app', () => {
     // ASCII, e `ê` não é caractere de palavra. `\brolês?\b` NUNCA casa — o
     // guard passava com "Qual vai ser o rolê?" no arquivo. O acento já torna a
     // sequência distintiva o bastante pra dispensar fronteira.
-    const hits = findAll(/rolê/i);
+    // Exceções onde "rolê" nomeia a OCASIÃO, não a entidade — ambas listam
+    // tipos de encontro ao lado de viagem, casa e churras. Quem escolhe "Rolê
+    // com a galera" ganha uma resenha chamada "Resenha da galera": nesse
+    // sentido as duas palavras convivem.
+    //
+    // São LINHAS, não arquivos: qualquer outro "rolê" continua quebrando.
+    const ALLOWED = [
+      "'onboarding.typeGalera': 'Rolê com a galera',",
+      "'groups.createCtaSubtitle': 'Viagem, casa, churras ou qualquer rolê',",
+    ];
+    const hits = findAll(/rolê/i).filter(h => !ALLOWED.some(a => h.includes(a)));
     expect(
       hits,
-      `O grupo é "resenha". Pra não repetir a palavra, reescreva a frase.${fail(hits)}`,
+      `O GRUPO é "resenha" — "rolê" só vale como rótulo de OCASIÃO.${fail(hits)}`,
     ).toEqual([]);
+  });
+
+  it('as exceções são exatamente as que a gente escolheu', () => {
+    // Trava o buraco: se uma linha permitida mudar de texto ela deixa de casar
+    // e o teste acima volta a acusar. E o total impede que apareça uma terceira
+    // sem passar por aqui.
+    const all = findAll(/rolê/i);
+    expect(all).toHaveLength(2);
+    expect(all.some(h => h.includes('onboarding.typeGalera'))).toBe(true);
+    expect(all.some(h => h.includes('groups.createCtaSubtitle'))).toBe(true);
   });
 });
 
@@ -376,10 +396,16 @@ describe('"resenha" concorda no feminino', () => {
     'pronto', 'cheio', 'vazio'].map(w => `${w}s?`).join('|');
 
   // O particípio pode estar até 4 palavras depois ("a resenha só é apagado").
+  //
+  // O ramo do DETERMINANTE exige "resenha" em MINÚSCULA, e essa é a parte
+  // sutil: o GRUPO é feminino ("a resenha"), mas o APP é masculino ("o
+  // Resenha", em invite.shareMessage e offline.gateBody). Sem separar os dois,
+  // o guard acusava a marca como erro de concordância. A inicial maiúscula é o
+  // que distingue os sentidos — por isso some a flag `i`.
   const AGREEMENT = new RegExp(
     `(?:^|[^\p{L}])(?:${DET})[ ](?:primeir[oa][ ])?resenhas?(?![\p{L}])`
-    + `|resenhas?(?![\p{L}])(?:[ ][^ ]+){0,4}[ ](?:${PART})(?![\p{L}])`,
-    'giu',
+    + `|[Rr]esenhas?(?![\p{L}])(?:[ ][^ ]+){0,4}[ ](?:${PART})(?![\p{L}])`,
+    'gu',
   );
 
   it('o regex reconhece os quatro erros que passaram batido', () => {
@@ -404,6 +430,10 @@ describe('"resenha" concorda no feminino', () => {
       'Monte uma resenha do seu jeito',
       'Já tem 5 resenhas rolando.',
       'nenhuma resenha arquivada',
+      // O APP é masculino; só o GRUPO é feminino. Estas duas são as frases
+      // reais que fizeram o guard acusar a marca.
+      'Entra no Resenha com o código {code}.',
+      'O Resenha precisa de internet pra carregar seus dados.',
     ]) {
       expect(new RegExp(AGREEMENT).test(s), `não deveria acusar: ${s}`).toBe(false);
     }

@@ -44,10 +44,14 @@ const FILTERS: { key: Filter; labelKey: TranslationKey }[] = [
 
 export default function CarteiraScreen() {
   const insets = useSafeAreaInsets();
-  const { data: txs, loading, error, refetch } = useWallet();
+  const { data: txs, isInitialLoading, error, refetch } = useWallet();
   // Primeira carga: sem nada em cache. Atualizar puxando não entra aqui — lá o
   // conteúdo real fica na tela e quem sinaliza é o indicador do PullToRefresh.
-  const firstLoad = loading && txs.length === 0;
+  // `isInitialLoading` direto, sem `&& txs.length === 0`. A guarda antiga
+  // queria dizer "ainda não chegou dado", mas não separava isso de "o dado é
+  // vazio de verdade": com a Carteira zerada ela ficava sempre verdadeira, e
+  // TODO refetch — puxar pra atualizar, voltar pra aba — repintava o skeleton.
+  const firstLoad = isInitialLoading;
   const isPremium = useIsPremium();
   const { language, t } = useLanguage();
   const { colors } = useTheme();

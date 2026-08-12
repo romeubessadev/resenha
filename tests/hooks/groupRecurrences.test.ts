@@ -7,6 +7,7 @@ import { describe, it, expect, afterEach } from 'vitest';
 import { createHarness, waitFor, type Harness } from '../support/hookHarness';
 import type { MockRow } from '../support/supabaseMock';
 import { useGroupRecurrences } from '@/hooks/useGroupRecurrences';
+import { translate } from '@/lib/i18n';
 
 const GROUP = 'g1';
 const ANA = 'ana';
@@ -189,7 +190,7 @@ describe('o que cada série mostra', () => {
     const { result } = h.run(() => useGroupRecurrences(GROUP));
     await waitFor(() => expect(result.current.error).toBeTruthy());
 
-    expect(result.current.error).toBe('Erro ao carregar as recorrências');
+    expect(result.current.error).toBe(translate('pt-BR', 'errors.loadRecurrencesFailed'));
     expect(result.current.error).not.toContain('row-level security');
   });
 

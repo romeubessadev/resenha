@@ -34,13 +34,12 @@ const COPY_KEYS: Record<PaywallReason, { eyebrow: TranslationKey; title: Transla
 // diferente vendendo a mesma oferta é inconsistência que todo usuário vê. A
 // exceção ao "só lucide na UI" vale para os dois paywalls e para o tour.
 const BENEFITS: { emoji: string; titleKey: TranslationKey; descKey: TranslationKey }[] = [
-  { emoji: '🎉', titleKey: 'limitPaywall.benefit1', descKey: 'limitPaywall.benefit1Desc' },
-  { emoji: '🏷️', titleKey: 'limitPaywall.benefit2', descKey: 'limitPaywall.benefit2Desc' },
   { emoji: '🎤', titleKey: 'limitPaywall.benefit3', descKey: 'limitPaywall.benefit3Desc' },
   { emoji: '⚡', titleKey: 'limitPaywall.benefit4', descKey: 'limitPaywall.benefit4Desc' },
-  { emoji: '📄', titleKey: 'limitPaywall.benefit5', descKey: 'limitPaywall.benefit5Desc' },
-  { emoji: '🕘', titleKey: 'limitPaywall.benefit6', descKey: 'limitPaywall.benefit6Desc' },
+  { emoji: '🎉', titleKey: 'limitPaywall.benefit1', descKey: 'limitPaywall.benefit1Desc' },
   { emoji: '🔁', titleKey: 'limitPaywall.benefit8', descKey: 'limitPaywall.benefit8Desc' },
+  { emoji: '🕘', titleKey: 'limitPaywall.benefit6', descKey: 'limitPaywall.benefit6Desc' },
+  { emoji: '📊', titleKey: 'limitPaywall.benefit5', descKey: 'limitPaywall.benefit5Desc' },
   { emoji: '🚀', titleKey: 'limitPaywall.benefit7', descKey: 'limitPaywall.benefit7Desc' },
 ];
 

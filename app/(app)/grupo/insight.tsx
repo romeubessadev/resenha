@@ -365,15 +365,29 @@ export default function InsightScreen() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={[styles.scrollContent, { paddingBottom: Math.max(insets.bottom, spacing.md) + spacing.lg }]}
           >
-            <View style={styles.sectionHeaderRow}>
-              <Text style={styles.sectionTitle}>{t('insight.byCategory')}</Text>
-            </View>
-
-            {categoryData.length === 0 ? (
-              <View style={styles.emptyState}>
-                <Text style={styles.emptyStateTitle}>{t('insight.emptyTitle')}</Text>
-                <Text style={styles.emptyStateDescription}>{t('insight.emptySubtitle')}</Text>
+            {/* O título some junto com os dados: "Pra onde foi o dinheiro"
+                anuncia uma resposta, e o estado vazio logo abaixo diz que não
+                tem resposta. Sem ele, o vazio fala por si.
+                Os controles de período ficam ACIMA do scroll de propósito —
+                vazio aqui costuma ser filtro de mês, não resenha sem despesa,
+                e a pessoa precisa alcançar o seletor pra descobrir isso. */}
+            {categoryData.length > 0 && (
+              <View style={styles.sectionHeaderRow}>
+                <Text style={styles.sectionTitle}>{t('insight.byCategory')}</Text>
               </View>
+            )}
+
+            {/* Resenha sem NENHUMA despesa não ganha texto: o R$ 0,00 do topo
+                já disse tudo, e repetir em prosa é a mesma informação duas
+                vezes. Só o filtro de período fala, porque ali existe uma saída
+                (trocar o mês) que a pessoa não adivinha. */}
+            {categoryData.length === 0 ? (
+              expenses.length === 0 ? null : (
+                <View style={styles.emptyState}>
+                  <Text style={styles.emptyStateTitle}>{t('insight.emptyPeriodTitle')}</Text>
+                  <Text style={styles.emptyStateDescription}>{t('insight.emptyPeriodSubtitle')}</Text>
+                </View>
+              )
             ) : (
               <View>
                 {categoryData.map(item => {

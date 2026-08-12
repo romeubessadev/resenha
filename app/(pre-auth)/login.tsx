@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -16,9 +17,16 @@ export default function LoginScreen() {
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [tourDone, setTourDone] = useState(false);
 
-  useEffect(() => {
-    isOnboardingDone().then(setTourDone);
-  }, []);
+  // A CADA FOCO, não só na montagem. "Bora rachar" faz `push`, então esta tela
+  // continua montada embaixo do tour — e quando a pessoa volta pra cá (voltar
+  // do cadastro, por exemplo), um `useEffect([])` não roda de novo e `tourDone`
+  // fica congelado no `false` da primeira abertura. O sintoma era o tour
+  // reaparecendo pra quem já tinha terminado.
+  useFocusEffect(
+    useCallback(() => {
+      isOnboardingDone().then(setTourDone);
+    }, []),
+  );
 
   // "Bora rachar" é o começo do funil: quem nunca viu o tour passa por ele (e
   // pelo paywall) antes do cadastro — a ordem que o CLAUDE.md define. Quem já

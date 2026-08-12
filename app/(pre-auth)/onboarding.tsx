@@ -19,11 +19,17 @@ import {
 import type { TranslationKey } from '@/lib/i18n';
 import { fontFamilies, fontSizes, radius, spacing, type ColorPalette } from '@/theme';
 
-// Emoji, e não lucide, só no tour e no paywall — decisão explícita pra bater
-// com as capturas. No app pós-login a regra continua sendo lucide.
+// Emoji, e não lucide, no tour e nos dois paywalls — decisão explícita pra
+// bater com os mockups. No app pós-login a regra continua sendo lucide.
+//
+// A troca por lucide chegou a ser feita e foi DESFEITA: o argumento técnico
+// (o tour já usa Mic, Wallet, QrCode em traço, então o mesmo microfone
+// aparecia de dois jeitos) perdeu pro que essas telas existem pra fazer —
+// encantar e converter. Cor e volume valem mais aqui do que coerência de
+// traço. Quem quiser reabrir, reabra por CONVERSÃO, não por consistência.
 const WELCOME_ITEMS = [
   { emoji: '📋', key: 'onboarding.welcomeItem1' },
-  { emoji: '🎤', key: 'onboarding.welcomeItem2' },
+  { emoji: '🎙️', key: 'onboarding.welcomeItem2' },
   { emoji: '⚡', key: 'onboarding.welcomeItem3' },
 ] as const satisfies readonly { emoji: string; key: TranslationKey }[];
 
@@ -103,11 +109,6 @@ const RESULT_SPLIT_LINE: Record<OnboardingSplit, TranslationKey> = {
   shares: 'onboarding.resultSplitShares',
 };
 
-const RESULT_SUBTITLE: Record<OnboardingSplit, TranslationKey> = {
-  equal: 'onboarding.resultSubtitleEqual',
-  exact: 'onboarding.resultSubtitleExact',
-  shares: 'onboarding.resultSubtitleShares',
-};
 
 // Diferença de consumo por pessoa, somada ao valor unitário do tipo. Escolhidos
 // pra dar número redondo em qualquer um dos quatro valores unitários — é o
@@ -473,13 +474,12 @@ export default function OnboardingScreen() {
       {step === 5 && (
         <>
           <Text style={styles.stepTitle}>{t('onboarding.resultTitle')}</Text>
-          <Text style={styles.stepSubtitle}>{t(RESULT_SUBTITLE[selectedSplit])}</Text>
+          <Text style={styles.stepSubtitle}>{t('onboarding.resultSubtitle')}</Text>
 
           <View style={styles.resultWrap}>
             <View style={styles.resultRaise} />
             <View style={styles.resultCard}>
               <View style={styles.resultTop}>
-                <Text style={styles.resultEyebrow}>{t('onboarding.resultExpenseLabel')}</Text>
                 <Text style={styles.resultExpenseTitle}>{demoTitle}</Text>
                 <Text style={styles.resultAmount}>{formatMoney(demo.total)}</Text>
                 <Text style={styles.resultSplitLine}>

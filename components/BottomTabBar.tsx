@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Home, Wallet, User } from 'lucide-react-native';
+import { UsersRound, Wallet, User } from 'lucide-react-native';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useTheme } from '@/hooks/useTheme';
@@ -8,7 +8,12 @@ import type { TranslationKey } from '@/lib/i18n';
 import { fontFamilies, spacing, type ColorPalette } from '@/theme';
 
 const TAB_META = {
-  grupos: { icon: Home, labelKey: 'tabs.groups' as TranslationKey },
+  // `UsersRound` e não `Users`: o lucide 1.23 não tem ícone de TRÊS pessoas —
+  // os dois desenham uma figura inteira mais uma atrás. A versão redonda tem
+  // menos traço, então segura melhor a 24px do tabbar, e combina com a Fredoka.
+  // O par ao lado (`User`, em Ajustes) fica sendo a mesma família: um contra
+  // vários, que é exatamente a diferença entre as duas abas.
+  grupos: { icon: UsersRound, labelKey: 'tabs.groups' as TranslationKey },
   carteira: { icon: Wallet, labelKey: 'tabs.wallet' as TranslationKey },
   ajustes: { icon: User, labelKey: 'tabs.profile' as TranslationKey },
 } as const;

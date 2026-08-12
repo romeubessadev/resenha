@@ -28,8 +28,12 @@ export default function GruposScreen() {
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
-  const { data: groups, loading, error, refetch } = useGroups();
-  const initialLoading = loading && groups.length === 0;
+  const { data: groups, isInitialLoading, error, refetch } = useGroups();
+  // Mesma correção da Carteira: a guarda `&& groups.length === 0` só não
+  // aparecia aqui porque quem tem resenha nunca cai nela. Quem não tem
+  // nenhuma — justamente quem acabou de criar conta — via o skeleton a cada
+  // volta pra aba.
+  const initialLoading = isInitialLoading;
   const { data: myProfile, refetch: refetchProfile } = useMyProfile();
   const { joinGroup } = useJoinGroup();
 

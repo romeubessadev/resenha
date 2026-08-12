@@ -2,6 +2,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { createHarness, waitFor, type Harness } from '../support/hookHarness';
 import { useGroups } from '@/hooks/useGroups';
+import { translate } from '@/lib/i18n';
 
 const ME = 'me';
 const OUTRO = 'outro';
@@ -223,7 +224,7 @@ describe('useGroups — erro', () => {
     const { result } = h.run(() => useGroups());
     await waitFor(() => expect(result.current.error).toBeTruthy());
 
-    expect(result.current.error).toBe('Erro ao carregar resenhas');
+    expect(result.current.error).toBe(translate('pt-BR', 'errors.loadGroupsFailed'));
     expect(result.current.error).not.toContain('row-level security');
     expect(result.current.data).toEqual([]);
   });

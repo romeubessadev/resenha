@@ -16,13 +16,15 @@ import { fontFamilies, fontSizes, radius, shadows, spacing, type ColorPalette } 
 // usa: é a mesma oferta, e duplicar a copy garantiria que as duas telas
 // divergissem na primeira revisão.
 const BENEFITS = [
-  { emoji: '🎉', title: 'limitPaywall.benefit1', desc: 'limitPaywall.benefit1Desc' },
-  { emoji: '🏷️', title: 'limitPaywall.benefit2', desc: 'limitPaywall.benefit2Desc' },
+  // Ordem por PERCEPÇÃO de valor, não por afinidade temática: IA e insights são
+  // o que diferencia, então abrem a lista. Ilimitadas cai pro 4º porque só pesa
+  // pra quem já bateu no limite. Exportar e novidades fecham.
   { emoji: '🎤', title: 'limitPaywall.benefit3', desc: 'limitPaywall.benefit3Desc' },
   { emoji: '⚡', title: 'limitPaywall.benefit4', desc: 'limitPaywall.benefit4Desc' },
-  { emoji: '📄', title: 'limitPaywall.benefit5', desc: 'limitPaywall.benefit5Desc' },
-  { emoji: '🕘', title: 'limitPaywall.benefit6', desc: 'limitPaywall.benefit6Desc' },
+  { emoji: '🎉', title: 'limitPaywall.benefit1', desc: 'limitPaywall.benefit1Desc' },
   { emoji: '🔁', title: 'limitPaywall.benefit8', desc: 'limitPaywall.benefit8Desc' },
+  { emoji: '🕘', title: 'limitPaywall.benefit6', desc: 'limitPaywall.benefit6Desc' },
+  { emoji: '📊', title: 'limitPaywall.benefit5', desc: 'limitPaywall.benefit5Desc' },
   { emoji: '🚀', title: 'limitPaywall.benefit7', desc: 'limitPaywall.benefit7Desc' },
 ] as const satisfies readonly { emoji: string; title: TranslationKey; desc: TranslationKey }[];
 
@@ -35,7 +37,7 @@ type PlanKey = 'monthly' | 'annual' | 'lifetime';
 // país e por promoção.
 const PLANS = [
   { key: 'monthly', title: 'paywall.planMonthly', note: 'paywall.planMonthlyNote', price: 'R$ 14,90' },
-  { key: 'annual', title: 'paywall.planAnnual', note: 'paywall.planAnnualNote', price: 'R$ 89,90', aside: 'R$ 7,49/mês' },
+  { key: 'annual', title: 'paywall.planAnnual', note: 'paywall.planAnnualNote', price: 'R$ 89,90/ano', aside: 'R$ 7,49/mês' },
   { key: 'lifetime', title: 'paywall.planLifetime', note: 'paywall.planLifetimeNote', price: 'R$ 249,90' },
 ] as const satisfies readonly {
   key: PlanKey; title: TranslationKey; note: TranslationKey; price: string; aside?: string;

@@ -4,6 +4,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { createHarness, waitFor, type Harness } from '../support/hookHarness';
 import { useWallet } from '@/hooks/useWallet';
+import { translate } from '@/lib/i18n';
 
 const G1 = 'g1';
 const G2 = 'g2';
@@ -213,7 +214,7 @@ describe('useWallet — o que eu devo e o que me devem', () => {
     const { result } = h.run(() => useWallet());
     await waitFor(() => expect(result.current.error).toBeTruthy());
 
-    expect(result.current.error).toBe('Erro ao carregar a carteira');
+    expect(result.current.error).toBe(translate('pt-BR', 'errors.loadWalletFailed'));
     expect(result.current.error).not.toContain('row-level security');
   });
 });

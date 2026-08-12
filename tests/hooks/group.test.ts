@@ -17,6 +17,7 @@ import {
   ArchiveNotSettledError,
 } from '@/hooks/useGroup';
 import { RoleLimitError } from '@/hooks/useGroups';
+import { translate } from '@/lib/i18n';
 
 const GROUP = 'g1';
 const ANA = 'ana';
@@ -102,7 +103,7 @@ describe('useGroup — o detalhe da resenha', () => {
     const { result } = h.run(() => useGroup(GROUP));
     await waitFor(() => expect(result.current.error).toBeTruthy());
 
-    expect(result.current.error).toBe('Erro ao carregar resenha');
+    expect(result.current.error).toBe(translate('pt-BR', 'errors.loadGroupFailed'));
     expect(result.current.error).not.toContain('row-level security');
   });
 
@@ -412,7 +413,7 @@ describe('erro do banco não passa calado', () => {
 
   it.each(casos)('falha na %s vira erro na tela', async (_nome, chave, rodar) => {
     h = createHarness({ session, tables: baseTables(), fail: { [chave]: 'boom' } });
-    expect(await rodar(h)).toBe('Erro ao carregar resenha');
+    expect(await rodar(h)).toBe(translate('pt-BR', 'errors.loadGroupFailed'));
   });
 
   it('editar a resenha propaga a falha', async () => {

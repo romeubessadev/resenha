@@ -7,6 +7,7 @@ import { resetStorage } from '../stubs/async-storage';
 import { useMyProfile, useUpdateMyProfile, useUpdateMyAvatar } from '@/hooks/useProfile';
 import { useOnboardingGroup } from '@/hooks/useOnboardingGroup';
 import { saveOnboardingAnswers, getOnboardingAnswers, EMPTY_ANSWERS } from '@/lib/onboarding';
+import { translate } from '@/lib/i18n';
 
 const EU = 'ana';
 const session = { user: { id: EU } };
@@ -38,7 +39,7 @@ describe('useMyProfile', () => {
     const { result } = h.run(() => useMyProfile());
     await waitFor(() => expect(result.current.error).toBeTruthy());
 
-    expect(result.current.error).toBe('Erro ao carregar perfil');
+    expect(result.current.error).toBe(translate('pt-BR', 'errors.loadProfileFailed'));
     expect(result.current.error).not.toContain('row-level security');
   });
 

@@ -21,6 +21,7 @@ import {
   type CreateExpenseInput,
 } from '@/hooks/useExpenses';
 import { queryKeys } from '@/lib/queryKeys';
+import { translate } from '@/lib/i18n';
 
 const GROUP = 'g1';
 const ANA = 'ana';
@@ -723,7 +724,7 @@ describe('nenhum erro do banco passa calado', () => {
     const { result } = h.run(() => useExpenses(GROUP));
     await waitFor(() => expect(result.current.error).toBeTruthy());
 
-    expect(result.current.error).toBe('Erro ao carregar despesas');
+    expect(result.current.error).toBe(translate('pt-BR', 'errors.loadExpensesFailed'));
   });
 
   it('sem sessão, criar e editar são barrados antes de tocar no banco', async () => {
