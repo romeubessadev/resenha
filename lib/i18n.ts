@@ -947,10 +947,13 @@ const pt = {
   'onboarding.previewInviteTitle': 'Chama a galera por:',
   'onboarding.previewInviteLocked': 'Após criar conta',
   'onboarding.previewInviteCode': 'Código',
-  // ATENÇÃO: este botão NÃO conclui o tour — ele avança pro passo 4 (demo de
-  // voz). O rótulo anterior, "Lançar primeira despesa", descrevia esse
-  // destino.
-  'onboarding.previewCta': 'Começar minha resenha',
+  // Descreve o DESTINO, que é o passo 4 (demo de voz) — não o fim do tour.
+  // Este botão está no passo 3 de 6: depois dele ainda vêm voz, resultado,
+  // paywall e cadastro, e a resenha só nasce lá no fim (useOnboardingGroup).
+  // Por isso não serve "Começar minha resenha" nem "Criar minha conta": as
+  // duas foram propostas e as duas prometem algo a quatro telas de distância.
+  // A própria tela já mostra o convite travado com "Após criar conta".
+  'onboarding.previewCta': 'Lançar a primeira despesa',
   'onboarding.nameViagem': 'Resenha da praia',
   'onboarding.nameRepublica': 'Nossa casa',
   'onboarding.nameGalera': 'Resenha da galera',
