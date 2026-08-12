@@ -872,22 +872,27 @@ const pt = {
   // O subtítulo diz EXATAMENTE o que a resposta controla: `demoName` (o nome
   // sugerido) e `buildDemo` (as despesas de exemplo). Nada além disso muda.
   //
-  // Duas tentativas anteriores erraram por aqui. "com a cara do seu rolê"
-  // usava o nome antigo do grupo. "deixar tudo com a cara de vocês" prometia
-  // "tudo" quando só nome e exemplos mudam, e falava no plural com um grupo
-  // que ainda não existe — neste passo a pessoa está sozinha, e os amigos do
-  // tour são fictícios. A repetição de "resenha" que motivou os dois some por
-  // corte: a frase simplesmente não precisa da palavra.
+  // TRÊS tentativas erraram por aqui, e a promessa exagerada é a reincidente:
+  // "com a cara do seu rolê" usava o nome antigo do grupo; "deixar tudo com a
+  // cara de vocês" e "deixar tudo no jeito pra você" prometiam TUDO. Só nome e
+  // exemplos mudam — se prometer configuração, a tela seguinte desmente.
+  // ("de vocês" ainda falava no plural com um grupo que não existe: aqui a
+  // pessoa está sozinha e os amigos do tour são fictícios.)
+  // A repetição de "resenha" que motivou as três some por corte — a frase não
+  // precisa da palavra.
   'onboarding.typeTitle': 'Qual vai ser a resenha?',
-  'onboarding.typeSubtitle': 'A gente usa isso pra sugerir um nome e montar os exemplos.',
+  'onboarding.typeSubtitle': 'A gente já sugere um nome e monta os exemplos pra você.',
   'onboarding.typeViagem': 'Viagem',
   'onboarding.typeViagemDesc': 'Praia, mochilão, road trip',
   'onboarding.typeRepublica': 'Casa',
   'onboarding.typeRepublicaDesc': 'Aluguel, mercado, contas',
-  'onboarding.typeGalera': 'Resenha com a galera',
+  // Sem "Resenha com a galera": repetia o título. E sem "Rolê com a galera",
+  // que traria de volta o nome aposentado do grupo — respondendo "Rolê" a
+  // "Qual vai ser a resenha?" dá dois nomes à mesma coisa na mesma tela.
+  'onboarding.typeGalera': 'Com a galera',
   'onboarding.typeGaleraDesc': 'Bar, churras, aniversário',
   'onboarding.typeOutro': 'Outro',
-  'onboarding.typeOutroDesc': 'Qualquer coisa que rache',
+  'onboarding.typeOutroDesc': 'Qualquer despesa pra dividir',
   'onboarding.splitTitle': 'Como costumam dividir?',
   'onboarding.splitSubtitle': 'A gente já configura como padrão. Cada despesa dá pra mudar.',
   // "Por consumo" de propósito, e não "Exato" como no formulário: aqui a
@@ -916,7 +921,7 @@ const pt = {
   'onboarding.nameViagem': 'Resenha da praia',
   'onboarding.nameRepublica': 'Nossa casa',
   'onboarding.nameGalera': 'Resenha da galera',
-  'onboarding.nameOutro': 'Meu primeira resenha',
+  'onboarding.nameOutro': 'Minha primeira resenha',
   'onboarding.voiceBadge': 'Premium',
   'onboarding.voiceTitle': 'Lança falando',
   'onboarding.voiceSubtitle': 'No app, você segura o botão e fala. A IA entende e registra pra você.',

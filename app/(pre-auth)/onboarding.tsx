@@ -30,7 +30,7 @@ const WELCOME_ITEMS = [
 const GROUP_TYPES = [
   { value: 'viagem', emoji: '🏖️', title: 'onboarding.typeViagem', desc: 'onboarding.typeViagemDesc', demoName: 'onboarding.nameViagem' },
   { value: 'republica', emoji: '🏠', title: 'onboarding.typeRepublica', desc: 'onboarding.typeRepublicaDesc', demoName: 'onboarding.nameRepublica' },
-  { value: 'galera', emoji: '🍺', title: 'onboarding.typeGalera', desc: 'onboarding.typeGaleraDesc', demoName: 'onboarding.nameGalera' },
+  { value: 'galera', emoji: '🍻', title: 'onboarding.typeGalera', desc: 'onboarding.typeGaleraDesc', demoName: 'onboarding.nameGalera' },
   { value: 'outro', emoji: '✨', title: 'onboarding.typeOutro', desc: 'onboarding.typeOutroDesc', demoName: 'onboarding.nameOutro' },
 ] as const satisfies readonly {
   value: OnboardingGroupType; emoji: string; title: TranslationKey; desc: TranslationKey; demoName: TranslationKey;
