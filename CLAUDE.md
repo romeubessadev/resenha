@@ -106,7 +106,25 @@
   "rolê" é masculino e "resenha" é feminino, então artigo, contração, pronome e
   particípio mudaram junto em 277 lugares. Um find-and-replace teria produzido
   "o resenha", "esse resenha", "Resenha criado" — e produziu, em 10 pontos que
-  só apareceram numa varredura de concordância.)
+  só apareceram numa varredura de concordância. Uma segunda varredura, meses
+  depois, ainda achou QUATRO: "Resenha não encontrado", "podem não ter sido
+  marcados", "só é apagado" e "Sua resenha tá montado". Todas no fim de frase
+  longa, longe da palavra que rege — por isso o guard existe.)
+- O GRUPO é feminino, o APP é masculino: "**a** resenha" é a coisa que a pessoa
+  cria, "**o** Resenha" é o produto. A inicial maiúscula é o que separa os dois
+  — e é assim que o guard de concordância distingue, então "o Resenha" passa e
+  "o resenha" quebra.
+  (Por quê: sem a distinção o guard acusava a marca como erro de gênero em
+  `invite.shareMessage` e `offline.gateBody`, os dois lugares onde o nome do
+  produto aparece legitimamente.)
+- "rolê" sobrevive em DOIS lugares, e só como rótulo de OCASIÃO ao lado de
+  viagem, casa e churras: `onboarding.typeGalera` ("Rolê com a galera") e
+  `groups.createCtaSubtitle` ("Viagem, casa, churras ou qualquer rolê"). Como
+  nome do GRUPO continua aposentado — "seu rolê", "criar um rolê", "Rolê
+  criado" não voltam. O guard trava o total em dois: um terceiro quebra.
+  (Por quê: nesse sentido as duas palavras não disputam — quem responde "Rolê
+  com a galera" ganha uma resenha chamada "Resenha da galera". O que a
+  renomeação desfez foi "rolê" como NOME da entidade, não a palavra.)
 - O app NÃO se autodenomina no texto: onde antes lia-se "o Bros já sabe quem
   paga o quê", hoje é "a gente já sabe". A única exceção é a mensagem de
   CONVITE (`invite.shareMessage`), que sai pelo WhatsApp pra quem ainda não
