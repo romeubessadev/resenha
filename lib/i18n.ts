@@ -852,11 +852,17 @@ const pt = {
   // qual palavra marcar (ver app/(pre-auth)/onboarding.tsx).
   'onboarding.welcomeEyebrow': 'Tour rapidinho',
   'onboarding.welcomeTitle': 'Bora rachar essa [conta]?',
-  'onboarding.welcomeSubtitle': 'Em 3 toques a gente monta sua primeira resenha pra você sentir como funciona. Sem cadastro ainda.',
+  // O subtítulo NÃO repete os três itens logo abaixo — ele faz o outro
+  // trabalho: enquadra ("é uma amostra") e derruba a objeção ("sem cadastro
+  // ainda"), que é o que segura a pessoa no topo do funil, já que o cadastro
+  // só vem depois do paywall.
+  // "Em 3 toques" era falso: do welcome até o resultado são 5 passos.
+  'onboarding.welcomeSubtitle': 'Em poucos passos você vê como funciona. Sem cadastro ainda.',
   'onboarding.welcomeItem1': 'Monte uma resenha do seu jeito',
-  'onboarding.welcomeItem2': 'Lance uma despesa por voz',
-  'onboarding.welcomeItem3': 'Veja a divisão sair na hora',
-  'onboarding.welcomeCta': 'Vamos nessa',
+  'onboarding.welcomeItem2': 'Lance uma despesa falando',
+  'onboarding.welcomeItem3': 'Veja quem deve o quê',
+  // Responde ao "Bora...?" do título — a repetição aqui é chamada e resposta.
+  'onboarding.welcomeCta': 'Bora lá',
   'onboarding.skip': 'Pular',
   'onboarding.stepBadge': '{current} de {total}',
   // Pergunta como alguém perguntaria de verdade, no mesmo registro do passo
