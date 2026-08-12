@@ -859,13 +859,15 @@ const pt = {
   'onboarding.welcomeCta': 'Vamos nessa',
   'onboarding.skip': 'Pular',
   'onboarding.stepBadge': '{current} de {total}',
-  // Pergunta direta, no mesmo registro do passo seguinte ("Como costumam
-  // dividir?"). A versão anterior era "Que tipo de resenha é o seu?", herdada
-  // de quando o grupo se chamava "rolê" — masculino. Além da concordância, a
-  // construção "que tipo de X é o seu" emperra, e a palavra "resenha"
-  // aparecia na pergunta E numa das respostas ("Resenha com a galera").
-  'onboarding.typeTitle': 'Pra que é essa resenha?',
-  'onboarding.typeSubtitle': 'A gente usa isso pra sugerir um nome e montar os exemplos com a cara da sua resenha.',
+  // Pergunta como alguém perguntaria de verdade, no mesmo registro do passo
+  // seguinte ("Como costumam dividir?"). Uma versão anterior era "Que tipo de
+  // resenha é o seu?", herdada de quando o grupo tinha outro nome, masculino.
+  //
+  // O subtítulo fecha com "a cara de vocês", e não "da sua resenha": o título
+  // já disse "resenha", e repetir a palavra em duas linhas seguidas pesa. O
+  // plural também casa com o passo seguinte, que fala com o grupo todo.
+  'onboarding.typeTitle': 'Qual vai ser a resenha?',
+  'onboarding.typeSubtitle': 'A gente usa isso pra sugerir um nome e deixar tudo com a cara de vocês.',
   'onboarding.typeViagem': 'Viagem',
   'onboarding.typeViagemDesc': 'Praia, mochilão, road trip',
   'onboarding.typeRepublica': 'Casa',

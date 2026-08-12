@@ -256,6 +256,36 @@ describe('nada sensível no client', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+// "rolê" não volta
+//
+// O grupo se chama RESENHA. A troca mexeu em 277 lugares porque o gênero mudou
+// junto (masculino → feminino), e a palavra antiga é sinônimo natural demais
+// pra não ser tentadora: já foi proposta de volta uma vez, pra evitar repetir
+// "resenha" em duas linhas seguidas. O jeito certo de evitar a repetição é
+// reescrever a frase, não trazer um segundo nome pra mesma coisa.
+//
+// Comentário PODE citar — é onde a história fica registrada. Por isso a
+// inspeção usa `code`, que tem os comentários trocados por espaço.
+// ═══════════════════════════════════════════════════════════════════════════
+describe('a palavra "rolê" não volta pro texto do app', () => {
+  it('nenhum arquivo de código usa "rolê" fora de comentário', () => {
+    // Só a forma ACENTUADA. Aceitar "role" sem acento pegaria `role` em
+    // inglês — que é coluna do banco (owner/admin/member), tipo do TypeScript
+    // e prop de acessibilidade — em 11 lugares legítimos.
+    //
+    // Sem `\b`: em regex de JavaScript a fronteira de palavra é definida sobre
+    // ASCII, e `ê` não é caractere de palavra. `\brolês?\b` NUNCA casa — o
+    // guard passava com "Qual vai ser o rolê?" no arquivo. O acento já torna a
+    // sequência distintiva o bastante pra dispensar fronteira.
+    const hits = findAll(/rolê/i);
+    expect(
+      hits,
+      `O grupo é "resenha". Pra não repetir a palavra, reescreva a frase.${fail(hits)}`,
+    ).toEqual([]);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
 // Fluxo Onboarding → Paywall → Auth
 //
 // O CLAUDE.md define essa ordem porque a pessoa se engaja e vê o paywall ANTES
