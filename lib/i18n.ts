@@ -859,8 +859,13 @@ const pt = {
   'onboarding.welcomeCta': 'Vamos nessa',
   'onboarding.skip': 'Pular',
   'onboarding.stepBadge': '{current} de {total}',
-  'onboarding.typeTitle': 'Que tipo de resenha é o seu?',
-  'onboarding.typeSubtitle': 'A gente usa isso pra sugerir um nome e montar os exemplos com a cara do sua resenha.',
+  // Pergunta direta, no mesmo registro do passo seguinte ("Como costumam
+  // dividir?"). A versão anterior era "Que tipo de resenha é o seu?", herdada
+  // de quando o grupo se chamava "rolê" — masculino. Além da concordância, a
+  // construção "que tipo de X é o seu" emperra, e a palavra "resenha"
+  // aparecia na pergunta E numa das respostas ("Resenha com a galera").
+  'onboarding.typeTitle': 'Pra que é essa resenha?',
+  'onboarding.typeSubtitle': 'A gente usa isso pra sugerir um nome e montar os exemplos com a cara da sua resenha.',
   'onboarding.typeViagem': 'Viagem',
   'onboarding.typeViagemDesc': 'Praia, mochilão, road trip',
   'onboarding.typeRepublica': 'Casa',
