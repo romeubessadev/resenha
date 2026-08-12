@@ -841,7 +841,7 @@ const pt = {
 
   'common.continue': 'Continuar',
 
-  'auth.emailLabel': 'Email',
+  'auth.emailLabel': 'E-mail',
   'auth.emailPlaceholder': 'voce@email.com',
   'auth.passwordLabel': 'Senha',
   'auth.orContinueWith': 'ou continue com',
@@ -988,7 +988,7 @@ const pt = {
   'entrar.footerLink': 'Criar conta',
 
   'recuperarSenha.title': 'Esqueceu a senha?',
-  'recuperarSenha.subtitle': 'Sem estresse. Manda seu email que a gente\nenvia um código.',
+  'recuperarSenha.subtitle': 'Sem estresse. Manda seu e-mail que a gente\nenvia um código.',
   'recuperarSenha.submitting': 'Enviando...',
   'recuperarSenha.submit': 'Enviar código',
   'recuperarSenha.errorGeneric': 'Não deu pra enviar o código. Tenta de novo.',
@@ -1006,13 +1006,13 @@ const pt = {
   'novaSenha.errorDifferent': 'A nova senha precisa ser diferente da anterior.',
   'novaSenha.errorGeneric': 'Não deu pra salvar a senha. Tenta de novo.',
 
-  'verificarCodigo.title': 'Confira seu email',
+  'verificarCodigo.title': 'Confira seu e-mail',
   'verificarCodigo.subtitle': 'Enviamos um código de 6 dígitos para',
   'verificarCodigo.submitting': 'Conferindo...',
   'verificarCodigo.submit': 'Confirmar código',
   'verificarCodigo.resendIn': 'Reenviar em {seconds}s',
   'verificarCodigo.resend': 'Reenviar código',
-  'verificarCodigo.changeEmail': 'Trocar email',
+  'verificarCodigo.changeEmail': 'Trocar e-mail',
   // Uma mensagem só: o servidor devolve o MESMO erro pra código errado e pra
   // código vencido (ver verificar-codigo.tsx). Ordem das ações pela chance:
   // errar um dígito é muito mais comum que deixar o código vencer.

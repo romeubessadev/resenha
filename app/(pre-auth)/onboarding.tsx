@@ -570,9 +570,16 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     position: 'absolute',
     left: 0,
   },
+  // Mesmo tamanho do logo no header de (tabs)/grupos: os dois são marca de
+  // CABEÇALHO, não abertura. A 64x32 ele ficava menor que o botão de voltar
+  // ao lado (40px), o que lia como logo encolhido em vez de discreto.
+  //
+  // Não vai a 112 nem 128 (os tamanhos de login/signup) de propósito: ali o
+  // logo é a âncora da tela; aqui ele acompanha o título da capa, que é o que
+  // precisa ser lido primeiro.
   wordmark: {
-    width: 64,
-    height: 32,
+    width: 88,
+    height: 44,
   },
   welcomeBody: {
     flex: 1,

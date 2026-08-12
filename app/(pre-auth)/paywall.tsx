@@ -185,9 +185,11 @@ const createStyles = (colors: ColorPalette) => StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.pagePadding,
   },
+  // Igual ao onboarding e ao header de (tabs)/grupos — os três são marca de
+  // cabeçalho, ao lado de um botão de 40px.
   wordmark: {
-    width: 64,
-    height: 32,
+    width: 88,
+    height: 44,
   },
   closeBtn: {
     position: 'absolute',
