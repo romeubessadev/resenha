@@ -68,6 +68,19 @@
   o staleTime é o que segura esses furos, não o mecanismo principal. Antes de
   trocar tudo isso por realtime, medir: é um canal POR resenha — `postgres_changes`
   filtra com um `eq` só — mais migration de publication, RLS e debounce.)
+- Cadastro com e-mail de terceiro fica como o GoTrue entrega, POR DECISÃO. Dá
+  pra criar conta com o e-mail de outra pessoa; o segundo cadastro naquele
+  e-mail NÃO sobrescreve senha nem nome, e a vítima recebe "Este e-mail já está
+  cadastrado" (comprovado por experimento contra a API real, não por leitura de
+  documentação).
+  (Por quê: a mitigação padrão — "último cadastro vence", via Edge Function que
+  apaga a conta pendente — TROCA um ataque por outro, e é por isso que o
+  Supabase não faz. Com ela, qualquer um passa a conseguir destruir o cadastro
+  em andamento de qualquer pessoa, repetidamente. Aqui o estrago do lado que
+  escolhemos é pequeno: a conta nasce VAZIA, não há dado a roubar, e o e-mail de
+  confirmação chega na caixa da VÍTIMA — basta ela não digitar um código que não
+  pediu. Se um dia o cadastro passar a carregar dado de antes, reavaliar: aí o
+  cálculo muda.)
 
 ## Comandos
 
